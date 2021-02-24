@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import spring.base.BaseResponse;
 import spring.base.SuccessResponse;
+import spring.dto.RegistrationResult;
 
 @RestController
 @AllArgsConstructor
@@ -17,8 +18,11 @@ public class RegistrationController {
     private final RegistrationRepository registrationRepository;
 
     @GetMapping("/register/anonymous")
-    private BaseResponse<String> getAnonymous(){
+    private BaseResponse<RegistrationResult> getAnonymous(){
         Session session = registrationRepository.registerAnon();
-        return new SuccessResponse<>(session.getToken());
+        RegistrationResult result = new RegistrationResult();
+        result.setToken(session.getToken());
+        result.setUserId(session.getUserId());
+        return new SuccessResponse<>(result);
     }
 }

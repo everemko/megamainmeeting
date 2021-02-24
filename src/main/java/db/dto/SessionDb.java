@@ -1,9 +1,7 @@
-package spring.db.dto;
+package db.dto;
 
 import domain.entity.auth.Session;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
 import javax.persistence.*;
 import java.security.SecureRandom;
@@ -13,8 +11,8 @@ import java.util.Random;
 
 @Data
 @Entity
-@Table(name = "SESSION")
-public class SessionDto {
+@Table(name = "SESSIONS")
+public class SessionDb {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,20 +21,22 @@ public class SessionDto {
 
     private String token;
 
-    private long userId;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private UserDb user;
 
     public Session toDomain() {
         return new Session(
                 id,
                 token,
-                userId
+                user.toDomain()
         );
     }
 
-    public static SessionDto getInstance(UserDto userDto) {
-        SessionDto dto = new SessionDto();
+    public static SessionDb getInstance(UserDb userDb) {
+        SessionDb dto = new SessionDb();
         dto.token = new RandomString(60).nextString();
-        dto.userId = userDto.getId();
+        dto.user = userDb;
         return dto;
     }
 

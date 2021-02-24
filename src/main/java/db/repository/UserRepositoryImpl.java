@@ -1,10 +1,10 @@
-package spring.db.repository;
+package db.repository;
 
 import domain.UserRepository;
 import domain.entity.user.User;
 import lombok.AllArgsConstructor;
-import spring.db.UserRepositoryJpa;
-import spring.db.dto.UserDto;
+import db.UserRepositoryJpa;
+import db.dto.UserDb;
 
 
 @AllArgsConstructor
@@ -14,7 +14,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public void saveUser(User user) {
-        userRepository.save(UserDto.getInstance(user));
+        userRepository.save(UserDb.getInstance(user));
     }
 
     @Override

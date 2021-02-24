@@ -1,5 +1,6 @@
 package domain.entity.auth;
 
+import domain.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -18,5 +19,9 @@ public class Session {
     private String token;
 
     @Getter
-    private long userId;
+    private User user;
+
+    public long getUserId(){
+        return user.getId();
+    }
 }

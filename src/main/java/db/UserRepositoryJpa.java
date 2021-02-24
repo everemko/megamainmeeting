@@ -1,9 +1,9 @@
-package spring.db;
+package db;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import spring.db.dto.UserDto;
+import db.dto.UserDb;
 
 @Repository
-public interface UserRepositoryJpa extends JpaRepository<UserDto, Long> {
+public interface UserRepositoryJpa extends JpaRepository<UserDb, Long> {
 }

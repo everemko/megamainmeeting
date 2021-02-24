@@ -1,4 +1,4 @@
-package spring.db.dto;
+package db.dto;
 
 import domain.entity.user.User;
 import lombok.Data;
@@ -7,8 +7,8 @@ import javax.persistence.*;
 
 @Data
 @Entity
-@Table(name = "USER")
-public class UserDto {
+@Table(name = "USERS")
+public class UserDb {
 
     @Id()
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,8 +18,8 @@ public class UserDto {
         return new User(id);
     }
 
-    public static UserDto getInstance(User user){
-        UserDto dto = new UserDto();
+    public static UserDb getInstance(User user){
+        UserDb dto = new UserDb();
         dto.id = user.getId();
         return dto;
     }
