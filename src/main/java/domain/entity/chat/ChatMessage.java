@@ -1,18 +1,15 @@
 package domain.entity.chat;
 
-
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
 
-@ToString
-public class NewMessage {
 
-    @Getter
-    @Setter
+@Data
+public class ChatMessage {
+
+    private long id;
     private String text;
-    @Getter
-    @Setter
+    private Room room;
     private long userId;
 }

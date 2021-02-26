@@ -7,6 +7,7 @@ import db.SessionRepositoryJpa;
 import db.UserRepositoryJpa;
 import db.dto.SessionDb;
 import db.dto.UserDb;
+import org.springframework.transaction.annotation.Transactional;
 
 @AllArgsConstructor
 public class RegistrationRepositoryImpl implements RegistrationRepository {
@@ -15,6 +16,7 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
     private SessionRepositoryJpa sessionRepository;
 
     @Override
+    @Transactional()
     public Session registerAnon() {
         UserDb userDb = new UserDb();
         userRepository.save(userDb);
