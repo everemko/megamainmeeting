@@ -1,2 +1,3 @@
 rootProject.name = 'MegaMainMeeting'
+include 'domain'
 
