@@ -40,4 +40,19 @@ public class ChatMessageDb {
         chatMessage.setRead(isRead);
         return chatMessage;
     }
+
+    public static ChatMessageDb getInstance(ChatMessage message){
+        RoomDb roomDb = new RoomDb();
+        UserDb userDb = new UserDb();
+        userDb.setId(message.getUserId());
+        roomDb.setId(message.getRoom().getId());
+        ChatMessageDb chatMessageDb = new ChatMessageDb();
+        chatMessageDb.setId(message.getId());
+        chatMessageDb.setMessage(message.getMessage());
+        chatMessageDb.setRoom(roomDb);
+        chatMessageDb.setRead(message.isRead());
+        chatMessageDb.setTime(message.getTime());
+        chatMessageDb.setUser(userDb);
+        return chatMessageDb;
+    }
 }

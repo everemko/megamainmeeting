@@ -49,4 +49,15 @@ public class UserSocketManagerImpl implements UserSocketClientManager {
             logger.error(session + " during SEND TO SOCKET: " + response, e);
         }
     }
+
+    @Override
+    public void send(WebSocketSession session, Object object) {
+        try {
+            TextMessage result = new TextMessage(mapper.writeValueAsString(object));
+            session.sendMessage(result);
+            logger.info("WEB SOCKET SEND: " + result.toString());
+        }  catch (IOException e) {
+            logger.error(session + " during SEND TO SOCKET: " + object.toString(), e);
+        }
+    }
 }

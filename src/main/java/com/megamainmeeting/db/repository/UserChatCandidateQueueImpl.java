@@ -24,7 +24,7 @@ public class UserChatCandidateQueueImpl implements UserChatCandidateQueue {
 
     @Override
     public boolean isExist(User user) {
-        return  users.contains(user);
+        return users.contains(user);
     }
 
     @Override

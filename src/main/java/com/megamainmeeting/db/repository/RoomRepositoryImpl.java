@@ -1,20 +1,14 @@
 package com.megamainmeeting.db.repository;
 
-import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.db.dto.UserDb;
-import com.megamainmeeting.domain.UserRepository;
-import com.megamainmeeting.domain.error.UserNotChatMatchException;
-import com.megamainmeeting.domain.error.UserNotFoundException;
+import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.entity.chat.Room;
-import com.megamainmeeting.domain.error.NotFoundException;
 import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -23,9 +17,9 @@ public class RoomRepositoryImpl implements RoomRepository {
     private final RoomRepositoryJpa roomRepositoryJpa;
 
     @Override
-    public Room get(long id) {
+    public Room get(long id) throws RoomNotFoundException {
         return roomRepositoryJpa.findById(id)
-                .orElseThrow(NotFoundException::new)
+                .orElseThrow(RoomNotFoundException::new)
                 .toDomain();
     }
 

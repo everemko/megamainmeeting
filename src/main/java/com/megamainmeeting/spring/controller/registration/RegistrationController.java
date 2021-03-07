@@ -14,10 +14,11 @@ import com.megamainmeeting.dto.RegistrationResult;
 @AllArgsConstructor
 public class RegistrationController {
 
+    public final static String REGISTER_ANONYMOUS_PATH = "/register/anonymous";
     private final Logger logger;
     private final RegistrationRepository registrationRepository;
 
-    @GetMapping("/register/anonymous")
+    @GetMapping(REGISTER_ANONYMOUS_PATH)
     public BaseResponse<RegistrationResult> getAnonymous(){
         Session session = registrationRepository.registerAnon();
         RegistrationResult result = new RegistrationResult();

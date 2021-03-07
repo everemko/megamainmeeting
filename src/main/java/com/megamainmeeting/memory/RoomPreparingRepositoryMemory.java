@@ -1,27 +1,25 @@
 package com.megamainmeeting.memory;
 
 import com.megamainmeeting.domain.RoomPreparingRepository;
-import com.megamainmeeting.domain.RoomRepository;
-import com.megamainmeeting.domain.error.UserNotChatMatchException;
-import com.megamainmeeting.entity.chat.Room;
+import com.megamainmeeting.domain.error.UserNotMatchException;
 import com.megamainmeeting.entity.chat.RoomPreparing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.NoSuchElementException;
 
 @AllArgsConstructor
 @Component
 public class RoomPreparingRepositoryMemory implements RoomPreparingRepository {
 
     private final Map<Long, RoomPreparing> roomPreparings = new HashMap<>();
-    private final RoomRepository roomRepository;
 
     @Override
-    public RoomPreparing get(long userId) {
-        return roomPreparings.get(userId);
+    public RoomPreparing get(long userId) throws UserNotMatchException {
+        RoomPreparing roomPreparing = roomPreparings.get(userId);
+        if(roomPreparing == null) throw new UserNotMatchException();
+        else return roomPreparing;
     }
 
     @Override

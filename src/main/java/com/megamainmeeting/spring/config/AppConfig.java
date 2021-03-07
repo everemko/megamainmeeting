@@ -16,11 +16,9 @@ import com.megamainmeeting.spring.socket.ChatWebSocketHandler;
 import com.megamainmeeting.spring.socket.UserSocketManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
-import org.springframework.web.socket.handler.LoggingWebSocketHandlerDecorator;
 
 @Configuration
 public class AppConfig {
@@ -67,7 +65,7 @@ public class AppConfig {
     @Bean
     public UserChatCandidateInteractor provideUserChatCandidateInteractor(UserChatCandidateQueue userMatchQueue,
                                                                           RoomRepository roomRepository,
-                                                                          UserMatchNotifier userMatchNorifier,
+                                                                          UserNotifier userMatchNorifier,
                                                                           UserRepository userRepository,
                                                                           RoomPreparingRepository roomPreparingRepository) {
         return new UserChatCandidateInteractor(
@@ -85,8 +83,8 @@ public class AppConfig {
     }
 
     @Bean
-    RoomInteractor roomInteractor(RoomRepository roomRepository, SessionRepository sessionRepository){
-        return new RoomInteractor(roomRepository, sessionRepository);
+    RoomInteractor roomInteractor(RoomRepository roomRepository){
+        return new RoomInteractor(roomRepository);
     }
 
     @Bean

@@ -1,7 +1,6 @@
 package com.megamainmeeting.spring.socket.chat;
 
-import com.megamainmeeting.domain.error.SessionNotFoundException;
-import com.megamainmeeting.domain.error.UserNotChatMatchException;
+import com.megamainmeeting.domain.error.UserNotMatchException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.dto.ReadyStatusDto;
@@ -19,7 +18,7 @@ public class ChatCandidateController {
     private final SocketSessions sessions;
 
     public void userStatus(ReadyStatusDto dto, WebSocketSession session) throws UserNotFoundException,
-            UserNotChatMatchException, WebSocketSessionNotFoundException {
+            UserNotMatchException, WebSocketSessionNotFoundException {
         if (dto.isReady()) {
             userChatCandidateInteractor.setUserReady(sessions.getUserId(session));
         } else {

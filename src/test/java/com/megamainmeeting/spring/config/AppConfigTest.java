@@ -10,10 +10,9 @@ import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
 import com.megamainmeeting.domain.interactor.ChatMessageInteractor;
 import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
-import com.megamainmeeting.spring.SocketSessions;
+import com.megamainmeeting.memory.RoomRepositoryMemory;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.socket.ChatWebSocketHandler;
-import com.megamainmeeting.spring.socket.UserSocketManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.TestConfiguration;
@@ -66,7 +65,7 @@ public class AppConfigTest {
     @Bean
     public UserChatCandidateInteractor provideUserChatCandidateInteractor(UserChatCandidateQueue userMatchQueue,
                                                                           RoomRepository roomRepository,
-                                                                          UserMatchNotifier userMatchNorifier,
+                                                                          UserNotifier userMatchNorifier,
                                                                           UserRepository userRepository,
                                                                           RoomPreparingRepository roomPreparingRepository) {
         return new UserChatCandidateInteractor(

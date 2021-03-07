@@ -1,16 +1,16 @@
 package com.megamainmeeting.spring.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.megamainmeeting.domain.error.AuthorizationException;
-import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.domain.error.UserNotChatMatchException;
+import com.megamainmeeting.domain.error.*;
 import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.dto.MessageOperationDto;
 import com.megamainmeeting.error.ErrorMessages;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.socket.auth.AuthenticationController;
 import com.megamainmeeting.spring.socket.chat.ChatCandidateController;
+import com.megamainmeeting.spring.socket.chat.MessageOperationsController;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ import com.megamainmeeting.dto.ReadyStatusDto;
 import java.io.IOException;
 
 @Component
-public class ChatWebSocketHandler extends TextWebSocketHandler  {
+public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 
     private final ObjectMapper mapper = new ObjectMapper();
@@ -43,6 +43,8 @@ public class ChatWebSocketHandler extends TextWebSocketHandler  {
     private ChatCandidateController chatCandidateController;
     @Autowired
     private RpcFactory rpcFactory;
+    @Autowired
+    MessageOperationsController messageOperationsController;
 
 
     @Override
@@ -64,6 +66,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler  {
                     chatCandidateController.userStatus(dto, session);
                     break;
                 }
+                case RpcMethods.MESSAGE_HAS_BEEN_READ: {
+                    MessageOperationDto dto = mapper.convertValue(request.getId(), MessageOperationDto.class);
+                    messageOperationsController.handle(dto, socketSessions.getUserId(session));
+                    break;
+                }
+
             }
         } catch (IOException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.DESERIALIZE_ERROR);
@@ -71,13 +79,20 @@ public class ChatWebSocketHandler extends TextWebSocketHandler  {
         } catch (AuthorizationException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.AUTHORIZATION_ERROR);
             userSocketManager.send(session, response);
-        } catch (UserNotChatMatchException exception) {
+        } catch (UserNotMatchException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.USER_NOT_FOUND_MATCH_ERROR);
             userSocketManager.send(session, response);
         } catch (UserNotFoundException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.USER_NOT_FOUND);
             userSocketManager.send(session, response);
-        } catch (WebSocketSessionNotFoundException exception){
+        } catch (WebSocketSessionNotFoundException exception) {
+
+        } catch (ChatMessageNotFoundException exception){
+            BaseRpc response = rpcFactory.getError(ErrorMessages.CHAT_MESSAGE_NOT_FOUND);
+            userSocketManager.send(session, response);
+        } catch (UserNotInRoomException exception){
+            BaseRpc response = rpcFactory.getError(ErrorMessages.USER_NOT_IN_ROOM);
+            userSocketManager.send(session, response);
         }
     }
 

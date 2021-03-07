@@ -8,4 +8,7 @@ public interface SessionRepositoryJpa extends JpaRepository<SessionDb, Long> {
 
     @Query(nativeQuery = true, value = "SELECT T FROM session WHERE session.token = :token")
     SessionDb findByToken(String token);
+
+    @Query(nativeQuery = true, value = "Select user_id from session where session.token = :token")
+    long getUserId(String token);
 }

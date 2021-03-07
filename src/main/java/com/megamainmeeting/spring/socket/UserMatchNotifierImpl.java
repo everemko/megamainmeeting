@@ -1,7 +1,12 @@
 package com.megamainmeeting.spring.socket;
 
-import com.megamainmeeting.domain.UserMatchNotifier;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.LongNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.fasterxml.jackson.databind.node.TextNode;
+import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.dto.RoomReadyResult;
+import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.Room;
 import com.megamainmeeting.entity.chat.RoomPreparing;
 import com.megamainmeeting.spring.UserSocketClientManager;
@@ -10,7 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class UserMatchNotifierImpl implements UserMatchNotifier {
+public class UserMatchNotifierImpl implements UserNotifier {
 
     @Autowired
     RpcFactory rpcFactory;
@@ -38,6 +43,14 @@ public class UserMatchNotifierImpl implements UserMatchNotifier {
     public void notifyUsersRefuse(RoomPreparing preparing) {
         BaseRpc response = rpcFactory.getNotification(RpcMethods.USERS_REFUSE_ROOM);
         for (long user : preparing.getUsers()) {
+            userSocketManager.send(user, response);
+        }
+    }
+
+    @Override
+    public void notifyChatMessageUpdated(ChatMessage message) {
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.MESSAGE_HAS_BEEN_READ_NOTIFICATION, message);
+        for(long user: message.getRoom().getUsers()){
             userSocketManager.send(user, response);
         }
     }

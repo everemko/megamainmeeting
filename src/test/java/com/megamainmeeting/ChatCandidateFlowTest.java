@@ -55,11 +55,8 @@ public class ChatCandidateFlowTest {
         authenticationController.auth(authenticationSocketDto, session1);
         authenticationSocketDto.setUserId(USER_ID_2);
         authenticationController.auth(authenticationSocketDto, session2);
-        BaseRequest chatCandidateRequest = new BaseRequest();
-        chatCandidateRequest.setUserId(USER_ID_1);
-        chatController.addChatCandidate(chatCandidateRequest);
-        chatCandidateRequest.setUserId(USER_ID_2);
-        chatController.addChatCandidate(chatCandidateRequest);
+        chatController.addChatCandidate(USER_ID_1);
+        chatController.addChatCandidate(USER_ID_2);
         checkUserMatchFound();
         ReadyStatusDto readyStatusDto = new ReadyStatusDto();
         readyStatusDto.setReady(true);
@@ -70,26 +67,28 @@ public class ChatCandidateFlowTest {
         newChatMessage.setMessage(MESSAGE_TEST);
         newChatMessage.setRoomId(roomId);
         newChatMessage.setUserId(USER_ID_1);
-        chatController.processMessage(newChatMessage);
+        chatController.processMessage(USER_ID_1, newChatMessage);
         newChatMessage.setUserId(USER_ID_2);
-        chatController.processMessage(newChatMessage);
+        chatController.processMessage(USER_ID_2, newChatMessage);
         checkMessage();
     }
 
     private void checkUserMatchFound() {
         NotificationRpcResponse<?> rpc1 = (NotificationRpcResponse<?>) testClientManager.removeFirst();
-        NotificationRpcResponse<?> rpc2 =  (NotificationRpcResponse<?>) testClientManager.removeFirst();
+        NotificationRpcResponse<?> rpc2 = (NotificationRpcResponse<?>) testClientManager.removeFirst();
         Assert.assertEquals(rpc1.getMethod(), RpcMethods.USER_MATCH_FOUND_NOTIFICATION);
         Assert.assertEquals(rpc2.getMethod(), RpcMethods.USER_MATCH_FOUND_NOTIFICATION);
     }
 
-    private void checkRoomReady(){
-        NotificationRpcResponse<RoomReadyResult> rpc1 = (NotificationRpcResponse<RoomReadyResult>) testClientManager.removeFirst();;
+    private void checkRoomReady() {
+        NotificationRpcResponse<RoomReadyResult> rpc1 = (NotificationRpcResponse<RoomReadyResult>) testClientManager.removeFirst();
+        ;
         roomId = rpc1.getParams().getRoomId();
-        NotificationRpcResponse<RoomReadyResult> rpc2 = (NotificationRpcResponse<RoomReadyResult>) testClientManager.removeFirst();;
+        NotificationRpcResponse<RoomReadyResult> rpc2 = (NotificationRpcResponse<RoomReadyResult>) testClientManager.removeFirst();
+        ;
     }
 
-    private void checkMessage(){
+    private void checkMessage() {
         ChatMessage message1 = ((NotificationRpcResponse<ChatMessage>) testClientManager.removeFirst()).getParams();
         Assert.assertEquals(message1.getRoom().getId(), roomId);
         Assert.assertEquals(message1.getMessage(), MESSAGE_TEST);

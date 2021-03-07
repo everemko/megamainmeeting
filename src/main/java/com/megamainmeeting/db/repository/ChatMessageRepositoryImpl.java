@@ -8,6 +8,7 @@ import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.domain.ChatMessageRepository;
 import com.megamainmeeting.db.ChatMessageRepositoryJpa;
 
+import com.megamainmeeting.domain.error.ChatMessageNotFoundException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.entity.chat.ChatMessage;
@@ -35,5 +36,15 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
         chatMessageDb.setMessage(message.getMessage());
         ChatMessageDb savedMessage = chatMessageRepositoryJpa.save(chatMessageDb);
         return savedMessage.toDomain();
+    }
+
+    @Override
+    public ChatMessage get(long messageId) throws ChatMessageNotFoundException{
+        return chatMessageRepositoryJpa.findById(messageId).orElseThrow(ChatMessageNotFoundException::new).toDomain();
+    }
+
+    @Override
+    public void update(ChatMessage chatMessage) {
+        chatMessageRepositoryJpa.save(ChatMessageDb.getInstance(chatMessage));
     }
 }

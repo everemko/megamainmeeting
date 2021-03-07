@@ -2,6 +2,7 @@ package com.megamainmeeting.entity.chat;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ public class Room {
 
     private long id;
     private Set<Long> users = new HashSet<>();
+    private LocalDateTime createdAt;
 
     public void addUser(long userId){
         users.add(userId);

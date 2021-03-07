@@ -1,4 +1,4 @@
-package com.megamainmeeting.db.repository;
+package com.megamainmeeting.memory;
 
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.error.RoomNotFoundException;

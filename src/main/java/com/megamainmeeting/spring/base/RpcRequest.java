@@ -10,5 +10,6 @@ import lombok.*;
 public class RpcRequest extends BaseRpc {
 
     private JsonNode params;
+    private long id = -1;
 
 }

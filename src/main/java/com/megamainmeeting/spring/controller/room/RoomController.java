@@ -7,6 +7,7 @@ import com.megamainmeeting.spring.base.BaseResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
@@ -18,8 +19,8 @@ public class RoomController {
     private final RoomInteractor roomInteractor;
 
     @GetMapping("/chat/rooms")
-    BaseResponse<List<Room>> getRooms(@RequestHeader String token) throws SessionNotFoundException {
-        List<Room> rooms = roomInteractor.getRooms(token);
+    BaseResponse<List<Room>> getRooms(@RequestAttribute("UserId") long userId) throws SessionNotFoundException {
+        List<Room> rooms = roomInteractor.getRooms(userId);
         return BaseResponse.getSuccessInstance(rooms);
     }
 }

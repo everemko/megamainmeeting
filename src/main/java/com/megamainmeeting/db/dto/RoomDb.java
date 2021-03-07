@@ -4,6 +4,7 @@ import com.megamainmeeting.entity.chat.Room;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,6 +25,7 @@ public class RoomDb {
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<UserDb> users = new HashSet<>();
+    private LocalDateTime createdAt;
 
     public void addUser(UserDb userDb) {
         users.add(userDb);
@@ -41,6 +43,7 @@ public class RoomDb {
                 .collect(Collectors.toSet());
         room.setId(id);
         room.setUsers(users);
+        room.setCreatedAt(createdAt);
         return room;
     }
 }

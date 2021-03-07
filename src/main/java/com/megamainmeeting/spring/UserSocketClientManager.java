@@ -8,4 +8,6 @@ public interface UserSocketClientManager {
     void send(long userId, BaseRpc response);
 
     void send(WebSocketSession session, BaseRpc response);
+
+    void send(WebSocketSession session, Object object);
 }

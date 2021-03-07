@@ -9,4 +9,6 @@ public interface SessionRepository {
     void save(Session session);
 
     User getUser(String token) throws SessionNotFoundException;
+
+    long getUserId(String token) throws SessionNotFoundException;
 }

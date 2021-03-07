@@ -13,10 +13,8 @@ import java.util.List;
 public class RoomInteractor {
 
     private final RoomRepository roomRepository;
-    private final SessionRepository sessionRepository;
 
-    public List<Room> getRooms(String token) throws SessionNotFoundException {
-        User user = sessionRepository.getUser(token);
-        return roomRepository.getList(user.getId());
+    public List<Room> getRooms(long userId) {
+        return roomRepository.getList(userId);
     }
 }
