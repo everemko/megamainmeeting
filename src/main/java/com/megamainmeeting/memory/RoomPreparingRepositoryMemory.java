@@ -23,13 +23,16 @@ public class RoomPreparingRepositoryMemory implements RoomPreparingRepository {
     }
 
     @Override
-    public void remove(long userId) {
-        roomPreparings.remove(userId);
+    public void add(RoomPreparing roomPreparing) {
+        roomPreparing.getUsers().forEach(it -> {
+            roomPreparings.put(it, roomPreparing);
+        });
     }
 
     @Override
-    public void add(RoomPreparing roomPreparing) {
-        roomPreparings.put(roomPreparing.getUser1(), roomPreparing);
-        roomPreparings.put(roomPreparing.getUser2(), roomPreparing);
+    public void remove(RoomPreparing roomPreparing) {
+        roomPreparing.getUsers().forEach(it -> {
+            roomPreparings.remove(it, roomPreparing);
+        });
     }
 }

@@ -9,6 +9,7 @@ import com.megamainmeeting.entity.chat.Room;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -24,14 +25,14 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public Room create(long user1, long user2) {
-        UserDb userDb1 = new UserDb();
-        userDb1.setId(user1);
-        UserDb userDb2 = new UserDb();
-        userDb2.setId(user2);
+    public Room create(Set<Long> users) {
         RoomDb roomDb = new RoomDb();
-        roomDb.addUser(userDb1);
-        roomDb.addUser(userDb2);
+        for(long userId: users){
+            UserDb userDb = new UserDb();
+            userDb.setId(userId);
+            roomDb.addUser(userDb);
+            roomDb.addUser(userDb);
+        }
         roomRepositoryJpa.save(roomDb);
         return roomDb.toDomain();
     }

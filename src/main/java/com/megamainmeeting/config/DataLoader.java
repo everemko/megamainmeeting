@@ -1,13 +1,9 @@
-package com.megamainmeeting.spring.config;
+package com.megamainmeeting.config;
 
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.db.dto.UserDb;
-import com.megamainmeeting.domain.RoomRepository;
-import com.megamainmeeting.domain.UserRepository;
-import com.megamainmeeting.entity.chat.Room;
-import com.megamainmeeting.entity.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;

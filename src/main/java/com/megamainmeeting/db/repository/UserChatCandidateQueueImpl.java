@@ -18,8 +18,10 @@ public class UserChatCandidateQueueImpl implements UserChatCandidateQueue {
     }
 
     @Override
-    public User findMatch(User user) {
-        return users.stream().filter(user1 -> true).findFirst().orElse(null);
+    synchronized public User findMatch(User user) {
+        User userMatch = users.stream().filter(user1 -> true).findFirst().orElse(null);
+        if(userMatch != null) users.remove(userMatch);
+        return userMatch;
     }
 
     @Override

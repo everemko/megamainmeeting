@@ -1,35 +1,49 @@
 package com.megamainmeeting.entity.chat;
 
-import lombok.Getter;
-
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 public class RoomPreparing {
 
-    @Getter
-    private long user1 = -1;
-    @Getter
-    private long user2 = -1;
-    private boolean user1Ready = false;
-    private boolean user2Ready = false;
+    private Map<Long, Boolean> users = new HashMap<>();
 
-    public RoomPreparing(long user1, long user2){
-        this.user1 = user1;
-        this.user2 = user2;
+    public void addUser(long user){
+        users.put(user, false);
     }
 
     public void setReady(long user){
-        if(user == user1) user1Ready = true;
-        if(user == user2) user2Ready = true;
+        users.put(user, true);
+    }
+
+    public void setNotReady(long user){
+        users.put(user, false);
     }
 
     public Set<Long> getUsers(){
-        return new HashSet<>(Arrays.asList(user1, user2));
+        return users.keySet();
+    }
+
+    public Set<Long> getReadyUsers(){
+        return users.entrySet()
+                .stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
+    }
+
+    public Set<Long> getNotReadyUsers(){
+        return users.entrySet()
+                .stream()
+                .filter(Map.Entry::getValue)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toSet());
     }
 
     public boolean isAllReady(){
-        return user1Ready && user2Ready;
+        for(boolean status: users.values()){
+            if(!status) return false;
+        }
+        return true;
     }
 }

@@ -7,7 +7,7 @@ public interface RoomPreparingRepository {
 
     RoomPreparing get(long userId) throws UserNotMatchException;
 
-    void remove(long userId);
-
     void add(RoomPreparing roomPreparing);
+
+    void remove(RoomPreparing roomPreparing);
 }

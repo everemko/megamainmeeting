@@ -11,6 +11,8 @@ public interface UserNotifier {
 
     void notifyUsersRefuse(RoomPreparing preparing);
 
+    void notifyUserRefuseChat(long userId);
+
     void notifyMatch(RoomPreparing preparing);
 
     void notifyChatMessageUpdated(ChatMessage message);

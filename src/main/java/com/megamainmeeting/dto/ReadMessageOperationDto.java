@@ -5,12 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MessageOperationDto {
+public class ReadMessageOperationDto {
 
     private long messageId;
-    private Type type;
-
-    public enum Type {
-        READ
-    }
 }

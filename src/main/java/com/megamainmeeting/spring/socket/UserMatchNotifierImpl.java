@@ -54,4 +54,10 @@ public class UserMatchNotifierImpl implements UserNotifier {
             userSocketManager.send(user, response);
         }
     }
+
+    @Override
+    public void notifyUserRefuseChat(long userId) {
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.USERS_REFUSE_ROOM);
+        userSocketManager.send(userId, response);
+    }
 }

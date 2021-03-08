@@ -1,4 +1,4 @@
-package com.megamainmeeting.spring.config;
+package com.megamainmeeting.config;
 
 
 import com.megamainmeeting.spring.controller.registration.RegistrationController;

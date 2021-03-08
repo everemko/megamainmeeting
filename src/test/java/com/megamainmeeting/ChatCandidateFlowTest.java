@@ -6,7 +6,7 @@ import com.megamainmeeting.dto.RoomReadyResult;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import com.megamainmeeting.spring.base.*;
-import com.megamainmeeting.spring.config.AppConfigTest;
+import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import com.megamainmeeting.spring.socket.auth.AuthenticationController;
 import com.megamainmeeting.spring.socket.chat.ChatCandidateController;

@@ -3,14 +3,14 @@ package com.megamainmeeting.spring.socket;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.megamainmeeting.domain.error.*;
 import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
-import com.megamainmeeting.dto.MessageOperationDto;
+import com.megamainmeeting.dto.ReadMessageOperationDto;
 import com.megamainmeeting.error.ErrorMessages;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.socket.auth.AuthenticationController;
 import com.megamainmeeting.spring.socket.chat.ChatCandidateController;
-import com.megamainmeeting.spring.socket.chat.MessageOperationsController;
+import com.megamainmeeting.spring.socket.chat.ChatMessageOperationsController;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -44,7 +44,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Autowired
     private RpcFactory rpcFactory;
     @Autowired
-    MessageOperationsController messageOperationsController;
+    ChatMessageOperationsController messageOperationsController;
 
 
     @Override
@@ -67,7 +67,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                     break;
                 }
                 case RpcMethods.MESSAGE_HAS_BEEN_READ: {
-                    MessageOperationDto dto = mapper.convertValue(request.getId(), MessageOperationDto.class);
+                    ReadMessageOperationDto dto = mapper.convertValue(request.getId(), ReadMessageOperationDto.class);
                     messageOperationsController.handle(dto, socketSessions.getUserId(session));
                     break;
                 }

@@ -22,11 +22,16 @@ public class TestClientManager implements UserSocketClientManager {
         list.add(response);
     }
 
-    BaseRpc getFirst(){
-        return list.get(0);
-    }
+//    BaseRpc getFirst(){
+//        return list.get(0);
+//    }
 
     BaseRpc removeFirst(){
         return list.remove(0);
+    }
+
+    @Override
+    public void send(WebSocketSession session, Object object) {
+
     }
 }
