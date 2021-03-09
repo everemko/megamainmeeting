@@ -1,6 +1,9 @@
 package com.megamainmeeting.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
+import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.megamainmeeting.db.ChatMessageRepositoryJpa;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.SessionRepositoryJpa;
@@ -20,6 +23,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.socket.WebSocketHandler;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
@@ -32,7 +37,10 @@ public class AppConfig {
 
     @Bean
     public ObjectMapper provideObjectMapper(){
-        return new ObjectMapper();
+        JavaTimeModule timeModule = new JavaTimeModule();
+        timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
+        timeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ISO_DATE_TIME));
+        return new ObjectMapper().registerModule(timeModule);
     }
 
     @Bean

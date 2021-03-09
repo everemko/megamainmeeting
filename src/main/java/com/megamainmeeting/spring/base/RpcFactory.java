@@ -1,12 +1,14 @@
 package com.megamainmeeting.spring.base;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RpcFactory {
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper mapper;
 
     public BaseRpc getRpcRequest(Object params){
         RpcRequest rpcRequest = new RpcRequest();

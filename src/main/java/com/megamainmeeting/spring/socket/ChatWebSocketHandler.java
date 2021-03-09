@@ -28,7 +28,8 @@ import java.io.IOException;
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
 
-    private final ObjectMapper mapper = new ObjectMapper();
+    @Autowired
+    private ObjectMapper mapper;
     @Autowired
     private Logger logger;
     @Autowired
