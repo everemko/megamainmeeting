@@ -2,7 +2,7 @@ package com.megamainmeeting.spring.controller.room;
 
 import com.megamainmeeting.domain.error.SessionNotFoundException;
 import com.megamainmeeting.interactor.RoomInteractor;
-import com.megamainmeeting.response.RoomResponse;
+import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.spring.base.BaseResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

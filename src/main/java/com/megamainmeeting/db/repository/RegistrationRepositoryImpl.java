@@ -1,6 +1,7 @@
 package com.megamainmeeting.db.repository;
 
 import com.megamainmeeting.domain.RegistrationRepository;
+import com.megamainmeeting.domain.registration.NewAnonumousUser;
 import com.megamainmeeting.entity.auth.Session;
 import lombok.AllArgsConstructor;
 import com.megamainmeeting.db.SessionRepositoryJpa;
@@ -17,8 +18,12 @@ public class RegistrationRepositoryImpl implements RegistrationRepository {
 
     @Override
     @Transactional()
-    public Session registerAnon() {
+    public Session registerAnon(NewAnonumousUser user) {
         UserDb userDb = new UserDb();
+        userDb.setDateBirth(user.getDateBirth());
+        userDb.setGender(user.getGender());
+        userDb.setGenderMatch(user.getGenderMatch());
+        userDb.setName(user.getName());
         userRepository.save(userDb);
         SessionDb sessionDb = SessionDb.getInstance(userDb);
         sessionRepository.save(sessionDb);

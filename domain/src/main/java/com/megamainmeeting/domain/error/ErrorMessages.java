@@ -1,4 +1,4 @@
-package com.megamainmeeting.error;
+package com.megamainmeeting.domain.error;
 
 public class ErrorMessages {
 

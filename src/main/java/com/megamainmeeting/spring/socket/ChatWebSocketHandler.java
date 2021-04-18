@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.megamainmeeting.domain.error.*;
 import com.megamainmeeting.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.dto.ReadMessageOperationDto;
-import com.megamainmeeting.error.ErrorMessages;
+import com.megamainmeeting.domain.error.ErrorMessages;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;

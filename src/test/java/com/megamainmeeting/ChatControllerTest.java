@@ -6,8 +6,7 @@ import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
-import com.megamainmeeting.error.ErrorMessages;
-import com.megamainmeeting.spring.base.BaseRequest;
+import com.megamainmeeting.domain.error.ErrorMessages;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import org.junit.Before;
@@ -17,7 +16,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashSet;
 

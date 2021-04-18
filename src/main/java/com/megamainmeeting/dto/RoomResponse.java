@@ -1,4 +1,4 @@
-package com.megamainmeeting.response;
+package com.megamainmeeting.dto;
 
 import com.megamainmeeting.db.dto.ChatMessageDb;
 import com.megamainmeeting.db.dto.RoomDb;

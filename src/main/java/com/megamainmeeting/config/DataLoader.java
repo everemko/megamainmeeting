@@ -23,22 +23,22 @@ public class DataLoader implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        if(!userRepository.existsById(USER_1)){
-            UserDb user = new UserDb();
-            user.setId(1);
-            userRepository.save(user);
-        }
-        if(!userRepository.existsById(USER_2)){
-            UserDb user = new UserDb();
-            user.setId(2);
-            userRepository.save(user);
-        }
-        if(!roomRepository.existsById(ROOM_ID)){
-            RoomDb roomDb = new RoomDb();
-            roomDb.setId(ROOM_ID);
-            roomDb.addUser(userRepository.findById(USER_1).get());
-            roomDb.addUser(userRepository.findById(USER_2).get());
-            roomRepository.save(roomDb);
-        }
+//        if(!userRepository.existsById(USER_1)){
+//            UserDb user = new UserDb();
+//            user.setId(1);
+//            userRepository.save(user);
+//        }
+//        if(!userRepository.existsById(USER_2)){
+//            UserDb user = new UserDb();
+//            user.setId(2);
+//            userRepository.save(user);
+//        }
+//        if(!roomRepository.existsById(ROOM_ID)){
+//            RoomDb roomDb = new RoomDb();
+//            roomDb.setId(ROOM_ID);
+//            roomDb.addUser(userRepository.findById(USER_1).get());
+//            roomDb.addUser(userRepository.findById(USER_2).get());
+//            roomRepository.save(roomDb);
+//        }
     }
 }

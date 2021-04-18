@@ -6,11 +6,9 @@ import com.megamainmeeting.db.dto.RoomDeleted;
 import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
-import com.megamainmeeting.response.RoomResponse;
-import com.megamainmeeting.entity.room.Room;
+import com.megamainmeeting.dto.RoomResponse;
 import lombok.AllArgsConstructor;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
