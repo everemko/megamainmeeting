@@ -1,18 +1,18 @@
 package com.megamainmeeting.spring.controller.chat;
 
-import com.megamainmeeting.domain.error.RoomNotFoundException;
-import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
-import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.db.dto.ChatMessageDb;
+import com.megamainmeeting.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
-import com.megamainmeeting.domain.interactor.ChatMessageInteractor;
-import com.megamainmeeting.error.ErrorMessages;
+import com.megamainmeeting.interactor.ChatMessageInteractor;
 import com.megamainmeeting.spring.base.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
-import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -43,4 +43,12 @@ public class ChatController {
         chatCandidateInteractor.remove(userId);
         return SuccessResponse.getSimpleSuccessResponse();
     }
+
+    @PostMapping("chat/messages/after/date")
+    public BaseResponse<Map<Long, List<ChatMessage>>> getMessages(@RequestAttribute("UserId") long userId,
+                                                              @RequestBody Map<Long, LocalDateTime> map) throws Exception{
+        Map<Long, List<ChatMessage>> messages = chatMessageInteractor.getMessagesAfterDate(map, userId);
+        return SuccessResponse.getSuccessInstance(messages);
+    }
+
 }

@@ -1,8 +1,7 @@
 package com.megamainmeeting.domain;
 
 import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.chat.Room;
-import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.chat.RoomPreparing;
 
 public interface UserNotifier {

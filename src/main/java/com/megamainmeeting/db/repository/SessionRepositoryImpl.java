@@ -23,13 +23,23 @@ public class SessionRepositoryImpl implements SessionRepository {
 
     @Override
     public User getUser(String token) throws SessionNotFoundException {
-        SessionDb sessionDb = sessionRepositoryJpa.findByToken(token);
-        if(sessionDb == null) throw new SessionNotFoundException();
-        return sessionDb.getUser().toDomain();
+        try {
+            SessionDb sessionDb = sessionRepositoryJpa.findByToken(token);
+            if (sessionDb == null) throw new SessionNotFoundException();
+            return sessionDb.getUser().toDomain();
+        } catch (Exception e){
+            throw new SessionNotFoundException();
+        }
     }
 
     @Override
     public long getUserId(String token) throws SessionNotFoundException {
-        return sessionRepositoryJpa.getUserId(token);
+        try {
+            SessionDb sessionDb = sessionRepositoryJpa.findByToken(token);
+            if (sessionDb == null) throw new SessionNotFoundException();
+            return sessionDb.getUser().getId();
+        } catch (Exception e){
+            throw new SessionNotFoundException();
+        }
     }
 }

@@ -10,6 +10,7 @@ public class TestValues {
 
     public static final long USER_ID_1 = 1;
     public static final long USER_ID_2 = 2;
+    public static final long USER_ID_3 = 3;
     public static final long ROOM_ID = 1;
     public static final String MESSAGE_TEST = "message test";
 }

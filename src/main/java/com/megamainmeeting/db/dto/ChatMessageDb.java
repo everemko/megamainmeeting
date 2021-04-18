@@ -2,6 +2,8 @@ package com.megamainmeeting.db.dto;
 
 import com.megamainmeeting.entity.chat.ChatMessage;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
@@ -11,7 +13,8 @@ import java.time.LocalTime;
 import java.time.ZoneOffset;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
 @Table(name = "chat_messages")
 @Entity
 public class ChatMessageDb {
@@ -20,7 +23,7 @@ public class ChatMessageDb {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String message;
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "room_id")
     private RoomDb room;
     @ManyToOne

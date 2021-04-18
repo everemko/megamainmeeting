@@ -2,10 +2,9 @@ package com.megamainmeeting.spring.socket;
 
 import com.megamainmeeting.domain.MessageChatManager;
 import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.chat.Room;
+import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.base.*;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

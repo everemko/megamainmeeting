@@ -5,11 +5,13 @@ import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
-import com.megamainmeeting.entity.chat.Room;
+import com.megamainmeeting.entity.room.Room;
+import com.megamainmeeting.entity.room.RoomList;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -38,10 +40,16 @@ public class RoomRepositoryImpl implements RoomRepository {
     }
 
     @Override
-    public List<Room> getList(long userId) {
-        return roomRepositoryJpa.findAllByUserId(userId)
+    public RoomList getList(long userId) {
+        List<Room> list = roomRepositoryJpa.findAllByUserId(userId)
                 .stream()
                 .map(RoomDb::toDomain)
                 .collect(Collectors.toList());
+        return new RoomList(list);
+    }
+
+    @Override
+    public void delete(long id) {
+        roomRepositoryJpa.deleteById(id);
     }
 }

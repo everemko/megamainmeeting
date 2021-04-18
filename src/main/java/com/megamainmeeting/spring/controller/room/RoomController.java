@@ -1,26 +1,32 @@
 package com.megamainmeeting.spring.controller.room;
 
 import com.megamainmeeting.domain.error.SessionNotFoundException;
-import com.megamainmeeting.domain.interactor.RoomInteractor;
-import com.megamainmeeting.entity.chat.Room;
+import com.megamainmeeting.interactor.RoomInteractor;
+import com.megamainmeeting.response.RoomResponse;
 import com.megamainmeeting.spring.base.BaseResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @Component
+@RestController
 @AllArgsConstructor
 public class RoomController {
 
     private final RoomInteractor roomInteractor;
 
     @GetMapping("/chat/rooms")
-    BaseResponse<List<Room>> getRooms(@RequestAttribute("UserId") long userId) throws SessionNotFoundException {
-        List<Room> rooms = roomInteractor.getRooms(userId);
+    public BaseResponse<List<RoomResponse>> getRooms(@RequestAttribute("UserId") long userId) throws SessionNotFoundException {
+        List<RoomResponse> rooms = roomInteractor.getRooms(userId);
         return BaseResponse.getSuccessInstance(rooms);
+    }
+
+    @PostMapping("chat/room/remove/{id}")
+    public BaseResponse<Void> remove(@RequestAttribute("UserId") long userId,
+                                     @PathVariable long id) throws Exception{
+        roomInteractor.removeRoom(userId, id);
+        return BaseResponse.getSuccessInstance(null);
     }
 }

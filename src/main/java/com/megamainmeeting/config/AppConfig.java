@@ -10,9 +10,7 @@ import com.megamainmeeting.db.SessionRepositoryJpa;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
-import com.megamainmeeting.domain.interactor.ChatMessageInteractor;
-import com.megamainmeeting.domain.interactor.RoomInteractor;
-import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.interactor.*;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.socket.ChatWebSocketHandler;
@@ -36,7 +34,7 @@ public class AppConfig {
     }
 
     @Bean
-    public ObjectMapper provideObjectMapper(){
+    public ObjectMapper provideObjectMapper() {
         JavaTimeModule timeModule = new JavaTimeModule();
         timeModule.addDeserializer(LocalDateTime.class, new LocalDateTimeDeserializer(DateTimeFormatter.ISO_DATE_TIME));
         timeModule.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer(DateTimeFormatter.ISO_DATE_TIME));
@@ -50,8 +48,10 @@ public class AppConfig {
     }
 
     @Bean
-    public UserChatCandidateQueue provideUserChatCandidateQueue() {
-        return new UserChatCandidateQueueImpl();
+    public UserChatCandidateQueue provideUserChatCandidateQueue(
+            RoomRepository roomRepository
+    ) {
+        return new UserChatCandidateQueueImpl(roomRepository);
     }
 
     @Bean
@@ -73,40 +73,65 @@ public class AppConfig {
     }
 
     @Bean
-    public UserChatCandidateInteractor provideUserChatCandidateInteractor(UserChatCandidateQueue userMatchQueue,
-                                                                          RoomRepository roomRepository,
-                                                                          UserNotifier userMatchNorifier,
-                                                                          UserRepository userRepository,
-                                                                          RoomPreparingRepository roomPreparingRepository) {
-        return new UserChatCandidateInteractor(
-                userMatchQueue,
-                roomRepository,
-                userMatchNorifier,
-                userRepository,
+    UserChatMatcher provideUserChatMatcher(
+            UserChatCandidateQueue userChatCandidateQueue,
+            UserChatPreparer userChatPreparer
+            ) {
+        return new UserChatMatcher(userChatCandidateQueue,
+                userChatPreparer
+        );
+    }
+
+    @Bean
+    UserChatPreparer provideUserChatPreparer(UserChatCandidateQueue userMatchQueue,
+                                             RoomRepository roomRepository,
+                                             UserNotifier userMatchNorifier,
+                                             UserRepository userRepository,
+                                             RoomPreparingRepository roomPreparingRepository) {
+        return new UserChatPreparer(
                 roomPreparingRepository,
-                new ScheduledThreadPoolExecutor(1));
+                userMatchNorifier,
+                roomRepository,
+                userRepository,
+                userMatchQueue,
+                new ScheduledThreadPoolExecutor(1)
+        );
+    }
+
+    @Bean
+    public UserChatCandidateInteractor provideUserChatCandidateInteractor(UserChatMatcher userChatMatcher,
+                                                                          UserChatCandidateQueue userChatCandidateQueue,
+                                                                          UserRepository userRepository,
+                                                                          UserChatPreparer userChatPreparer) {
+        return new UserChatCandidateInteractor(
+                userChatCandidateQueue,
+                userRepository,
+                userChatMatcher,
+                userChatPreparer
+        );
     }
 
     @Bean
     ChatMessageInteractor provideChatMessageInteractor(MessageChatManager messageChatManager,
-                                                       ChatMessageRepository chatMessageRepository) {
-        return new ChatMessageInteractor(messageChatManager, chatMessageRepository);
+                                                       ChatMessageRepository chatMessageRepository,
+                                                       RoomRepositoryJpa roomRepositoryJpa) {
+        return new ChatMessageInteractor(messageChatManager, chatMessageRepository, roomRepositoryJpa);
     }
 
     @Bean
-    RoomInteractor roomInteractor(RoomRepository roomRepository){
+    RoomInteractor roomInteractor(RoomRepositoryJpa roomRepository) {
         return new RoomInteractor(roomRepository);
     }
 
     @Bean
     UserSocketClientManager userSocketClientManager(ObjectMapper objectMapper,
                                                     Logger logger,
-                                                    SocketSessions socketSessions){
+                                                    SocketSessions socketSessions) {
         return new UserSocketManagerImpl(objectMapper, logger, socketSessions);
     }
 
     @Bean(name = "loggedChatWebSocketHandler")
-    WebSocketHandler provideWebSocketHandler(ChatWebSocketHandler chatWebSocketHandler){
+    WebSocketHandler provideWebSocketHandler(ChatWebSocketHandler chatWebSocketHandler) {
         return chatWebSocketHandler;
     }
 }

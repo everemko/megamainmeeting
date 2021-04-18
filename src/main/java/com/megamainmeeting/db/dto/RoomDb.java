@@ -1,15 +1,19 @@
 package com.megamainmeeting.db.dto;
 
-import com.megamainmeeting.entity.chat.Room;
+import com.megamainmeeting.entity.room.Room;
 import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Data
+@Setter
+@Getter
 @Table(name = "room")
 @Entity
 public class RoomDb {
@@ -25,13 +29,19 @@ public class RoomDb {
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<UserDb> users = new HashSet<>();
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt = LocalDateTime.now(ZoneOffset.UTC);
+
+    @OneToMany(mappedBy = "room",  cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    private Set<ChatMessageDb> messages;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "room")
+    private RoomDeleted roomDeleted;
 
     public void addUser(UserDb userDb) {
         users.add(userDb);
     }
 
-    public void addUsers(Set<UserDb> users){
+    public void addUsers(Set<UserDb> users) {
         this.users.addAll(users);
     }
 
@@ -45,5 +55,13 @@ public class RoomDb {
         room.setUsers(users);
         room.setCreatedAt(createdAt);
         return room;
+    }
+
+    public void setRoomDeleted(RoomDeleted roomDeleted) {
+        this.roomDeleted = roomDeleted;
+    }
+
+    public boolean isUserInRoom(long userId){
+        return users.stream().anyMatch(it -> it.getId() == userId);
     }
 }

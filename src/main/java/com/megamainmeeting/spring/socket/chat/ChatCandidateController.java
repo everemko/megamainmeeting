@@ -2,7 +2,7 @@ package com.megamainmeeting.spring.socket.chat;
 
 import com.megamainmeeting.domain.error.UserNotMatchException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.dto.ReadyStatusDto;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
 import com.megamainmeeting.spring.SocketSessions;

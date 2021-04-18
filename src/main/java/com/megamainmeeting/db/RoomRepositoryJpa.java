@@ -13,6 +13,6 @@ import java.util.Set;
 public interface RoomRepositoryJpa extends JpaRepository<RoomDb, Long> {
 
 
-    @Query(value = "Select T from room where user_id = :userId", nativeQuery = true)
+    @Query(value = "Select * from Room inner join room_user on room.id = room_user.room_id where room_user.user_id = :userId", nativeQuery = true)
     List<RoomDb> findAllByUserId(long userId);
 }

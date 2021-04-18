@@ -1,9 +1,9 @@
 package com.megamainmeeting.entity.chat;
 
+import com.megamainmeeting.entity.room.Room;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 
 @Data

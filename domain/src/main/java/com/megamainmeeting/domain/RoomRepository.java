@@ -1,10 +1,10 @@
 package com.megamainmeeting.domain;
 
 import com.megamainmeeting.domain.error.RoomNotFoundException;
-import com.megamainmeeting.entity.chat.Room;
+import com.megamainmeeting.entity.room.Room;
+import com.megamainmeeting.entity.room.RoomList;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Set;
 
 public interface RoomRepository {
@@ -13,5 +13,7 @@ public interface RoomRepository {
 
     Room create(Set<Long> users);
 
-    List<Room> getList(long userId);
+    RoomList getList(long userId);
+
+    void delete(long id);
 }

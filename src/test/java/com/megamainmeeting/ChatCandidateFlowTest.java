@@ -1,10 +1,13 @@
 package com.megamainmeeting;
 
+import com.megamainmeeting.config.RepositoryConfigTest;
+import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.AuthenticationSocketDto;
 import com.megamainmeeting.dto.ReadyStatusDto;
-import com.megamainmeeting.dto.RoomReadyResult;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
+import com.megamainmeeting.entity.room.Room;
+import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.spring.base.*;
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.spring.controller.chat.ChatController;
@@ -21,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = AppConfigTest.class)
+@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class})
 public class ChatCandidateFlowTest {
 
     private static final long USER_ID_1 = 1;
@@ -37,6 +40,8 @@ public class ChatCandidateFlowTest {
     ChatController chatController;
     @Autowired
     ChatCandidateController chatCandidateController;
+    @Autowired
+    RoomRepository roomRepository;
     private TestWebSocketSession session1;
     private TestWebSocketSession session2;
 
@@ -46,6 +51,15 @@ public class ChatCandidateFlowTest {
     public void setup() {
         session1 = new TestWebSocketSession();
         session2 = new TestWebSocketSession();
+        clearRoom();
+    }
+
+    private void clearRoom(){
+        RoomList list = roomRepository.getList(USER_ID_1);
+        list.getList().stream().filter(room -> room.isUserInRoom(USER_ID_2)).forEach(room -> {
+            roomRepository.delete(room.getId());
+        });
+
     }
 
     @Test
@@ -81,11 +95,11 @@ public class ChatCandidateFlowTest {
     }
 
     private void checkRoomReady() {
-        NotificationRpcResponse<RoomReadyResult> rpc1 = (NotificationRpcResponse<RoomReadyResult>) testClientManager.removeFirst();
-        ;
-        roomId = rpc1.getParams().getRoomId();
-        NotificationRpcResponse<RoomReadyResult> rpc2 = (NotificationRpcResponse<RoomReadyResult>) testClientManager.removeFirst();
-        ;
+        NotificationRpcResponse<Room> rpc1 = (NotificationRpcResponse<Room>) testClientManager.removeFirst();
+
+        roomId = rpc1.getParams().getId();
+        NotificationRpcResponse<Room> rpc2 = (NotificationRpcResponse<Room>) testClientManager.removeFirst();
+
     }
 
     private void checkMessage() {

@@ -1,6 +1,7 @@
 package com.megamainmeeting.config;
 
 
+import com.megamainmeeting.spring.controller.queue.UserChatQueueController;
 import com.megamainmeeting.spring.controller.registration.RegistrationController;
 import com.megamainmeeting.spring.utils.AuthenticationRestHeaderInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,6 @@ public class InterceptorConfig implements WebMvcConfigurer {
     }
 
     private final static String[] AUTHENTICATION_IGNORE = {
-            RegistrationController.REGISTER_ANONYMOUS_PATH
+            RegistrationController.REGISTER_ANONYMOUS_PATH, UserChatQueueController.QUEUE
     };
 }
