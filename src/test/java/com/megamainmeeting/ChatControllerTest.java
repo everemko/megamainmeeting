@@ -1,5 +1,6 @@
 package com.megamainmeeting;
 
+import com.megamainmeeting.config.TestValues;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
@@ -26,21 +27,18 @@ import static org.junit.Assert.*;
 public class ChatControllerTest {
 
     private final static long NOT_EXIST_USER_ID = -1;
-    private final static long USER_ID = 1;
-    private final static long USER_ID_2 = 2;
-    private long roomId = -1;
 
     @Autowired
     ChatController chatController;
     @Autowired
     RoomRepository roomRepository;
+    private TestValues testValues;
 
     @Before
     public void prepare(){
-        if(roomRepository.getList(USER_ID).isEmpty()){
-            roomRepository.create(new HashSet<>(Collections.singletonList(USER_ID)));
-        }
-        roomId = roomRepository.getList(USER_ID).getList().stream().findFirst().get().getId();
+        testValues = new TestValues(roomRepository);
+        testValues.prepareChatCandidateReqeusts();
+        testValues.prepareRoomToUser1User2();
     }
 
 
@@ -49,7 +47,7 @@ public class ChatControllerTest {
         NewChatMessage newChatMessage = new NewChatMessage();
         newChatMessage.setRoomId(-1);
         newChatMessage.setMessage("asdfasdf");
-        BaseResponse<?> response = chatController.processMessage(USER_ID, newChatMessage);
+        BaseResponse<?> response = chatController.processMessage(TestValues.USER_ID_1, newChatMessage);
         assertFalse(response.isSuccess());
         assertEquals(ErrorMessages.ROOM_NOT_FOUND, response.getErrorMessage());
     }
@@ -67,51 +65,52 @@ public class ChatControllerTest {
     @Test
     public void addMessageSuccess() throws Exception {
         NewChatMessage newChatMessage = new NewChatMessage();
-        newChatMessage.setRoomId(roomId);
+        newChatMessage.setRoomId(TestValues.ROOM_ID);
         newChatMessage.setMessage("asdfasdf");
-        BaseResponse<ChatMessage> response = (BaseResponse<ChatMessage>) chatController.processMessage(USER_ID, newChatMessage);
+        BaseResponse<ChatMessage> response = (BaseResponse<ChatMessage>) chatController.processMessage(TestValues.USER_ID_1, newChatMessage);
         assertTrue(response.isSuccess());
         assertEquals(1, response.getResult().getUserId());
-        assertEquals(roomId, response.getResult().getRoom().getId());
+        assertEquals(TestValues.ROOM_ID, response.getResult().getRoom().getId());
         assertEquals("asdfasdf", response.getResult().getMessage());
     }
 
     @Test
     public void removeChatCandidate() throws Exception {
-        chatController.removeChatCandidate(USER_ID);
-        chatController.addChatCandidate(USER_ID);
-        chatController.removeChatCandidate(USER_ID);
-        BaseResponse<Object> response3 = chatController.addChatCandidate(USER_ID);
+        chatController.removeChatCandidate(TestValues.USER_ID_1);
+        chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
+        chatController.removeChatCandidate(TestValues.USER_ID_1);
+        BaseResponse<Object> response3 = chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
         assertTrue(response3.isSuccess());
         assertNull(response3.getErrorMessage());
         assertNull(response3.getResult());
     }
 
     public void addChatCandidate() throws Exception {
-        BaseResponse<Object> response = chatController.addChatCandidate(USER_ID);
+        BaseResponse<Object> response = chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
         assertTrue(response.isSuccess());
         assertNull(response.getErrorMessage());
         assertNull(response.getResult());
-        chatController.removeChatCandidate(USER_ID);
+        chatController.removeChatCandidate(TestValues.USER_ID_1);
     }
 
     @Test(expected = UserNotFoundException.class)
     public void addChatCandidateInvalidUser() throws Exception {
-        BaseResponse<Object> response = chatController.addChatCandidate(-1);
+        BaseResponse<Object> response = chatController.addChatCandidate(-1, testValues.getChatCandidate1());
         assertFalse(response.isSuccess());
         assertEquals(ErrorMessages.USER_NOT_FOUND, response.getErrorMessage());
     }
 
     @Test(expected = UserAlreadyCandidateException.class)
     public void addChatCandidateAlreadyInQueue() throws Exception {
-        BaseResponse<Object> response = chatController.addChatCandidate(USER_ID);
-        BaseResponse<Object> response2 = chatController.addChatCandidate(USER_ID);
+        testValues.clearRoomUser1User2();
+        BaseResponse<Object> response = chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
+        BaseResponse<Object> response2 = chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
         assertTrue(response.isSuccess());
         assertNull(response.getErrorMessage());
         assertNull(response.getResult());
         assertFalse(response2.isSuccess());
         assertEquals(ErrorMessages.USER_ALREADY_CANDIDATE, response2.getErrorMessage());
         assertNull(response2.getResult());
-        chatController.removeChatCandidate(USER_ID);
+        chatController.removeChatCandidate(TestValues.USER_ID_1);
     }
 }

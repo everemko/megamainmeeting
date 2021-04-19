@@ -3,7 +3,7 @@ package com.megamainmeeting.spring.socket;
 import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
-import com.megamainmeeting.entity.chat.RoomPreparing;
+import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.base.*;
 import org.springframework.beans.factory.annotation.Autowired;

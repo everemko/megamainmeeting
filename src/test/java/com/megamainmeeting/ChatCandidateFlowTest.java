@@ -1,13 +1,13 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.config.RepositoryConfigTest;
+import com.megamainmeeting.config.TestValues;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.AuthenticationSocketDto;
 import com.megamainmeeting.dto.ReadyStatusDto;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import com.megamainmeeting.entity.room.Room;
-import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.spring.base.*;
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.spring.controller.chat.ChatController;
@@ -44,23 +44,21 @@ public class ChatCandidateFlowTest {
     RoomRepository roomRepository;
     private TestWebSocketSession session1;
     private TestWebSocketSession session2;
+    private TestValues testValues;
 
     private long roomId = -1;
+
 
     @Before
     public void setup() {
         session1 = new TestWebSocketSession();
         session2 = new TestWebSocketSession();
-        clearRoom();
+        testValues = new TestValues(roomRepository);
+        testValues.prepareChatCandidateReqeusts();
+        testValues.clearRoomUser1User2();
     }
 
-    private void clearRoom(){
-        RoomList list = roomRepository.getList(USER_ID_1);
-        list.getList().stream().filter(room -> room.isUserInRoom(USER_ID_2)).forEach(room -> {
-            roomRepository.delete(room.getId());
-        });
 
-    }
 
     @Test
     public void test() throws Exception {
@@ -69,8 +67,8 @@ public class ChatCandidateFlowTest {
         authenticationController.auth(authenticationSocketDto, session1);
         authenticationSocketDto.setUserId(USER_ID_2);
         authenticationController.auth(authenticationSocketDto, session2);
-        chatController.addChatCandidate(USER_ID_1);
-        chatController.addChatCandidate(USER_ID_2);
+        chatController.addChatCandidate(USER_ID_1, testValues.getChatCandidate1());
+        chatController.addChatCandidate(USER_ID_2, testValues.getChatCandidate2());
         checkUserMatchFound();
         ReadyStatusDto readyStatusDto = new ReadyStatusDto();
         readyStatusDto.setReady(true);

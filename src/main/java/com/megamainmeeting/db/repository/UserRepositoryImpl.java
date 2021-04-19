@@ -21,7 +21,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(long id) throws UserNotFoundException {
-        return userRepository.findById(id).orElseThrow(UserNotFoundException::new).toDomain();
+        return userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new)
+                .toDomain();
     }
 
     @Override

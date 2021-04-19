@@ -1,10 +1,9 @@
-package com.megamainmeeting.interactor;
+package com.megamainmeeting.domain.match;
 
 import com.megamainmeeting.domain.*;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotMatchException;
 import com.megamainmeeting.entity.room.Room;
-import com.megamainmeeting.entity.chat.RoomPreparing;
 import com.megamainmeeting.entity.user.User;
 import lombok.AllArgsConstructor;
 
@@ -28,26 +27,26 @@ public class UserChatPreparer {
     private final ScheduledExecutorService scheduledExecutorService;
     private final Map<RoomPreparing, OnceRunnable> returnToMatchQueueMap = new HashMap<>();
 
-    public void prepare(Set<User> users) {
+    public void prepare(Set<ChatCandidate> users) {
         RoomPreparing roomPreparing = new RoomPreparing();
         users.forEach((user) -> {
-            roomPreparing.addUser(user.getId());
-            roomPreparing.addUser(user.getId());
+            roomPreparing.addUser(user);
+            roomPreparing.addUser(user);
         });
         matchNotifier.notifyMatch(roomPreparing);
         roomPreparingRepository.add(roomPreparing);
         scheduleReturnToQueue(roomPreparing);
     }
 
-    public void setReady(User user) throws UserNotMatchException{
+    public void setReady(User user) throws UserNotMatchException {
         RoomPreparing roomPreparing = roomPreparingRepository.get(user.getId());
         roomPreparing.setReady(user.getId());
-        if(roomPreparing.isAllReady() ){
+        if (roomPreparing.isAllReady()) {
             returnToMatchQueueMap.get(roomPreparing).run();
         }
     }
 
-    public void setNotReady(User user) throws UserNotMatchException{
+    public void setNotReady(User user) throws UserNotMatchException {
         RoomPreparing roomPreparing = roomPreparingRepository.get(user.getId());
         returnToMatchQueueMap.get(roomPreparing).run();
     }
@@ -60,26 +59,21 @@ public class UserChatPreparer {
                 matchNotifier.notifyRoomReady(room);
             } else {
                 returnToQueue(roomPreparing.getReadyUsers());
-                notifyNotReady(roomPreparing.getNotReadyUsers());
+                notifyNotReady(roomPreparing.getUsers());
             }
         });
         scheduledExecutorService.schedule(runnable, DELAY, TimeUnit.MILLISECONDS);
         returnToMatchQueueMap.put(roomPreparing, runnable);
     }
 
-    private void returnToQueue(Set<Long> users){
-        for(long id: users){
-            try {
-                User user = userRepository.get(id);
-                userMatchQueue.add(user);
-            } catch (UserNotFoundException exception){
-
-            }
+    private void returnToQueue(Set<ChatCandidate> users) {
+        for (ChatCandidate chatCandidate : users) {
+            userMatchQueue.add(chatCandidate);
         }
     }
 
-    private void notifyNotReady(Set<Long> users){
-        for(long id: users){
+    private void notifyNotReady(Set<Long> users) {
+        for (long id : users) {
             matchNotifier.notifyUserRefuseChat(id);
         }
     }

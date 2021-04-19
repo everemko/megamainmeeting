@@ -10,6 +10,8 @@ import com.megamainmeeting.db.SessionRepositoryJpa;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
+import com.megamainmeeting.domain.match.UserChatMatcher;
+import com.megamainmeeting.domain.match.UserChatPreparer;
 import com.megamainmeeting.interactor.*;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;

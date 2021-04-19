@@ -2,10 +2,13 @@ package com.megamainmeeting;
 
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.config.RepositoryConfigTest;
+import com.megamainmeeting.config.TestValues;
 import com.megamainmeeting.db.repository.UserChatCandidateQueueImpl;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.UserChatCandidateQueue;
 import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.match.ChatCandidate;
+import com.megamainmeeting.domain.match.ChatGoal;
 import com.megamainmeeting.dto.ReadyStatusDto;
 import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.entity.user.User;
@@ -39,19 +42,41 @@ public class ChatCandidateControllerTest {
     @Autowired
     UserChatCandidateQueue userChatCandidateQueue;
 
+    TestValues testValues;
+    ChatCandidate chatCandidate1;
+    ChatCandidate chatCandidate2;
+    ChatCandidate chatCandidate3;
+
+    @Before
+    public void preapre(){
+        testValues = new TestValues(roomRepository);
+        testValues.prepareRoomToUser1User2();
+        chatCandidate1 = getChatCandidate(USER_ID_1);
+        chatCandidate2 = getChatCandidate(USER_ID_2);
+        chatCandidate3 = getChatCandidate(USER_ID_3);
+    }
+
+    private ChatCandidate getChatCandidate(long userId){
+        ChatCandidate chatCandidate = new ChatCandidate();
+        chatCandidate.setUserId(userId);
+        chatCandidate.setAgeFrom(18);
+        chatCandidate.setAgeTo(22);
+        chatCandidate.setAge(20);
+        chatCandidate.setChatGoal(ChatGoal.Chat);
+        chatCandidate.setRoomList(roomRepository.getList(userId));
+        return chatCandidate;
+    }
+
     @Test
     public void testFindChatWithExistRoom() throws Exception{
-        Set<Long> users = new HashSet<>(Arrays.asList(USER_ID_1, USER_ID_2));
-        RoomList roomList = roomRepository.getList(USER_ID_1);
-        if(roomList.getList().stream().noneMatch((room -> room.isUserInRoom(USER_ID_2)))){
-            roomRepository.create(users);
-        }
-        User user = new User(USER_ID_1);
-        userChatCandidateQueue.add(user);
-        User user2 = userChatCandidateQueue.findMatch(USER_ID_2);
+        userChatCandidateQueue.add(chatCandidate1);
+        ChatCandidate user2 = userChatCandidateQueue.findMatch(chatCandidate2);
         Assert.assertNull(user2);
-        User user3 = userChatCandidateQueue.findMatch(USER_ID_3);
+        ChatCandidate user3 = userChatCandidateQueue.findMatch(chatCandidate3);
         Assert.assertNotNull(user3);
+        userChatCandidateQueue.remove(USER_ID_1);
+        userChatCandidateQueue.remove(USER_ID_2);
+        userChatCandidateQueue.remove(USER_ID_3);
     }
 
 }

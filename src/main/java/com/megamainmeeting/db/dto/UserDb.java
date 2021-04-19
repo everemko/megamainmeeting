@@ -1,10 +1,18 @@
 package com.megamainmeeting.db.dto;
 
+import com.megamainmeeting.entity.room.Room;
+import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.entity.user.User;
 import lombok.Data;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Data
 @Entity
@@ -23,8 +31,19 @@ public class UserDb {
     @Column(nullable = false, name = "gender_match")
     private Long genderMatch;
 
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "Room_User",
+            joinColumns = {@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "room_id")}
+    )
+    private Set<RoomDb> rooms = new HashSet<>();
+
     public User toDomain(){
-        return new User(id);
+        LocalDateTime now = LocalDateTime.now();
+        long age = Period.between(dateBirth.toLocalDate(), now.toLocalDate()).getYears();
+        List<Room> roomList = rooms.stream().map(RoomDb::toDomain).collect(Collectors.toList());
+        return new User(id, age, new RoomList(roomList));
     }
 
     public static UserDb getInstance(User user){

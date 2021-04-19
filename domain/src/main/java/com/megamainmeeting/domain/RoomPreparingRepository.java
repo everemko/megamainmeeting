@@ -1,7 +1,7 @@
 package com.megamainmeeting.domain;
 
 import com.megamainmeeting.domain.error.UserNotMatchException;
-import com.megamainmeeting.entity.chat.RoomPreparing;
+import com.megamainmeeting.domain.match.RoomPreparing;
 
 public interface RoomPreparingRepository {
 

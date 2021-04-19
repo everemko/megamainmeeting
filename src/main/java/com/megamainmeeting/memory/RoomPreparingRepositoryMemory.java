@@ -2,7 +2,7 @@ package com.megamainmeeting.memory;
 
 import com.megamainmeeting.domain.RoomPreparingRepository;
 import com.megamainmeeting.domain.error.UserNotMatchException;
-import com.megamainmeeting.entity.chat.RoomPreparing;
+import com.megamainmeeting.domain.match.RoomPreparing;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 

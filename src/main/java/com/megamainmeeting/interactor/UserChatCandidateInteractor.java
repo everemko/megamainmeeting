@@ -1,10 +1,16 @@
 package com.megamainmeeting.interactor;
 
 import com.megamainmeeting.domain.*;
+import com.megamainmeeting.domain.error.AddChatCandidateException;
+import com.megamainmeeting.domain.match.UserChatMatcher;
+import com.megamainmeeting.domain.match.UserChatPreparer;
 import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotMatchException;
+import com.megamainmeeting.domain.match.ChatCandidate;
+import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.entity.user.User;
+import com.megamainmeeting.spring.controller.chat.ChatCandidateRequest;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -18,10 +24,16 @@ public class UserChatCandidateInteractor {
     private final UserChatMatcher userChatMatcher;
     private final UserChatPreparer userChatPreparer;
 
-    public void add(long userId) throws UserNotFoundException, UserAlreadyCandidateException{
+    public void add(long userId, ChatCandidateRequest chatCandidateRequest) throws UserNotFoundException, UserAlreadyCandidateException, AddChatCandidateException {
         User user = userRepository.get(userId);
-        if(userMatchQueue.isExist(user)) throw new UserAlreadyCandidateException();
-        userChatMatcher.match(user);
+        ChatCandidate chatCandidate = new ChatCandidate();
+        chatCandidate.setAgeFrom(chatCandidateRequest.getAgeFrom());
+        chatCandidate.setAgeTo(chatCandidateRequest.getAgeTo());
+        chatCandidate.setChatGoal(chatCandidateRequest.getChatGoal());
+        chatCandidate.setUserId(userId);
+        chatCandidate.setAge(user.getAge());
+        chatCandidate.setRoomList(user.getRoomList());
+        userChatMatcher.match(chatCandidate);
     }
 
     public void setUserReady(long userId) throws UserNotMatchException, UserNotFoundException{

@@ -1,4 +1,4 @@
-package com.megamainmeeting.interactor;
+package com.megamainmeeting.domain.match;
 
 import lombok.AllArgsConstructor;
 

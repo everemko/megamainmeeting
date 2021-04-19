@@ -1,6 +1,7 @@
 package com.megamainmeeting.spring.controller.chat;
 
 import com.megamainmeeting.db.dto.ChatMessageDb;
+import com.megamainmeeting.domain.match.ChatCandidate;
 import com.megamainmeeting.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
@@ -33,8 +34,10 @@ public class ChatController {
     }
 
     @PostMapping("chat/candidate/add")
-    public BaseResponse<Object> addChatCandidate(@RequestAttribute("UserId") long userId) throws Exception {
-        chatCandidateInteractor.add(userId);
+    public BaseResponse<Object> addChatCandidate(@RequestAttribute("UserId") long userId,
+                                                 @RequestBody ChatCandidateRequest chatCandidateRequest) throws Exception {
+
+        chatCandidateInteractor.add(userId, chatCandidateRequest);
         return SuccessResponse.getSimpleSuccessResponse();
     }
 
