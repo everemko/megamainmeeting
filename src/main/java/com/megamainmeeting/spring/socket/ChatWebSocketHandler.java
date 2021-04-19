@@ -68,7 +68,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                     break;
                 }
                 case RpcMethods.MESSAGE_HAS_BEEN_READ: {
-                    ReadMessageOperationDto dto = mapper.convertValue(request.getId(), ReadMessageOperationDto.class);
+                    ReadMessageOperationDto dto = mapper.convertValue(request.getParams(), ReadMessageOperationDto.class);
                     messageOperationsController.handle(dto, socketSessions.getUserId(session));
                     break;
                 }
@@ -77,22 +77,14 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
         } catch (IOException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.DESERIALIZE_ERROR);
             userSocketManager.send(session, response);
-        } catch (AuthorizationException exception) {
+        } catch (WebSocketSessionNotFoundException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.AUTHORIZATION_ERROR);
             userSocketManager.send(session, response);
-        } catch (UserNotMatchException exception) {
-            BaseRpc response = rpcFactory.getError(ErrorMessages.USER_NOT_FOUND_MATCH_ERROR);
+        } catch (BaseException exception) {
+            BaseRpc response = rpcFactory.getError(exception.getMessage());
             userSocketManager.send(session, response);
-        } catch (UserNotFoundException exception) {
-            BaseRpc response = rpcFactory.getError(ErrorMessages.USER_NOT_FOUND);
-            userSocketManager.send(session, response);
-        } catch (WebSocketSessionNotFoundException exception) {
-
-        } catch (ChatMessageNotFoundException exception){
-            BaseRpc response = rpcFactory.getError(ErrorMessages.CHAT_MESSAGE_NOT_FOUND);
-            userSocketManager.send(session, response);
-        } catch (UserNotInRoomException exception){
-            BaseRpc response = rpcFactory.getError(ErrorMessages.USER_NOT_IN_ROOM);
+        } catch (Exception exception) {
+            BaseRpc response = rpcFactory.getError(ErrorMessages.INTERNAL_SERVER_ERROR);
             userSocketManager.send(session, response);
         }
     }

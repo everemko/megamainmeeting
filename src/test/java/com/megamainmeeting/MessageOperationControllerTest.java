@@ -2,11 +2,13 @@ package com.megamainmeeting;
 
 
 import com.megamainmeeting.config.AppConfigTest;
+import com.megamainmeeting.config.RepositoryConfigTest;
 import com.megamainmeeting.config.TestValues;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.ReadMessageOperationDto;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
+import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.spring.base.NotificationRpcResponse;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import com.megamainmeeting.spring.socket.chat.ChatMessageOperationsController;
@@ -25,7 +27,7 @@ import java.util.HashSet;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = AppConfigTest.class)
+@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class})
 public class MessageOperationControllerTest {
 
     @Autowired
@@ -37,31 +39,30 @@ public class MessageOperationControllerTest {
     @Autowired
     RoomRepository roomRepository;
 
-    private final static long USER_ID = 1;
-    private final static long USER_ID_2 = 2;
-    private long roomId = -1;
+    TestValues testValues;
+
 
     @Before
     public void prepare(){
-        if(roomRepository.getList(USER_ID).getList().stream().noneMatch(room -> room.isUserInRoom(USER_ID_2))){
-            roomRepository.create(new HashSet<>(Arrays.asList(USER_ID, USER_ID_2)));
-        }
-        roomId = roomRepository.getList(USER_ID).getList().stream().findFirst().get().getId();
+        testValues = new TestValues(roomRepository);
+        testValues.prepareRoomToUser1User2();
     }
 
     @Test
     public void test() throws Exception{
-
         NewChatMessage newChatMessage = new NewChatMessage();
         newChatMessage.setMessage(TestValues.MESSAGE_TEST);
-        newChatMessage.setRoomId(roomId);
-        chatController.processMessage(USER_ID, newChatMessage);
+        newChatMessage.setRoomId(TestValues.ROOM_ID);
+        chatController.processMessage(TestValues.USER_ID_1, newChatMessage);
         NotificationRpcResponse<ChatMessage> response = (NotificationRpcResponse<ChatMessage>) testClientManager.removeFirst();
         ChatMessage chatMessage = response.getParams();
         ReadMessageOperationDto readMessageOperationDto = new ReadMessageOperationDto();
         readMessageOperationDto.setMessageId(chatMessage.getId());
-        chatMessageOperationsController.handle(readMessageOperationDto, USER_ID_2);
+        chatMessageOperationsController.handle(readMessageOperationDto, TestValues.USER_ID_2);
         NotificationRpcResponse<ChatMessage> response2 = (NotificationRpcResponse<ChatMessage>) testClientManager.removeFirst();
         Assert.assertTrue(response2.getParams().isRead());
+        Room room = response2.getParams().getRoom();
+        Assert.assertTrue(room.isUserInRoom(TestValues.USER_ID_1));
+        Assert.assertTrue(room.isUserInRoom(TestValues.USER_ID_2));
     }
 }
