@@ -3,7 +3,8 @@ package com.megamainmeeting.db.dto;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.entity.user.User;
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -11,10 +12,10 @@ import java.time.Period;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
-@Data
+@Getter
+@Setter
 @Entity
 @Table(name = "USERS")
 public class UserDb {
@@ -30,6 +31,9 @@ public class UserDb {
     private Long gender;
     @Column(nullable = false, name = "gender_match")
     private Long genderMatch;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private UserProfileDb userProfile = new UserProfileDb();
 
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
