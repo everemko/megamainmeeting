@@ -8,7 +8,7 @@ public class RpcMethods {
     public static final String MESSAGE_HAS_BEEN_READ = "message_has_been_read";
 
 
-    public static final String MESSAGE_HAS_BEEN_READ_NOTIFICATION = "message_has_been_read_notification";
+    public static final String MESSAGE_UPDATED_NOTIFICATION = "message_updated_notification";
     public static final String USER_MATCH_FOUND_NOTIFICATION = "user_match_found_notification";
     public static final String CHAT_ROOM_CREATED_NOTIFICATION = "chat_room_ready";
     public static final String USERS_REFUSE_ROOM = "users_refuse_room";

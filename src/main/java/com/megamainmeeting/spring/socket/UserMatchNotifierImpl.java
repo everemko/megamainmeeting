@@ -43,7 +43,7 @@ public class UserMatchNotifierImpl implements UserNotifier {
 
     @Override
     public void notifyChatMessageUpdated(ChatMessage message) {
-        BaseRpc response = rpcFactory.getNotification(RpcMethods.MESSAGE_HAS_BEEN_READ_NOTIFICATION, message);
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.MESSAGE_UPDATED_NOTIFICATION, message);
         for(long user: message.getRoom().getUsers()){
             userSocketManager.send(user, response);
         }
