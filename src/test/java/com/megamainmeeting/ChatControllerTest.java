@@ -1,6 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
@@ -32,11 +33,13 @@ public class ChatControllerTest {
     ChatController chatController;
     @Autowired
     RoomRepository roomRepository;
+    @Autowired
+    UserRepositoryJpa userRepositoryJpa;
     private TestValues testValues;
 
     @Before
     public void prepare(){
-        testValues = new TestValues(roomRepository);
+        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareChatCandidateReqeusts();
         testValues.prepareRoomToUser1User2();
     }

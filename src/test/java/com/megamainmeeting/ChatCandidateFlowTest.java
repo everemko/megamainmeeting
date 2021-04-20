@@ -2,6 +2,7 @@ package com.megamainmeeting;
 
 import com.megamainmeeting.config.RepositoryConfigTest;
 import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.AuthenticationSocketDto;
 import com.megamainmeeting.dto.ReadyStatusDto;
@@ -42,6 +43,8 @@ public class ChatCandidateFlowTest {
     ChatCandidateController chatCandidateController;
     @Autowired
     RoomRepository roomRepository;
+    @Autowired
+    UserRepositoryJpa userRepositoryJpa;
     private TestWebSocketSession session1;
     private TestWebSocketSession session2;
     private TestValues testValues;
@@ -53,7 +56,7 @@ public class ChatCandidateFlowTest {
     public void setup() {
         session1 = new TestWebSocketSession();
         session2 = new TestWebSocketSession();
-        testValues = new TestValues(roomRepository);
+        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareChatCandidateReqeusts();
         testValues.clearRoomUser1User2();
     }

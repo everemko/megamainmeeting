@@ -3,6 +3,7 @@ package com.megamainmeeting;
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.config.RepositoryConfigTest;
 import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.repository.UserChatCandidateQueueImpl;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.UserChatCandidateQueue;
@@ -41,6 +42,8 @@ public class ChatCandidateControllerTest {
     RoomRepository roomRepository;
     @Autowired
     UserChatCandidateQueue userChatCandidateQueue;
+    @Autowired
+    UserRepositoryJpa userRepositoryJpa;
 
     TestValues testValues;
     ChatCandidate chatCandidate1;
@@ -49,7 +52,7 @@ public class ChatCandidateControllerTest {
 
     @Before
     public void preapre(){
-        testValues = new TestValues(roomRepository);
+        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareRoomToUser1User2();
         chatCandidate1 = getChatCandidate(USER_ID_1);
         chatCandidate2 = getChatCandidate(USER_ID_2);

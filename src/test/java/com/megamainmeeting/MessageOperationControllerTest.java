@@ -4,6 +4,7 @@ package com.megamainmeeting;
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.config.RepositoryConfigTest;
 import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.ReadMessageOperationDto;
 import com.megamainmeeting.entity.chat.ChatMessage;
@@ -38,13 +39,15 @@ public class MessageOperationControllerTest {
     ChatMessageOperationsController chatMessageOperationsController;
     @Autowired
     RoomRepository roomRepository;
+    @Autowired
+    UserRepositoryJpa userRepositoryJpa;
 
     TestValues testValues;
 
 
     @Before
     public void prepare(){
-        testValues = new TestValues(roomRepository);
+        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareRoomToUser1User2();
     }
 

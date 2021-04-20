@@ -11,14 +11,12 @@ import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
+import com.megamainmeeting.entity.room.Room;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
@@ -35,20 +33,24 @@ public class ChatMessageInteractor {
     }
 
     public Map<Long, List<ChatMessage>> getMessagesAfterDate(Map<Long, LocalDateTime> map,
-                                                               long userId) throws RoomNotFoundException, UserNotInRoomException{
+                                                             long userId) throws RoomNotFoundException, UserNotInRoomException {
         LinkedHashMap<Long, List<ChatMessage>> newMap = new LinkedHashMap<>();
-        for(Map.Entry<Long, LocalDateTime> entry: map.entrySet()){
-            RoomDb room = roomRepositoryJpa.findById(entry.getKey()).orElseThrow(RoomNotFoundException::new);
-            if(!room.isUserInRoom(userId)){
-                throw new UserNotInRoomException();
-            }
+        for (RoomDb room : roomRepositoryJpa.findAllByUserId(userId)) {
+            Optional<LocalDateTime> optional = map.entrySet()
+                    .stream()
+                    .filter(it -> it.getKey() == room.getId())
+                    .map(Map.Entry::getValue)
+                    .findFirst();
             List<ChatMessage> list = room.getMessages()
                     .stream()
-                    .filter(it -> it.getTime().isAfter(entry.getValue()))
+                    .filter((ChatMessageDb it) -> {
+                        if (optional.isEmpty()) return true;
+                        else return it.getTime().isAfter(optional.get());
+                    })
                     .map(ChatMessageDb::toDomain)
                     .collect(Collectors.toList());
-            newMap.put(entry.getKey(), list);
-        };
+            newMap.put(room.getId(), list);
+        }
         return newMap;
     }
 }
