@@ -4,6 +4,7 @@ import com.megamainmeeting.db.dto.ChatMessageDb;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.db.dto.RoomDeleted;
 import com.megamainmeeting.db.dto.UserDb;
+import com.megamainmeeting.entity.user.User;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -16,7 +17,7 @@ import java.util.stream.Collectors;
 public class RoomResponse {
 
     private long id;
-    private Set<Long> users = new HashSet<>();
+    private Set<User> users = new HashSet<>();
     private LocalDateTime createdAt;
     private long messageCountUnread;
     private RoomDeleted roomDeleted;
@@ -25,7 +26,7 @@ public class RoomResponse {
         id = roomDb.getId();
         users = roomDb.getUsers()
                 .stream()
-                .map(UserDb::getId)
+                .map(UserDb::toDomain)
                 .collect(Collectors.toSet());
         createdAt = roomDb.getCreatedAt();
         messageCountUnread = roomDb.getMessages()

@@ -1,5 +1,6 @@
 package com.megamainmeeting.interactor;
 
+import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.domain.*;
 import com.megamainmeeting.domain.error.AddChatCandidateException;
 import com.megamainmeeting.domain.match.UserChatMatcher;
@@ -20,19 +21,20 @@ public class UserChatCandidateInteractor {
 
     private final UserChatCandidateQueue userMatchQueue;
     private final UserRepository userRepository;
-
+    private final RoomRepository roomRepository;
     private final UserChatMatcher userChatMatcher;
     private final UserChatPreparer userChatPreparer;
 
     public void add(long userId, ChatCandidateRequest chatCandidateRequest) throws UserNotFoundException, UserAlreadyCandidateException, AddChatCandidateException {
         User user = userRepository.get(userId);
+        RoomList roomList = roomRepository.getList(userId);
         ChatCandidate chatCandidate = new ChatCandidate();
         chatCandidate.setAgeFrom(chatCandidateRequest.getAgeFrom());
         chatCandidate.setAgeTo(chatCandidateRequest.getAgeTo());
         chatCandidate.setChatGoal(chatCandidateRequest.getChatGoal());
         chatCandidate.setUserId(userId);
         chatCandidate.setAge(user.getAge());
-        chatCandidate.setRoomList(user.getRoomList());
+        chatCandidate.setRoomList(roomList);
         userChatMatcher.match(chatCandidate);
     }
 

@@ -104,10 +104,12 @@ public class AppConfig {
     public UserChatCandidateInteractor provideUserChatCandidateInteractor(UserChatMatcher userChatMatcher,
                                                                           UserChatCandidateQueue userChatCandidateQueue,
                                                                           UserRepository userRepository,
-                                                                          UserChatPreparer userChatPreparer) {
+                                                                          UserChatPreparer userChatPreparer,
+                                                                          RoomRepository roomRepository) {
         return new UserChatCandidateInteractor(
                 userChatCandidateQueue,
                 userRepository,
+                roomRepository,
                 userChatMatcher,
                 userChatPreparer
         );

@@ -6,14 +6,12 @@ import lombok.*;
 @Getter
 @Setter
 @AllArgsConstructor
-@NoArgsConstructor
 @EqualsAndHashCode(of = {"id"})
 public class User {
 
     private long id;
-
     private long age;
+    private long gender;
+    private String name;
 
-
-    private RoomList roomList;
 }

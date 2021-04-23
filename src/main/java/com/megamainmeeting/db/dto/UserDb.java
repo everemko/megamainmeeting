@@ -47,7 +47,7 @@ public class UserDb {
         LocalDateTime now = LocalDateTime.now();
         long age = Period.between(dateBirth.toLocalDate(), now.toLocalDate()).getYears();
         List<Room> roomList = rooms.stream().map(RoomDb::toDomain).collect(Collectors.toList());
-        return new User(id, age, new RoomList(roomList));
+        return new User(id, age, gender, name);
     }
 
     public static UserDb getInstance(User user){
