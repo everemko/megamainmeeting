@@ -1,6 +1,8 @@
 package com.megamainmeeting.spring.socket;
 
 import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.open.RoomBlockingStatus;
+import com.megamainmeeting.domain.open.UserOpensSet;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.domain.match.RoomPreparing;
@@ -52,6 +54,18 @@ public class UserMatchNotifierImpl implements UserNotifier {
     @Override
     public void notifyUserRefuseChat(long userId) {
         BaseRpc response = rpcFactory.getNotification(RpcMethods.USERS_REFUSE_ROOM);
+        userSocketManager.send(userId, response);
+    }
+
+    @Override
+    public void notifyUserShouldOpens(long userId, UserOpensSet userOpensSet) {
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.USER_SHOULD_OPENS_NOTIFICATION, userOpensSet);
+        userSocketManager.send(userId, response);
+    }
+
+    @Override
+    public void notifyUserOpens(long userId, RoomBlockingStatus roomBlockingStatus) {
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.USER_OPENS_NOTIFICATION, roomBlockingStatus);
         userSocketManager.send(userId, response);
     }
 }

@@ -1,10 +1,11 @@
 package com.megamainmeeting.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.megamainmeeting.TestClientManager;
+import com.megamainmeeting.utils.TestClientManager;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
+import com.megamainmeeting.domain.open.UserOpeningCheck;
 import com.megamainmeeting.interactor.ChatMessageInteractor;
 import com.megamainmeeting.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.domain.match.UserChatMatcher;
@@ -70,11 +71,13 @@ public class AppConfigTest {
     @Bean
     public UserChatCandidateInteractor provideUserChatCandidateInteractor(UserChatMatcher userChatMatcher,
                                                                           UserChatCandidateQueue userChatCandidateQueue,
+                                                                          RoomRepository roomRepository,
                                                                           UserRepository userRepository,
                                                                           UserChatPreparer userChatPreparer) {
         return new UserChatCandidateInteractor(
                 userChatCandidateQueue,
                 userRepository,
+                roomRepository,
                 userChatMatcher,
                 userChatPreparer
         );
@@ -83,8 +86,9 @@ public class AppConfigTest {
     @Bean
     ChatMessageInteractor provideChatMessageInteractor(MessageChatManager messageChatManager,
                                                        ChatMessageRepository chatMessageRepository,
-                                                       RoomRepositoryJpa roomRepositoryJpa) {
-        return new ChatMessageInteractor(messageChatManager, chatMessageRepository, roomRepositoryJpa);
+                                                       RoomRepositoryJpa roomRepositoryJpa,
+                                                       UserOpeningCheck userOpeningCheck) {
+        return new ChatMessageInteractor(messageChatManager, chatMessageRepository, roomRepositoryJpa, userOpeningCheck);
     }
 
     @Bean

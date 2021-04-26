@@ -3,7 +3,7 @@ package com.megamainmeeting;
 
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.config.RepositoryConfigTest;
-import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.ReadMessageOperationDto;
@@ -13,6 +13,7 @@ import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.spring.base.NotificationRpcResponse;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import com.megamainmeeting.spring.socket.chat.ChatMessageOperationsController;
+import com.megamainmeeting.utils.TestClientManager;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,14 +23,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class})
-public class MessageOperationControllerTest {
+public class MessageOperationControllerTest extends BaseTest{
 
     @Autowired
     TestClientManager testClientManager;
@@ -42,13 +37,15 @@ public class MessageOperationControllerTest {
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
 
+    @Autowired
     TestValues testValues;
 
 
     @Before
     public void prepare(){
-        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareRoomToUser1User2();
+        testValues.deleteAllMessagesInRoom();
+        testClientManager.clear();
     }
 
     @Test

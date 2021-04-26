@@ -1,7 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.config.RepositoryConfigTest;
-import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.dto.AuthenticationSocketDto;
@@ -14,6 +14,8 @@ import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import com.megamainmeeting.spring.socket.auth.AuthenticationController;
 import com.megamainmeeting.spring.socket.chat.ChatCandidateController;
+import com.megamainmeeting.utils.TestClientManager;
+import com.megamainmeeting.utils.TestWebSocketSession;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -24,9 +26,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class})
-public class ChatCandidateFlowTest {
+public class ChatCandidateFlowTest extends BaseTest{
 
     private static final long USER_ID_1 = 1;
     private static final long USER_ID_2 = 2;
@@ -47,6 +47,8 @@ public class ChatCandidateFlowTest {
     UserRepositoryJpa userRepositoryJpa;
     private TestWebSocketSession session1;
     private TestWebSocketSession session2;
+
+    @Autowired
     private TestValues testValues;
 
     private long roomId = -1;
@@ -56,7 +58,6 @@ public class ChatCandidateFlowTest {
     public void setup() {
         session1 = new TestWebSocketSession();
         session2 = new TestWebSocketSession();
-        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareChatCandidateReqeusts();
         testValues.clearRoomUser1User2();
     }

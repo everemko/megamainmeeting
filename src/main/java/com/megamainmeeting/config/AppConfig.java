@@ -12,6 +12,7 @@ import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
 import com.megamainmeeting.domain.match.UserChatMatcher;
 import com.megamainmeeting.domain.match.UserChatPreparer;
+import com.megamainmeeting.domain.open.UserOpeningCheck;
 import com.megamainmeeting.interactor.*;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;
@@ -118,8 +119,9 @@ public class AppConfig {
     @Bean
     ChatMessageInteractor provideChatMessageInteractor(MessageChatManager messageChatManager,
                                                        ChatMessageRepository chatMessageRepository,
-                                                       RoomRepositoryJpa roomRepositoryJpa) {
-        return new ChatMessageInteractor(messageChatManager, chatMessageRepository, roomRepositoryJpa);
+                                                       RoomRepositoryJpa roomRepositoryJpa,
+                                                       UserOpeningCheck userOpeningCheck) {
+        return new ChatMessageInteractor(messageChatManager, chatMessageRepository, roomRepositoryJpa, userOpeningCheck);
     }
 
     @Bean

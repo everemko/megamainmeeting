@@ -10,6 +10,7 @@ import com.megamainmeeting.entity.room.RoomList;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -33,7 +34,6 @@ public class RoomRepositoryImpl implements RoomRepository {
             UserDb userDb = new UserDb();
             userDb.setId(userId);
             roomDb.addUser(userDb);
-            roomDb.addUser(userDb);
         }
         roomRepositoryJpa.save(roomDb);
         return roomDb.toDomain();
@@ -50,6 +50,12 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public void delete(long id) {
-        roomRepositoryJpa.deleteById(id);
+        Optional<RoomDb> roomDbOptional = roomRepositoryJpa.findById(id);
+        if(roomDbOptional.isEmpty()) return;
+        RoomDb roomDb = roomDbOptional.get();
+        roomDb.getUsers().clear();
+        roomDb.getUserOpens().clear();
+        roomRepositoryJpa.save(roomDb);
+        roomRepositoryJpa.delete(roomDb);
     }
 }

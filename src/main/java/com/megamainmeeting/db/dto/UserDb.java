@@ -1,5 +1,6 @@
 package com.megamainmeeting.db.dto;
 
+import com.megamainmeeting.domain.open.UserOpenType;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.room.RoomList;
 import com.megamainmeeting.entity.user.User;
@@ -33,7 +34,10 @@ public class UserDb {
     private Long genderMatch;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private UserProfileDb userProfile = new UserProfileDb();
+    private UserProfileDb userProfile;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<UserOpenUpDb> userOpens;
 
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
@@ -54,5 +58,12 @@ public class UserDb {
         UserDb dto = new UserDb();
         dto.id = user.getId();
         return dto;
+    }
+
+    public Set<UserOpenType> getUserOpens(long roomId){
+        return userOpens.stream()
+                .filter(it -> it.getRoom().getId() == roomId)
+                .map(UserOpenUpDb::getUserOpenType)
+                .collect(Collectors.toSet());
     }
 }

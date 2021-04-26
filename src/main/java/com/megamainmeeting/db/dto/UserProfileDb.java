@@ -25,6 +25,7 @@ public class UserProfileDb {
     private String country;
     private String profession;
     private String aboutMyself;
+    private String photo;
     private int height;
     private int wight;
     private String firstDateIdeal;

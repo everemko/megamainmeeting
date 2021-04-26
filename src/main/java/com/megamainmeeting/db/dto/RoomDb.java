@@ -1,5 +1,7 @@
 package com.megamainmeeting.db.dto;
 
+import com.megamainmeeting.domain.error.UserNotFoundException;
+import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.entity.room.Room;
 import lombok.Data;
 import lombok.Getter;
@@ -29,13 +31,17 @@ public class RoomDb {
             inverseJoinColumns = {@JoinColumn(name = "user_id")}
     )
     private Set<UserDb> users = new HashSet<>();
+
     private LocalDateTime createdAt = LocalDateTime.now(ZoneOffset.UTC);
 
-    @OneToMany(mappedBy = "room",  cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<ChatMessageDb> messages;
 
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "room")
     private RoomDeleted roomDeleted;
+
+    @OneToMany(mappedBy = "room", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<UserOpenUpDb> userOpens;
 
     public void addUser(UserDb userDb) {
         users.add(userDb);
@@ -43,6 +49,10 @@ public class RoomDb {
 
     public void addUsers(Set<UserDb> users) {
         this.users.addAll(users);
+    }
+
+    public UserDb getUser(long userId) throws UserNotInRoomException {
+        return users.stream().filter(it -> it.getId() == userId).findFirst().orElseThrow(UserNotInRoomException::new);
     }
 
     public Room toDomain() {
@@ -61,7 +71,7 @@ public class RoomDb {
         this.roomDeleted = roomDeleted;
     }
 
-    public boolean isUserInRoom(long userId){
+    public boolean isUserInRoom(long userId) {
         return users.stream().anyMatch(it -> it.getId() == userId);
     }
 }

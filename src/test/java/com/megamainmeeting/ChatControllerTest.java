@@ -1,14 +1,11 @@
 package com.megamainmeeting;
 
-import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.domain.error.*;
+import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
-import com.megamainmeeting.domain.error.RoomNotFoundException;
-import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
-import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
-import com.megamainmeeting.domain.error.ErrorMessages;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import org.junit.Before;
@@ -18,14 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Collections;
-import java.util.HashSet;
-
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-public class ChatControllerTest {
+public class ChatControllerTest extends BaseTest{
 
     private final static long NOT_EXIST_USER_ID = -1;
 
@@ -35,13 +28,15 @@ public class ChatControllerTest {
     RoomRepository roomRepository;
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
+
+    @Autowired
     private TestValues testValues;
 
     @Before
     public void prepare(){
-        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareChatCandidateReqeusts();
         testValues.prepareRoomToUser1User2();
+        testValues.deleteAllMessagesInRoom();
     }
 
 
@@ -58,7 +53,7 @@ public class ChatControllerTest {
     @Test(expected = UserNotFoundException.class)
     public void addMessageRoomInvalidUser() throws Exception {
         NewChatMessage newChatMessage = new NewChatMessage();
-        newChatMessage.setRoomId(1);
+        newChatMessage.setRoomId(TestValues.ROOM_ID);
         newChatMessage.setMessage("asdfasdf");
         BaseResponse<?> response = chatController.processMessage(NOT_EXIST_USER_ID, newChatMessage);
         assertFalse(response.isSuccess());

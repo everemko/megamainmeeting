@@ -1,19 +1,20 @@
 package com.megamainmeeting.interactor;
 
-import com.megamainmeeting.db.ChatMessageRepositoryJpa;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.dto.ChatMessageDb;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.domain.ChatMessageRepository;
 import com.megamainmeeting.domain.MessageChatManager;
+import com.megamainmeeting.domain.error.RoomIsBlockedException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
+import com.megamainmeeting.domain.open.RoomBlockingNotifier;
+import com.megamainmeeting.domain.open.UserOpeningCheck;
+import com.megamainmeeting.domain.open.UserOpensRepository;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
-import com.megamainmeeting.entity.room.Room;
 import lombok.AllArgsConstructor;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -25,10 +26,15 @@ public class ChatMessageInteractor {
     private final MessageChatManager messageChatManager;
     private final ChatMessageRepository chatMessageRepository;
     private final RoomRepositoryJpa roomRepositoryJpa;
+    private final UserOpeningCheck userOpeningCheck;
 
-    public ChatMessage onNewMessage(NewChatMessage newMessage) throws RoomNotFoundException, UserNotFoundException {
+    synchronized
+    public ChatMessage onNewMessage(NewChatMessage newMessage) throws RoomNotFoundException, UserNotFoundException,
+            RoomIsBlockedException, UserNotInRoomException {
+        userOpeningCheck.checkBeforeMessage(newMessage.getRoomId(), newMessage.getUserId());
         ChatMessage message = chatMessageRepository.save(newMessage);
         messageChatManager.sendIgnoreSender(message);
+        userOpeningCheck.checkAfterMessage(newMessage.getRoomId());
         return message;
     }
 

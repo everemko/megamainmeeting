@@ -1,4 +1,4 @@
-package com.megamainmeeting;
+package com.megamainmeeting.utils;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

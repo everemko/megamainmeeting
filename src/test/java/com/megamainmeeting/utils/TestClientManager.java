@@ -1,4 +1,4 @@
-package com.megamainmeeting;
+package com.megamainmeeting.utils;
 
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.base.BaseRequest;
@@ -26,12 +26,16 @@ public class TestClientManager implements UserSocketClientManager {
 //        return list.get(0);
 //    }
 
-    BaseRpc removeFirst(){
+    public BaseRpc removeFirst(){
         return list.remove(0);
     }
 
     @Override
     public void send(WebSocketSession session, Object object) {
 
+    }
+
+    public void clear(){
+        list.clear();
     }
 }

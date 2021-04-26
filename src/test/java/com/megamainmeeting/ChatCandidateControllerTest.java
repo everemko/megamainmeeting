@@ -2,20 +2,13 @@ package com.megamainmeeting;
 
 import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.config.RepositoryConfigTest;
-import com.megamainmeeting.config.TestValues;
+import com.megamainmeeting.config.TestConfigs;
+import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
-import com.megamainmeeting.db.repository.UserChatCandidateQueueImpl;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.UserChatCandidateQueue;
-import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.domain.match.ChatCandidate;
 import com.megamainmeeting.domain.match.ChatGoal;
-import com.megamainmeeting.dto.ReadyStatusDto;
-import com.megamainmeeting.entity.room.RoomList;
-import com.megamainmeeting.entity.user.User;
-import com.megamainmeeting.spring.base.NotificationRpcResponse;
-import com.megamainmeeting.spring.controller.chat.ChatController;
-import com.megamainmeeting.spring.socket.chat.ChatCandidateController;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,15 +18,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class})
-public class ChatCandidateControllerTest {
+public class ChatCandidateControllerTest extends BaseTest{
 
     private static final long USER_ID_1 = 1;
     private static final long USER_ID_2 = 2;
@@ -45,6 +32,7 @@ public class ChatCandidateControllerTest {
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
 
+    @Autowired
     TestValues testValues;
     ChatCandidate chatCandidate1;
     ChatCandidate chatCandidate2;
@@ -52,8 +40,8 @@ public class ChatCandidateControllerTest {
 
     @Before
     public void preapre(){
-        testValues = new TestValues(userRepositoryJpa, roomRepository);
         testValues.prepareRoomToUser1User2();
+        testValues.clearRoomUser1User3();
         chatCandidate1 = getChatCandidate(USER_ID_1);
         chatCandidate2 = getChatCandidate(USER_ID_2);
         chatCandidate3 = getChatCandidate(USER_ID_3);

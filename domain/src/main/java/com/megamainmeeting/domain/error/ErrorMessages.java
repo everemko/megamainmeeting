@@ -6,6 +6,7 @@ public class ErrorMessages {
     public static final String ROOM_NOT_FOUND = "Room not found";
     public static final String USER_NOT_FOUND = "User doesn't exist";
     public static final String USER_ALREADY_CANDIDATE = "User is already a candidate";
+    public static final String ROOM_IS_BLOCKED = "Room is blocked";
 
 
     public static final String DESERIALIZE_ERROR = "Parsing error";
