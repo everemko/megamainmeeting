@@ -5,10 +5,7 @@ import com.megamainmeeting.db.dto.ChatMessageDb;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.domain.ChatMessageRepository;
 import com.megamainmeeting.domain.MessageChatManager;
-import com.megamainmeeting.domain.error.RoomIsBlockedException;
-import com.megamainmeeting.domain.error.RoomNotFoundException;
-import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.domain.error.UserNotInRoomException;
+import com.megamainmeeting.domain.error.*;
 import com.megamainmeeting.domain.open.RoomBlockingNotifier;
 import com.megamainmeeting.domain.open.UserOpeningCheck;
 import com.megamainmeeting.domain.open.UserOpensRepository;
@@ -30,7 +27,7 @@ public class ChatMessageInteractor {
 
     synchronized
     public ChatMessage onNewMessage(NewChatMessage newMessage) throws RoomNotFoundException, UserNotFoundException,
-            RoomIsBlockedException, UserNotInRoomException {
+            RoomIsBlockedException, UserNotInRoomException, OpenRequestNotFoundException {
         userOpeningCheck.checkBeforeMessage(newMessage.getRoomId(), newMessage.getUserId());
         ChatMessage message = chatMessageRepository.save(newMessage);
         messageChatManager.sendIgnoreSender(message);

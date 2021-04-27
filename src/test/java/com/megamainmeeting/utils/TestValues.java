@@ -1,15 +1,12 @@
 package com.megamainmeeting.utils;
 
+import com.megamainmeeting.db.OpenRequestRepositoryJpa;
 import com.megamainmeeting.db.RoomRepositoryJpa;
+import com.megamainmeeting.db.UserOpenUpRepositoryJpa;
 import com.megamainmeeting.db.UserRepositoryJpa;
-import com.megamainmeeting.db.dto.RoomDb;
-import com.megamainmeeting.db.dto.UserDb;
-import com.megamainmeeting.db.dto.UserProfileDb;
+import com.megamainmeeting.db.dto.*;
 import com.megamainmeeting.domain.RoomRepository;
-import com.megamainmeeting.domain.open.Room;
-import com.megamainmeeting.domain.open.User;
-import com.megamainmeeting.domain.open.UserOpens;
-import com.megamainmeeting.domain.open.UserOpensRepository;
+import com.megamainmeeting.domain.open.*;
 import com.megamainmeeting.dto.AuthenticationSocketDto;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import com.megamainmeeting.entity.room.RoomList;
@@ -20,9 +17,7 @@ import com.megamainmeeting.utils.TestWebSocketSession;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Data
@@ -44,15 +39,21 @@ public class TestValues {
     private final RoomRepository roomRepository;
     private final RoomRepositoryJpa roomRepositoryJpa;
     private final UserOpensRepository userOpensRepository;
+    private final UserOpenUpRepositoryJpa userOpenUpRepositoryJpa;
+    private final OpenRequestRepositoryJpa openRequestRepositoryJpa;
 
     public TestValues(UserRepositoryJpa userRepositoryJpa,
                       RoomRepository roomRepository,
                       RoomRepositoryJpa roomRepositoryJpa,
-                      UserOpensRepository userOpensRepository){
+                      UserOpensRepository userOpensRepository,
+                      UserOpenUpRepositoryJpa userOpenUpRepositoryJpa,
+                      OpenRequestRepositoryJpa openRequestRepositoryJpa){
         this.roomRepositoryJpa = roomRepositoryJpa;
         this.userRepositoryJpa = userRepositoryJpa;
         this.roomRepository = roomRepository;
         this.userOpensRepository = userOpensRepository;
+        this.userOpenUpRepositoryJpa = userOpenUpRepositoryJpa;
+        this.openRequestRepositoryJpa = openRequestRepositoryJpa;
 
         setUserData(USER_ID_1);
         setUserData(USER_ID_2);
@@ -168,6 +169,9 @@ public class TestValues {
     public void deleteAllUser1User2Opens(){
         UserDb userDb = userRepositoryJpa.findById(USER_ID_1).get();
         userDb.getUserOpens().clear();
+        userDb.getRooms().forEach(it -> {
+            it.getOpenRequest().forEach(it2 -> it2.getUserOpen().clear());
+        });
         userRepositoryJpa.save(userDb);
         UserDb userDb2 = userRepositoryJpa.findById(USER_ID_2).get();
         userDb2.getUserOpens().clear();
@@ -196,22 +200,29 @@ public class TestValues {
         return authenticationSocketDto;
     }
 
-    public UserOpens getUserOpens1() throws Exception{
+    public UserOpens getUserOpens1(long openRequestId) throws Exception{
         Room room = userOpensRepository.getRoom(ROOM_ID);
         User user = room.getUser(USER_ID_1);
-        return getUserOpens(user);
+        return getUserOpens(user, openRequestId);
     }
 
-    public UserOpens getUserOpens2() throws Exception{
+    public UserOpens getUserOpens2(long openRequestId) throws Exception{
         Room room = userOpensRepository.getRoom(ROOM_ID);
         User user = room.getUser(USER_ID_2);
-        return getUserOpens(user);
+        return getUserOpens(user, openRequestId);
     }
 
-    public UserOpens getUserOpens(User user){
+    public UserOpens getUserOpens(User user, long openRequestId){
         UserOpens userOpens = new UserOpens();
-        userOpens.setRoomId(ROOM_ID);
+        userOpens.setOpenRequestId(openRequestId);
         userOpens.setType(user.getAvailable().stream().findFirst().get());
         return userOpens;
+    }
+
+    public void deleteAllUserOpenRequestInRoom(){
+        RoomDb roomDb = roomRepositoryJpa.findById(ROOM_ID).get();
+        Set<UserOpenUpDb> openUpDbs = roomDb.getUsers().stream().flatMap(it -> it.getUserOpens().stream()).collect(Collectors.toSet());
+        roomDb.getOpenRequest().clear();
+        roomRepositoryJpa.save(roomDb);
     }
 }

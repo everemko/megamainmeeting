@@ -7,7 +7,7 @@ import lombok.Data;
 public class UserOpens {
 
     private long userId;
-    private long roomId;
+    private long openRequestId;
     private UserOpenType type;
 
 }

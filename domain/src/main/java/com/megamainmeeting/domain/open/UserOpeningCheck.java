@@ -1,9 +1,6 @@
 package com.megamainmeeting.domain.open;
 
-import com.megamainmeeting.domain.error.RoomIsBlockedException;
-import com.megamainmeeting.domain.error.RoomNotFoundException;
-import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.domain.error.UserNotInRoomException;
+import com.megamainmeeting.domain.error.*;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
@@ -14,24 +11,30 @@ public class UserOpeningCheck {
     private final RoomBlockingNotifier roomBlockingNotifier;
 
     public void checkBeforeMessage(long roomId, long userId) throws RoomNotFoundException,
-            RoomIsBlockedException, UserNotInRoomException {
+            RoomIsBlockedException, UserNotInRoomException, OpenRequestNotFoundException {
         Room room = userOpensRepository.getRoom(roomId);
-        if(room.isBlocked()){
-            roomBlockingNotifier.notifyUserShouldOpens(room.getUser(userId), roomId);
+        if (room.isBlocked()) {
+            throw new RoomIsBlockedException();
+        }
+        if(room.isNeedToBeBlocked()){
+            OpenRequest openRequest = userOpensRepository.blockRoom(roomId);
+            roomBlockingNotifier.notifyUserShouldOpens(room.getUser(userId), openRequest);
             throw new RoomIsBlockedException();
         }
     }
 
-    public void checkAfterMessage(long roomId) throws RoomNotFoundException{
+    public void checkAfterMessage(long roomId) throws RoomNotFoundException, OpenRequestNotFoundException {
         Room room = userOpensRepository.getRoom(roomId);
-        if(room.isBlocked()){
-            roomBlockingNotifier.notifyRoomShouldOpens(room);
+        if(room.isNeedToBeBlocked()){
+            OpenRequest openRequest = userOpensRepository.blockRoom(roomId);
+            roomBlockingNotifier.notifyRoomShouldOpens(room, openRequest);
         }
     }
 
-    public void addUserOpen(UserOpens userOpens) throws RoomNotFoundException, UserNotInRoomException, UserNotFoundException {
+    public void addUserOpen(UserOpens userOpens) throws RoomNotFoundException,
+            UserNotInRoomException, UserNotFoundException, OpenRequestNotFoundException {
         userOpensRepository.updateUserOpens(userOpens);
-        Room room = userOpensRepository.getRoom(userOpens.getRoomId());
+        Room room = userOpensRepository.getRoomByOpenRequestId(userOpens.getOpenRequestId());
         roomBlockingNotifier.notifyRoomOpens(room);
     }
 

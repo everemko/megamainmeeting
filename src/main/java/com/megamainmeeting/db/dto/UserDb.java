@@ -60,10 +60,7 @@ public class UserDb {
         return dto;
     }
 
-    public Set<UserOpenType> getUserOpens(long roomId){
-        return userOpens.stream()
-                .filter(it -> it.getRoom().getId() == roomId)
-                .map(UserOpenUpDb::getUserOpenType)
-                .collect(Collectors.toSet());
+    public void remove(UserOpenUpDb userOpenUpDb){
+        userOpens.remove(userOpenUpDb);
     }
 }

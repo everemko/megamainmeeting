@@ -1,5 +1,6 @@
 package com.megamainmeeting.spring.controller.opening;
 
+import com.megamainmeeting.domain.error.OpenRequestNotFoundException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
@@ -12,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+import java.util.Set;
+
 @RestController
 public class UserOpeningController {
 
@@ -22,24 +26,26 @@ public class UserOpeningController {
 
     @PostMapping("user/open")
     public BaseResponse<?> userOpen(@RequestAttribute("UserId") long userId,
-                                    @RequestBody UserOpens userOpens) throws RoomNotFoundException, UserNotInRoomException, UserNotFoundException {
+                                    @RequestBody UserOpens userOpens) throws RoomNotFoundException, UserNotInRoomException,
+            UserNotFoundException, OpenRequestNotFoundException {
         userOpens.setUserId(userId);
         userOpeningCheck.addUserOpen(userOpens);
         return SuccessResponse.getSimpleSuccessResponse();
     }
 
     @PostMapping("user/open/available")
-    public BaseResponse<UserOpensSet> getOpensAvailable(@RequestAttribute("UserId") long userId,
-                                                        @RequestBody long roomId) throws RoomNotFoundException, UserNotInRoomException {
-        Room room = userOpensRepository.getRoom(roomId);
+    public BaseResponse<Set<UserOpenType>> getOpensAvailable(@RequestAttribute("UserId") long userId,
+                                                             @RequestBody long openRequestId) throws RoomNotFoundException,
+            UserNotInRoomException, OpenRequestNotFoundException  {
+        Room room = userOpensRepository.getRoomByOpenRequestId(openRequestId);
         User user = room.getUser(userId);
-        UserOpensSet userOpensSet = UserOpensSet.getInstanceAvailable(user, roomId);
-        return SuccessResponse.getSuccessInstance(userOpensSet);
+        return SuccessResponse.getSuccessInstance(user.getAvailable());
     }
 
     @PostMapping("room/blocking")
     public BaseResponse<RoomBlockingStatus> getRoomBlockingStatus(@RequestAttribute("UserId") long userId,
-                                                                  @RequestBody long roomId) throws RoomNotFoundException, UserNotInRoomException {
+                                                                  @RequestBody long roomId) throws RoomNotFoundException,
+            UserNotInRoomException, OpenRequestNotFoundException {
         Room room = userOpensRepository.getRoom(roomId);
         room.checkIsUserInRoom(userId);
         RoomBlockingStatus roomBlockingStatus = RoomBlockingStatus.getInstance(room);

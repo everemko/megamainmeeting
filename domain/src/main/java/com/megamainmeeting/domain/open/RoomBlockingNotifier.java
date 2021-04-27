@@ -10,26 +10,21 @@ public class RoomBlockingNotifier {
 
     private UserNotifier userNotifier;
 
-    public void notifyUserShouldOpens(User user, long roomId) throws UserNotInRoomException {
-        UserOpensSet userOpensSet = UserOpensSet.getInstanceAvailable(user, roomId);
-        userNotifier.notifyUserShouldOpens(user.getId(),  userOpensSet);
+    public void notifyUserShouldOpens(User user, OpenRequest openRequest) throws UserNotInRoomException {
+        userNotifier.notifyUserShouldOpens(user.getId(),  openRequest);
     }
 
-    public void notifyRoomShouldOpens(Room room){
+    public void notifyRoomShouldOpens(Room room, OpenRequest openRequest){
         room.getUsers()
                 .forEach(it -> {
-                    UserOpensSet userOpensSet = UserOpensSet.getInstanceAvailable(it, room.getId());
-                    userNotifier.notifyUserShouldOpens(it.getId(), userOpensSet);
+                    userNotifier.notifyUserShouldOpens(it.getId(), openRequest);
                 });
     }
 
     public void notifyRoomOpens(Room room){
         RoomBlockingStatus roomBlockingStatus = RoomBlockingStatus.getInstance(room);
-        room.getUsers()
-                .forEach(it -> {
-                    UserOpensSet userOpensSet = UserOpensSet.getInstanceUsed(it, room.getId());
-                    roomBlockingStatus.add(userOpensSet);
-                });
+        room.getOpenRequests()
+                .forEach(roomBlockingStatus::add);
         room.getUsers()
                 .forEach(it -> {
                     userNotifier.notifyUserOpens(it.getId(), roomBlockingStatus);

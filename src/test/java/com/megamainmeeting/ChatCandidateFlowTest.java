@@ -92,8 +92,8 @@ public class ChatCandidateFlowTest extends BaseTest{
     private void checkUserMatchFound() {
         NotificationRpcResponse<?> rpc1 = (NotificationRpcResponse<?>) testClientManager.removeFirst();
         NotificationRpcResponse<?> rpc2 = (NotificationRpcResponse<?>) testClientManager.removeFirst();
-        Assert.assertEquals(rpc1.getMethod(), RpcMethods.USER_MATCH_FOUND_NOTIFICATION);
-        Assert.assertEquals(rpc2.getMethod(), RpcMethods.USER_MATCH_FOUND_NOTIFICATION);
+        Assert.assertEquals(RpcMethods.USER_MATCH_FOUND_NOTIFICATION, rpc1.getMethod());
+        Assert.assertEquals(RpcMethods.USER_MATCH_FOUND_NOTIFICATION, rpc2.getMethod());
     }
 
     private void checkRoomReady() {

@@ -22,8 +22,4 @@ public class User {
     public boolean isOpen(long level){
         return opensUsed.size() >= level;
     }
-
-    public void addOpens(UserOpenType type){
-        opensUsed.add(type);
-    }
 }

@@ -6,6 +6,8 @@ import com.megamainmeeting.entity.room.Room;
 import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -40,8 +42,8 @@ public class RoomDb {
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "room")
     private RoomDeleted roomDeleted;
 
-    @OneToMany(mappedBy = "room", cascade = {CascadeType.ALL}, fetch = FetchType.EAGER, orphanRemoval = true)
-    private Set<UserOpenUpDb> userOpens;
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+    private Set<OpenRequestDb> openRequest;
 
     public void addUser(UserDb userDb) {
         users.add(userDb);
@@ -73,5 +75,15 @@ public class RoomDb {
 
     public boolean isUserInRoom(long userId) {
         return users.stream().anyMatch(it -> it.getId() == userId);
+    }
+
+
+    @PreRemove
+    private void remove(){
+        openRequest.stream()
+                .flatMap(it -> it.getUserOpen().stream())
+                .forEach(it -> {
+                    users.forEach(user -> user.remove(it));
+                });
     }
 }

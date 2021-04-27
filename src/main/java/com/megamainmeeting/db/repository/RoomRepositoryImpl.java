@@ -50,12 +50,6 @@ public class RoomRepositoryImpl implements RoomRepository {
 
     @Override
     public void delete(long id) {
-        Optional<RoomDb> roomDbOptional = roomRepositoryJpa.findById(id);
-        if(roomDbOptional.isEmpty()) return;
-        RoomDb roomDb = roomDbOptional.get();
-        roomDb.getUsers().clear();
-        roomDb.getUserOpens().clear();
-        roomRepositoryJpa.save(roomDb);
-        roomRepositoryJpa.delete(roomDb);
+        roomRepositoryJpa.deleteById(id);
     }
 }

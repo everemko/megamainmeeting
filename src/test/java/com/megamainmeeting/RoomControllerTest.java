@@ -26,9 +26,7 @@ import java.util.HashSet;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class})
-public class RoomControllerTest {
+public class RoomControllerTest extends BaseTest {
 
     @Autowired
     RoomRepository roomRepository;

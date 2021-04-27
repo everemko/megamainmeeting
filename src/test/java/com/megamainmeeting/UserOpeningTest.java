@@ -44,9 +44,10 @@ public class UserOpeningTest {
     public void before() {
         testValues.prepareRoomToUser1User2();
         testValues.deleteAllMessagesInRoom();
+        testValues.deleteAllUser1User2Opens();
+        testValues.deleteAllUserOpenRequestInRoom();
         testValues.deleteProfiles();
         testValues.prepareProfiles();
-        testValues.deleteAllUser1User2Opens();
         testClientManager.clear();
     }
 
@@ -58,18 +59,18 @@ public class UserOpeningTest {
         chatMessageInteractor.onNewMessage(testValues.getChatMessage());
         chatMessageInteractor.onNewMessage(testValues.getChatMessage());
         removeNewMessageNotification(3);
-        NotificationRpcResponse<UserOpensSet> userShouldOpens1 = (NotificationRpcResponse<UserOpensSet>) testClientManager.removeFirst();
+        NotificationRpcResponse<OpenRequest> userShouldOpens1 = (NotificationRpcResponse<OpenRequest>) testClientManager.removeFirst();
         Assert.assertEquals(RpcMethods.USER_SHOULD_OPENS_NOTIFICATION, userShouldOpens1.getMethod());
         Assert.assertEquals(TestValues.ROOM_ID, userShouldOpens1.getParams().getRoomId());
-//        Assert.assertEquals(userShouldOpens1.getParams().getUserId(), TestValues.USER_ID_1);
-        NotificationRpcResponse<UserOpensSet> userShouldOpens2 = (NotificationRpcResponse<UserOpensSet>) testClientManager.removeFirst();
+        NotificationRpcResponse<OpenRequest> userShouldOpens2 = (NotificationRpcResponse<OpenRequest>) testClientManager.removeFirst();
         Assert.assertEquals(userShouldOpens2.getMethod(), RpcMethods.USER_SHOULD_OPENS_NOTIFICATION);
         Assert.assertEquals(userShouldOpens2.getParams().getRoomId(), TestValues.ROOM_ID);
-//        Assert.assertEquals(userShouldOpens2.getParams().getUserId(), TestValues.USER_ID_2);
-        userOpeningController.userOpen(TestValues.USER_ID_1, testValues.getUserOpens1());
+
+        Assert.assertEquals(userShouldOpens1.getParams().getId(), userShouldOpens2.getParams().getId());
+        userOpeningController.userOpen(TestValues.USER_ID_1, testValues.getUserOpens1(userShouldOpens1.getParams().getId()));
         checkUser1OpensCorrectly();
         checkUser1OpensCorrectly();
-        userOpeningController.userOpen(TestValues.USER_ID_2, testValues.getUserOpens2());
+        userOpeningController.userOpen(TestValues.USER_ID_2, testValues.getUserOpens2(userShouldOpens1.getParams().getId()));
         checkUser2OpensCorrectly();
         checkUser2OpensCorrectly();
     }
@@ -86,10 +87,8 @@ public class UserOpeningTest {
         RoomBlockingStatus roomBlockingStatus1 = response.getParams();
         Assert.assertTrue(roomBlockingStatus1.isBlocked());
         Assert.assertEquals(roomBlockingStatus1.getId(), TestValues.ROOM_ID);
-        UserOpensSet userOpens1 = roomBlockingStatus1.getOpens().stream().filter(it -> it.getUserId() == TestValues.USER_ID_1).findFirst().get();
-        UserOpensSet userOpens2 = roomBlockingStatus1.getOpens().stream().filter(it -> it.getUserId() == TestValues.USER_ID_2).findFirst().get();
-        Assert.assertEquals(1, userOpens1.getCount());
-        Assert.assertEquals(0, userOpens2.getCount());
+        Assert.assertEquals(1, roomBlockingStatus1.getByUserId(TestValues.USER_ID_1).size());
+        Assert.assertEquals(0, roomBlockingStatus1.getByUserId(TestValues.USER_ID_2).size());
     }
 
     private void checkUser2OpensCorrectly(){
@@ -97,9 +96,7 @@ public class UserOpeningTest {
         RoomBlockingStatus roomBlockingStatus2 = response2.getParams();
         Assert.assertFalse(roomBlockingStatus2.isBlocked());
         Assert.assertEquals(roomBlockingStatus2.getId(), TestValues.ROOM_ID);
-        UserOpensSet userOpens1 = roomBlockingStatus2.getOpens().stream().filter(it -> it.getUserId() == TestValues.USER_ID_1).findFirst().get();
-        UserOpensSet userOpens2 = roomBlockingStatus2.getOpens().stream().filter(it -> it.getUserId() == TestValues.USER_ID_2).findFirst().get();
-        Assert.assertEquals(1, userOpens1.getCount());
-        Assert.assertEquals(1, userOpens2.getCount());
+        Assert.assertEquals(1, roomBlockingStatus2.getByUserId(TestValues.USER_ID_1).size());
+        Assert.assertEquals(1, roomBlockingStatus2.getByUserId(TestValues.USER_ID_2).size());
     }
 }

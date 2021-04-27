@@ -100,7 +100,6 @@ public class ChatControllerTest extends BaseTest{
 
     @Test(expected = UserAlreadyCandidateException.class)
     public void addChatCandidateAlreadyInQueue() throws Exception {
-        testValues.clearRoomUser1User2();
         BaseResponse<Object> response = chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
         BaseResponse<Object> response2 = chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
         assertTrue(response.isSuccess());
