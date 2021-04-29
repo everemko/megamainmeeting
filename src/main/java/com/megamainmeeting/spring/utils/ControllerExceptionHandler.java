@@ -11,6 +11,7 @@ import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 
 import javax.servlet.ServletException;
 
@@ -30,6 +31,9 @@ public class ControllerExceptionHandler {
         }
         else if(ex instanceof HttpMessageConversionException){
             return new FailureResponse(ErrorMessages.DESERIALIZE_ERROR);
+        }
+        else if(ex instanceof MaxUploadSizeExceededException){
+            return new FailureResponse("Exceeding the maximum uploading size");
         }
         else {
             logger.error(ex.toString());

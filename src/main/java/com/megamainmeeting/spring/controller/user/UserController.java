@@ -4,6 +4,7 @@ import com.megamainmeeting.domain.ImageRepository;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.db.dto.UserProfileDb;
+import com.megamainmeeting.domain.error.AvatarSizeException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
@@ -71,14 +72,18 @@ public class UserController {
     }
 
     @PostMapping("user/profile/avatar")
-    BaseResponse<String> postUserAvatar(
+    public BaseResponse<String> postUserAvatar(
             @RequestAttribute("UserId") long userId,
             @RequestPart("avatar") MultipartFile file
-            ) throws UserNotFoundException, IOException {
+            ) throws UserNotFoundException, IOException, AvatarSizeException {
+        if(file.getSize() > MAX_IMAGE_SIZE) throw new AvatarSizeException();
         UserDb user = userRepositoryJpa.findById(userId).orElseThrow(UserNotFoundException::new);
         UserProfileDb userProfileDb = user.getUserProfile();
         String url = imageRepository.saveAvatar(file.getInputStream());
         userProfileDb.setPhoto(url);
+        userRepositoryJpa.save(user);
         return SuccessResponse.getSuccessInstance(url);
     }
+
+    private static final double MAX_IMAGE_SIZE = 2 * Math.pow(10, 6);
 }

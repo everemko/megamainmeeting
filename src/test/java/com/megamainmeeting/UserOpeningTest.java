@@ -22,9 +22,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@SpringBootTest(classes = Application.class)
-@ContextConfiguration(classes = {AppConfigTest.class, RepositoryConfigTest.class, TestConfigs.class})
-public class UserOpeningTest {
+public class UserOpeningTest extends BaseTest{
 
     @Autowired
     TestValues testValues;
