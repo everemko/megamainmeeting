@@ -35,9 +35,9 @@ public class UserOpeningController {
 
     @PostMapping("user/open/available")
     public BaseResponse<Set<UserOpenType>> getOpensAvailable(@RequestAttribute("UserId") long userId,
-                                                             @RequestBody long openRequestId) throws RoomNotFoundException,
+                                                             @RequestBody long roomId) throws RoomNotFoundException,
             UserNotInRoomException, OpenRequestNotFoundException  {
-        Room room = userOpensRepository.getRoomByOpenRequestId(openRequestId);
+        Room room = userOpensRepository.getRoom(roomId);
         User user = room.getUser(userId);
         return SuccessResponse.getSuccessInstance(user.getAvailable());
     }
