@@ -38,5 +38,21 @@ dependencies {
 
     implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
 
+    // https://mvnrepository.com/artifact/com.box/box-java-sdk
+    implementation group: 'com.box', name: 'box-java-sdk', version: '2.54.0'
+
+    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
+    implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.60'
+// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.60'
+    // https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j
+    implementation group: 'org.bitbucket.b_c', name: 'jose4j', version: '0.5.5'
+// https://mvnrepository.com/artifact/com.eclipsesource.minimal-json/minimal-json
+    implementation group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.1'
+
+
+
+
+
     implementation project('domain')
 }

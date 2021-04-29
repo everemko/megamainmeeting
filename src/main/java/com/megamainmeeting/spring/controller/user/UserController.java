@@ -1,18 +1,20 @@
 package com.megamainmeeting.spring.controller.user;
 
+import com.megamainmeeting.domain.ImageRepository;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.db.dto.UserProfileDb;
+import com.megamainmeeting.domain.error.AvatarSizeException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.entity.user.User;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Optional;
 
 @Component
@@ -22,6 +24,8 @@ public class UserController {
 
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
+    @Autowired
+    ImageRepository imageRepository;
 
     @PostMapping("user/profile/update")
     BaseResponse<?> update(
@@ -66,4 +70,20 @@ public class UserController {
         userProfile.setWight(userProfileDb.getWight());
         return SuccessResponse.getSuccessInstance(userProfile);
     }
+
+    @PostMapping("user/profile/avatar")
+    public BaseResponse<String> postUserAvatar(
+            @RequestAttribute("UserId") long userId,
+            @RequestPart("avatar") MultipartFile file
+            ) throws UserNotFoundException, IOException, AvatarSizeException {
+        if(file.getSize() > MAX_IMAGE_SIZE) throw new AvatarSizeException();
+        UserDb user = userRepositoryJpa.findById(userId).orElseThrow(UserNotFoundException::new);
+        UserProfileDb userProfileDb = user.getUserProfile();
+        String url = imageRepository.saveAvatar(file.getInputStream());
+        userProfileDb.setPhoto(url);
+        userRepositoryJpa.save(user);
+        return SuccessResponse.getSuccessInstance(url);
+    }
+
+    private static final double MAX_IMAGE_SIZE = 2 * Math.pow(10, 6);
 }
