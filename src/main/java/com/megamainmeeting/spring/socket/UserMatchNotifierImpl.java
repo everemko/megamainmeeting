@@ -1,9 +1,12 @@
 package com.megamainmeeting.spring.socket;
 
+import com.megamainmeeting.db.RoomRepositoryJpa;
+import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
 import com.megamainmeeting.domain.open.UserOpensSet;
+import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.domain.match.RoomPreparing;
@@ -19,10 +22,15 @@ public class UserMatchNotifierImpl implements UserNotifier {
     RpcFactory rpcFactory;
     @Autowired
     UserSocketClientManager userSocketManager;
+    @Autowired
+    RoomRepositoryJpa roomRepositoryJpa;
 
     @Override
     public void notifyRoomReady(Room room) {
-        BaseRpc response = rpcFactory.getNotification(RpcMethods.CHAT_ROOM_CREATED_NOTIFICATION, room);
+        RoomDb roomDb = roomRepositoryJpa.findById(room.getId()).orElse(null);
+        if (roomDb == null) return;
+        RoomResponse roomResponse = new RoomResponse(roomDb);
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.CHAT_ROOM_CREATED_NOTIFICATION, roomResponse);
         for (long user : room.getUsers()) {
             userSocketManager.send(user, response);
         }
@@ -47,7 +55,7 @@ public class UserMatchNotifierImpl implements UserNotifier {
     @Override
     public void notifyChatMessageUpdated(ChatMessage message) {
         BaseRpc response = rpcFactory.getNotification(RpcMethods.MESSAGE_UPDATED_NOTIFICATION, message);
-        for(long user: message.getRoom().getUsers()){
+        for (long user : message.getRoom().getUsers()) {
             userSocketManager.send(user, response);
         }
     }
