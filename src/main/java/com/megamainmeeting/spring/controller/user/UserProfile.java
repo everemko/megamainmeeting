@@ -11,7 +11,7 @@ public class UserProfile {
     private String profession;
     private String aboutMyself;
     private int height;
-    private int wight;
+    private int weight;
     private String firstDateIdeal;
 
 

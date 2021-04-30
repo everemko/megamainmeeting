@@ -46,7 +46,7 @@ public class UserController {
         userProfileDb.setFirstDateIdeal(userProfile.getFirstDateIdeal());
         userProfileDb.setHeight(userProfile.getHeight());
         userProfileDb.setProfession(userProfile.getProfession());
-        userProfileDb.setWight(userProfile.getWight());
+        userProfileDb.setWeight(userProfile.getWeight());
         user.setUserProfile(userProfileDb);
         userRepositoryJpa.save(user);
         return SuccessResponse.getSuccessInstance(null);
@@ -67,7 +67,7 @@ public class UserController {
         userProfile.setFirstDateIdeal(userProfileDb.getFirstDateIdeal());
         userProfile.setHeight(userProfileDb.getHeight());
         userProfile.setProfession(userProfileDb.getProfession());
-        userProfile.setWight(userProfileDb.getWight());
+        userProfile.setWeight(userProfileDb.getWeight());
         return SuccessResponse.getSuccessInstance(userProfile);
     }
 

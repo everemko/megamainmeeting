@@ -27,7 +27,7 @@ public class UserProfileDb {
     private String aboutMyself;
     private String photo;
     private int height;
-    private int wight;
+    private int weight;
     private String firstDateIdeal;
 
 
