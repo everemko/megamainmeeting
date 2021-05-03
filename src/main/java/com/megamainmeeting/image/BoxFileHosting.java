@@ -12,7 +12,7 @@ public class BoxFileHosting implements ImageRepository {
     private BoxDeveloperEditionAPIConnection api;
 
     public BoxFileHosting() throws IOException {
-        Reader reader = new FileReader(this.getClass().getResource("/813834594_n2fnopuu_config.json").getFile());
+        Reader reader = new InputStreamReader(this.getClass().getResourceAsStream("/813834594_n2fnopuu_config.json"));
         BoxConfig config = BoxConfig.readFrom(reader);
         api = BoxDeveloperEditionAPIConnection.getAppEnterpriseConnection(config);
     }

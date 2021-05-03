@@ -60,6 +60,14 @@ public class UserDb {
         return dto;
     }
 
+    public UserProfileDb getUserProfile(){
+        if(userProfile == null) {
+            userProfile = new UserProfileDb();
+            userProfile.setUser(this);
+        }
+        return userProfile;
+    }
+
     public void remove(UserOpenUpDb userOpenUpDb){
         userOpens.remove(userOpenUpDb);
     }
