@@ -1,7 +1,5 @@
 package com.megamainmeeting;
 
-import com.megamainmeeting.config.AppConfigTest;
-import com.megamainmeeting.config.RepositoryConfigTest;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.dto.ChatMessageDb;

@@ -5,13 +5,11 @@ import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.UserOpenUpRepositoryJpa;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.dto.*;
-import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.domain.error.OpenRequestNotFoundException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.domain.open.*;
-import com.megamainmeeting.spring.controller.user.UserProfile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -52,13 +50,13 @@ public class UserOpensRepositoryImpl implements UserOpensRepository {
 
     private Set<UserOpens> getUserOpens(Set<UserOpenUpDb> userOpens) {
         return userOpens.stream()
-                .map(it -> {
-                    UserOpens userOpen = new UserOpens();
-                    userOpen.setType(it.getUserOpenType());
-                    userOpen.setUserId(it.getUser().getId());
-                    userOpen.setOpenRequestId(it.getOpenRequest().getId());
-                    return userOpen;
-                })
+                .map(it ->
+                        UserOpens.getInstance(
+                                it.getUser().getId(),
+                                it.getOpenRequest().getId(),
+                                it.getUserOpenType(),
+                                it.getUser().getUserProfile().getByType(it.getUserOpenType())
+                        ))
                 .collect(Collectors.toSet());
     }
 
@@ -102,8 +100,8 @@ public class UserOpensRepositoryImpl implements UserOpensRepository {
         if (userProfile.getHeight() != 0) {
             types.add(UserOpenType.Height);
         }
-        if (userProfile.getWight() != 0) {
-            types.add(UserOpenType.Wight);
+        if (userProfile.getWeight() != 0) {
+            types.add(UserOpenType.Weight);
         }
         if (userProfile.getProfession() != null) {
             types.add(UserOpenType.Profession);

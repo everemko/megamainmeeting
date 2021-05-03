@@ -49,6 +49,10 @@ public class RoomDb {
         users.add(userDb);
     }
 
+    public void addMessage(ChatMessageDb chatMessageDb){
+        messages.add(chatMessageDb);
+    }
+
     public void addUsers(Set<UserDb> users) {
         this.users.addAll(users);
     }

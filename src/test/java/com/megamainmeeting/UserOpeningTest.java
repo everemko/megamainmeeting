@@ -1,8 +1,5 @@
 package com.megamainmeeting;
 
-import com.megamainmeeting.config.AppConfigTest;
-import com.megamainmeeting.config.RepositoryConfigTest;
-import com.megamainmeeting.config.TestConfigs;
 import com.megamainmeeting.domain.open.*;
 import com.megamainmeeting.spring.base.BaseRpc;
 import com.megamainmeeting.spring.base.NotificationRpcResponse;
@@ -60,11 +57,12 @@ public class UserOpeningTest extends BaseTest{
         NotificationRpcResponse<OpenRequest> userShouldOpens1 = (NotificationRpcResponse<OpenRequest>) testClientManager.removeFirst();
         Assert.assertEquals(RpcMethods.USER_SHOULD_OPENS_NOTIFICATION, userShouldOpens1.getMethod());
         Assert.assertEquals(TestValues.ROOM_ID, userShouldOpens1.getParams().getRoomId());
-        NotificationRpcResponse<OpenRequest> userShouldOpens2 = (NotificationRpcResponse<OpenRequest>) testClientManager.removeFirst();
-        Assert.assertEquals(userShouldOpens2.getMethod(), RpcMethods.USER_SHOULD_OPENS_NOTIFICATION);
-        Assert.assertEquals(userShouldOpens2.getParams().getRoomId(), TestValues.ROOM_ID);
 
-        Assert.assertEquals(userShouldOpens1.getParams().getId(), userShouldOpens2.getParams().getId());
+        NotificationRpcResponse<OpenRequest> userShouldOpens2 = (NotificationRpcResponse<OpenRequest>) testClientManager.removeFirst();
+        Assert.assertEquals(RpcMethods.USER_SHOULD_OPENS_NOTIFICATION, userShouldOpens2.getMethod());
+        Assert.assertEquals(TestValues.ROOM_ID, userShouldOpens2.getParams().getRoomId());
+        Assert.assertEquals(userShouldOpens2.getParams().getId(), userShouldOpens1.getParams().getId());
+
         userOpeningController.userOpen(TestValues.USER_ID_1, testValues.getUserOpens1(userShouldOpens1.getParams().getId()));
         checkUser1OpensCorrectly();
         checkUser1OpensCorrectly();

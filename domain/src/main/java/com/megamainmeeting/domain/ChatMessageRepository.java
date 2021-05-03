@@ -12,5 +12,5 @@ public interface ChatMessageRepository {
 
     ChatMessage get(long messageId) throws ChatMessageNotFoundException;
 
-    void update(ChatMessage message);
+    void update(ChatMessage message) throws ChatMessageNotFoundException;
 }

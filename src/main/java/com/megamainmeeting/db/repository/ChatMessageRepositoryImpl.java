@@ -44,7 +44,10 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     }
 
     @Override
-    public void update(ChatMessage chatMessage) {
-        chatMessageRepositoryJpa.save(ChatMessageDb.getInstance(chatMessage));
+    public void update(ChatMessage chatMessage) throws ChatMessageNotFoundException {
+        ChatMessageDb chatMessageDb = chatMessageRepositoryJpa.findById(chatMessage.getId()).orElseThrow(ChatMessageNotFoundException::new);
+        chatMessageDb.setMessage(chatMessage.getMessage());
+        chatMessageDb.setRead(chatMessage.isRead());
+        chatMessageRepositoryJpa.save(chatMessageDb);
     }
 }

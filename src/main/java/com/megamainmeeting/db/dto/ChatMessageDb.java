@@ -23,7 +23,7 @@ public class ChatMessageDb {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String message;
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "room_id")
     private RoomDb room;
     @ManyToOne
@@ -44,18 +44,13 @@ public class ChatMessageDb {
         return chatMessage;
     }
 
-    public static ChatMessageDb getInstance(ChatMessage message){
-        RoomDb roomDb = new RoomDb();
-        UserDb userDb = new UserDb();
-        userDb.setId(message.getUserId());
-        roomDb.setId(message.getRoom().getId());
-        ChatMessageDb chatMessageDb = new ChatMessageDb();
-        chatMessageDb.setId(message.getId());
-        chatMessageDb.setMessage(message.getMessage());
-        chatMessageDb.setRoom(roomDb);
-        chatMessageDb.setRead(message.isRead());
-        chatMessageDb.setTime(message.getTime());
-        chatMessageDb.setUser(userDb);
-        return chatMessageDb;
+    @PrePersist
+    public void prePersist(){
+        room.addMessage(this);
+    }
+
+    @PreUpdate
+    public void preUpdate(){
+        room.addMessage(this);
     }
 }

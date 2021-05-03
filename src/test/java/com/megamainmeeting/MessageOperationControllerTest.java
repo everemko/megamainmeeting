@@ -1,8 +1,6 @@
 package com.megamainmeeting;
 
 
-import com.megamainmeeting.config.AppConfigTest;
-import com.megamainmeeting.config.RepositoryConfigTest;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;

@@ -1,7 +1,6 @@
 package com.megamainmeeting.db.dto;
 
-import com.megamainmeeting.entity.user.User;
-import lombok.Data;
+import com.megamainmeeting.domain.open.UserOpenType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,5 +29,17 @@ public class UserProfileDb {
     private int weight;
     private String firstDateIdeal;
 
-
+    public String getByType(UserOpenType type){
+        switch (type){
+            case City: return city;
+            case Photo: return photo;
+            case Weight: return String.valueOf(weight);
+            case Height: return String.valueOf(height);
+            case Country: return country;
+            case Profession: return profession;
+            case AboutMyself: return aboutMyself;
+            case FirstDateIdeal: return firstDateIdeal;
+        }
+        return null;
+    }
 }

@@ -1,6 +1,6 @@
 package com.megamainmeeting;
 
-import com.megamainmeeting.config.RepositoryConfigTest;
+import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
@@ -97,7 +97,7 @@ public class ChatCandidateFlowTest extends BaseTest{
     }
 
     private void checkRoomReady() {
-        NotificationRpcResponse<Room> rpc1 = (NotificationRpcResponse<Room>) testClientManager.removeFirst();
+        NotificationRpcResponse<RoomResponse> rpc1 = (NotificationRpcResponse<RoomResponse>) testClientManager.removeFirst();
 
         roomId = rpc1.getParams().getId();
         NotificationRpcResponse<Room> rpc2 = (NotificationRpcResponse<Room>) testClientManager.removeFirst();
