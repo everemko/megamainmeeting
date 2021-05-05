@@ -68,6 +68,10 @@ public class UserDb {
         return userProfile;
     }
 
+    public void addUserOpens(UserOpenUpDb userOpenUpDb){
+        userOpens.add(userOpenUpDb);
+    }
+
     public void remove(UserOpenUpDb userOpenUpDb){
         userOpens.remove(userOpenUpDb);
     }

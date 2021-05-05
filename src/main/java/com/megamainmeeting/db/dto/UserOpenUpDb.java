@@ -36,4 +36,10 @@ public class UserOpenUpDb {
     private void preRemove(){
         user.remove(this);
     }
+
+    @PrePersist
+    private void prePersist(){
+        user.addUserOpens(this);
+        openRequest.addUserOpen(this);
+    }
 }

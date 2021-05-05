@@ -31,6 +31,10 @@ public class OpenRequestDb {
         return room.getId();
     }
 
+    public void addUserOpen(UserOpenUpDb userOpenUpDb){
+        userOpen.add(userOpenUpDb);
+    }
+
     @PreRemove
     private void preRemove(){
         room.getOpenRequest().remove(this);
