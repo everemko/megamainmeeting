@@ -13,6 +13,7 @@ public class UserProfile {
     private int height;
     private int weight;
     private String firstDateIdeal;
+    private String avatar;
 
 
 }

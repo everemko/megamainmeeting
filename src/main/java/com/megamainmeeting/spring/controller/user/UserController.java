@@ -68,6 +68,7 @@ public class UserController {
         userProfile.setHeight(userProfileDb.getHeight());
         userProfile.setProfession(userProfileDb.getProfession());
         userProfile.setWeight(userProfileDb.getWeight());
+        userProfile.setAvatar(userProfileDb.getPhoto());
         return SuccessResponse.getSuccessInstance(userProfile);
     }
 
