@@ -26,6 +26,8 @@ public class UserController {
     UserRepositoryJpa userRepositoryJpa;
     @Autowired
     ImageRepository imageRepository;
+    @Autowired
+    UpdateAvatarInteractor updateAvatarInteractor;
 
     @PostMapping("user/profile/update")
     BaseResponse<?> update(
@@ -77,14 +79,9 @@ public class UserController {
             @RequestAttribute("UserId") long userId,
             @RequestPart("avatar") MultipartFile file
             ) throws UserNotFoundException, IOException, AvatarSizeException {
-        if(file.getSize() > MAX_IMAGE_SIZE) throw new AvatarSizeException();
-        UserDb user = userRepositoryJpa.findById(userId).orElseThrow(UserNotFoundException::new);
-        UserProfileDb userProfileDb = user.getUserProfile();
-        String url = imageRepository.saveAvatar(file.getInputStream());
-        userProfileDb.setPhoto(url);
-        userRepositoryJpa.save(user);
+        String url = updateAvatarInteractor.updatePhoto(userId, file.getBytes());
         return SuccessResponse.getSuccessInstance(url);
     }
 
-    private static final double MAX_IMAGE_SIZE = 2 * Math.pow(10, 6);
+
 }
