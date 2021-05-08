@@ -77,4 +77,10 @@ public class UserMatchNotifierImpl implements UserNotifier {
         BaseRpc response = rpcFactory.getNotification(RpcMethods.USER_OPENS_NOTIFICATION, roomBlockingStatus);
         userSocketManager.send(userId, response);
     }
+
+    @Override
+    public void notifyRoomBlocked(long userId, long roomId){
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.ROOM_BLOCKED_NOTIFICATION, roomId);
+        userSocketManager.send(userId, response);
+    }
 }

@@ -21,6 +21,7 @@ public class RoomResponse {
     private LocalDateTime createdAt;
     private long messageCountUnread;
     private RoomDeleted roomDeleted;
+    private boolean isBlocked = false;
 
     public RoomResponse(RoomDb roomDb){
         id = roomDb.getId();
@@ -34,5 +35,6 @@ public class RoomResponse {
                 .filter(ChatMessageDb::isRead)
                 .count();
         roomDeleted = roomDb.getRoomDeleted();
+        isBlocked = roomDb.getRoomBlocked() != null;
     }
 }

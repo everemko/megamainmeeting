@@ -125,8 +125,8 @@ public class AppConfig {
     }
 
     @Bean
-    RoomInteractor roomInteractor(RoomRepositoryJpa roomRepository) {
-        return new RoomInteractor(roomRepository);
+    RoomInteractor roomInteractor(RoomRepositoryJpa roomRepository, UserNotifier userNotifier) {
+        return new RoomInteractor(roomRepository, userNotifier);
     }
 
     @Bean

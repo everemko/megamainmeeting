@@ -1,13 +1,9 @@
 package com.megamainmeeting.db.dto;
 
-import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.entity.room.Room;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -44,6 +40,9 @@ public class RoomDb {
 
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
     private Set<OpenRequestDb> openRequest;
+
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "room", orphanRemoval = true)
+    private RoomBlockedDb roomBlocked;
 
     public void addUser(UserDb userDb) {
         users.add(userDb);

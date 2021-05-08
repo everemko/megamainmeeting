@@ -22,4 +22,6 @@ public interface UserNotifier {
     void notifyUserShouldOpens(long userId, OpenRequest openRequest);
 
     void notifyUserOpens(long userId, RoomBlockingStatus roomBlockingStatus);
+
+    void notifyRoomBlocked(long userId, long roomId);
 }

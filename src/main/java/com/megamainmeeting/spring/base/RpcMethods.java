@@ -15,6 +15,7 @@ public class RpcMethods {
     public static final String NEW_MESSAGE_NOTIFICATION = "new_message_notification";
     public static final String USER_SHOULD_OPENS_NOTIFICATION = "user_should_opens_notification";
     public static final String USER_OPENS_NOTIFICATION = "user_opens_notification";
+    public static final String ROOM_BLOCKED_NOTIFICATION = "room_blocked_notification";
 
 }
 
