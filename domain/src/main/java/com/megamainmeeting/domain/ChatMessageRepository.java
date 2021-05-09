@@ -6,9 +6,11 @@ import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 
+import java.io.IOException;
+
 public interface ChatMessageRepository {
 
-    public ChatMessage save(NewChatMessage message) throws RoomNotFoundException, UserNotFoundException;
+    public ChatMessage save(NewChatMessage message) throws RoomNotFoundException, UserNotFoundException, IOException;
 
     ChatMessage get(long messageId) throws ChatMessageNotFoundException;
 

@@ -3,6 +3,7 @@ package com.megamainmeeting.interactor;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.dto.ChatMessageDb;
 import com.megamainmeeting.db.dto.RoomDb;
+import com.megamainmeeting.db.mapper.ChatMessageDbMapper;
 import com.megamainmeeting.domain.ChatMessageRepository;
 import com.megamainmeeting.domain.MessageChatManager;
 import com.megamainmeeting.domain.error.*;
@@ -12,7 +13,9 @@ import com.megamainmeeting.domain.open.UserOpensRepository;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -24,10 +27,12 @@ public class ChatMessageInteractor {
     private final ChatMessageRepository chatMessageRepository;
     private final RoomRepositoryJpa roomRepositoryJpa;
     private final UserOpeningCheck userOpeningCheck;
+    private ChatMessageDbMapper chatMessageDbMapper;
 
     synchronized
     public ChatMessage onNewMessage(NewChatMessage newMessage) throws RoomNotFoundException, UserNotFoundException,
-            RoomIsBlockedException, UserNotInRoomException, OpenRequestNotFoundException {
+            RoomIsBlockedException, UserNotInRoomException, OpenRequestNotFoundException, BadDataException, IOException {
+        newMessage.checkValid();
         userOpeningCheck.checkBeforeMessage(newMessage.getRoomId(), newMessage.getUserId());
         ChatMessage message = chatMessageRepository.save(newMessage);
         messageChatManager.sendIgnoreSender(message);
@@ -50,7 +55,7 @@ public class ChatMessageInteractor {
                         if (optional.isEmpty()) return true;
                         else return it.getTime().isAfter(optional.get());
                     })
-                    .map(ChatMessageDb::toDomain)
+                    .map(it -> chatMessageDbMapper.map(it))
                     .collect(Collectors.toList());
             newMap.put(room.getId(), list);
         }

@@ -1,6 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.dto.RoomResponse;
+import com.megamainmeeting.interactor.ChatMessageInteractor;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
@@ -45,6 +46,8 @@ public class ChatCandidateFlowTest extends BaseTest{
     RoomRepository roomRepository;
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
+    @Autowired
+    ChatMessageInteractor chatMessageInteractor;
     private TestWebSocketSession session1;
     private TestWebSocketSession session2;
 
@@ -60,6 +63,7 @@ public class ChatCandidateFlowTest extends BaseTest{
         session2 = new TestWebSocketSession();
         testValues.prepareChatCandidateReqeusts();
         testValues.clearRoomUser1User2();
+        testClientManager.clear();
     }
 
 
@@ -83,9 +87,9 @@ public class ChatCandidateFlowTest extends BaseTest{
         newChatMessage.setMessage(MESSAGE_TEST);
         newChatMessage.setRoomId(roomId);
         newChatMessage.setUserId(USER_ID_1);
-        chatController.processMessage(USER_ID_1, newChatMessage);
+        chatMessageInteractor.onNewMessage(newChatMessage);
         newChatMessage.setUserId(USER_ID_2);
-        chatController.processMessage(USER_ID_2, newChatMessage);
+        chatMessageInteractor.onNewMessage(newChatMessage);
         checkMessage();
     }
 

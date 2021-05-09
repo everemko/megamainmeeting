@@ -30,19 +30,11 @@ public class ChatMessageDb {
     @JoinColumn(name = "user_id")
     private UserDb user;
 
+    @Column(name = "image_url")
+    private String imageUrl;
+
     private LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
     private boolean isRead = false;
-
-    public ChatMessage toDomain(){
-        ChatMessage chatMessage = new ChatMessage();
-        chatMessage.setId(id);
-        chatMessage.setMessage(message);
-        chatMessage.setRoom(room.toDomain());
-        chatMessage.setUserId(user.getId());
-        chatMessage.setTime(time);
-        chatMessage.setRead(isRead);
-        return chatMessage;
-    }
 
     @PrePersist
     public void prePersist(){

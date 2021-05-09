@@ -27,9 +27,9 @@ public class UpdateAvatarInteractor {
         UserDb user = userRepositoryJpa.findById(userId).orElseThrow(UserNotFoundException::new);
         UserProfileDb userProfileDb = user.getUserProfile();
         String oldUrl = userProfileDb.getPhoto();
-        String url = imageRepository.saveAvatar(new ByteArrayInputStream(avatar));
+        String url = imageRepository.saveImage(new ByteArrayInputStream(avatar));
         userProfileDb.setPhoto(url);
-        imageRepository.deletePhoto(oldUrl);
+        imageRepository.deleteImage(oldUrl);
         userRepositoryJpa.save(user);
         return imageRepository.getDownloadLink(url);
     }

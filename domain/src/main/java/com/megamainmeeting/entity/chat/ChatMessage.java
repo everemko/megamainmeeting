@@ -15,4 +15,5 @@ public class ChatMessage {
     private long userId;
     private LocalDateTime time;
     private boolean isRead;
+    private String image;
 }

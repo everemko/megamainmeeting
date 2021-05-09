@@ -5,9 +5,11 @@ import java.util.stream.Stream;
 
 public interface ImageRepository {
 
-    public String saveAvatar(InputStream stream) throws FileNotFoundException, IOException;
+    public String saveImage(InputStream stream) throws FileNotFoundException, IOException;
 
-    public void deletePhoto(String url);
+    public void deleteImage(String url);
 
     public String getDownloadLink(String url);
+
+    public String saveImage(byte[] image) throws FileNotFoundException, IOException;
 }

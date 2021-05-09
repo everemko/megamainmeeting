@@ -10,6 +10,7 @@ import com.megamainmeeting.spring.base.*;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,11 +27,18 @@ public class ChatController {
 
 
     @PostMapping("/chat/message/add")
-    public BaseResponse<?> processMessage(@RequestAttribute("UserId") long userId,
-                                          @RequestBody NewChatMessage newMessage) throws Exception {
-        newMessage.setUserId(userId);
-        ChatMessage message = chatMessageInteractor.onNewMessage(newMessage);
-        return BaseResponse.getSuccessInstance(message);
+    public BaseResponse<ChatMessage> processMessage(@RequestAttribute("UserId") long userId,
+                                          @RequestPart("roomId") long roomId,
+                                          @RequestPart("message") String message,
+                                          @RequestPart("image") MultipartFile file) throws Exception {
+        NewChatMessage newChatMessage = NewChatMessage.getInstance(
+                message,
+                file != null ? file.getBytes() : null,
+                userId,
+                roomId
+        );
+        ChatMessage chatMessage = chatMessageInteractor.onNewMessage(newChatMessage);
+        return BaseResponse.getSuccessInstance(chatMessage);
     }
 
     @PostMapping("chat/candidate/add")
@@ -49,7 +57,7 @@ public class ChatController {
 
     @PostMapping("chat/messages/after/date")
     public BaseResponse<Map<Long, List<ChatMessage>>> getMessages(@RequestAttribute("UserId") long userId,
-                                                              @RequestBody Map<Long, LocalDateTime> map) throws Exception{
+                                                                  @RequestBody Map<Long, LocalDateTime> map) throws Exception {
         Map<Long, List<ChatMessage>> messages = chatMessageInteractor.getMessagesAfterDate(map, userId);
         return SuccessResponse.getSuccessInstance(messages);
     }

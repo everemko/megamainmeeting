@@ -88,6 +88,9 @@ public class TestValues {
                 .findFirst()
                 .get()
                 .getId();
+        RoomDb roomDb = roomRepositoryJpa.findById(ROOM_ID).get();
+        roomDb.setRoomBlocked(null);
+        roomRepositoryJpa.save(roomDb);
     }
 
     public void prepareChatCandidateReqeusts(){
@@ -222,5 +225,13 @@ public class TestValues {
         Set<UserOpenUpDb> openUpDbs = roomDb.getUsers().stream().flatMap(it -> it.getUserOpens().stream()).collect(Collectors.toSet());
         roomDb.getOpenRequest().clear();
         roomRepositoryJpa.save(roomDb);
+    }
+
+    public long getNotExistRoomId(){
+        return roomRepositoryJpa.count() + 1;
+    }
+
+    public long getNotExistUserId(){
+        return userRepositoryJpa.count() + 1;
     }
 }

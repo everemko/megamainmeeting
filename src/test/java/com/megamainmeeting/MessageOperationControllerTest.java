@@ -1,6 +1,7 @@
 package com.megamainmeeting;
 
 
+import com.megamainmeeting.interactor.ChatMessageInteractor;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
@@ -34,6 +35,8 @@ public class MessageOperationControllerTest extends BaseTest{
     RoomRepository roomRepository;
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
+    @Autowired
+    ChatMessageInteractor chatMessageInteractor;
 
     @Autowired
     TestValues testValues;
@@ -51,7 +54,8 @@ public class MessageOperationControllerTest extends BaseTest{
         NewChatMessage newChatMessage = new NewChatMessage();
         newChatMessage.setMessage(TestValues.MESSAGE_TEST);
         newChatMessage.setRoomId(TestValues.ROOM_ID);
-        chatController.processMessage(TestValues.USER_ID_1, newChatMessage);
+        newChatMessage.setUserId(TestValues.USER_ID_1);
+        chatMessageInteractor.onNewMessage(newChatMessage);
         NotificationRpcResponse<ChatMessage> response = (NotificationRpcResponse<ChatMessage>) testClientManager.removeFirst();
         ChatMessage chatMessage = response.getParams();
         ReadMessageOperationDto readMessageOperationDto = new ReadMessageOperationDto();

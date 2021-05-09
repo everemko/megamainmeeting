@@ -52,6 +52,7 @@ public class RoomControllerTest extends BaseTest {
     @Before
     public void before() {
         testValues.prepareRoomToUser1User2();
+        testClientManager.clear();
     }
 
     @Test
@@ -90,9 +91,6 @@ public class RoomControllerTest extends BaseTest {
         Assert.assertEquals(RpcMethods.ROOM_BLOCKED_NOTIFICATION, block2.getMethod());
         Assert.assertEquals(TestValues.ROOM_ID, (long) block1.getParams());
         Assert.assertEquals(TestValues.ROOM_ID, (long) block2.getParams());
-        RoomDb roomDb = roomRepositoryJpa.findById(TestValues.ROOM_ID).get();
-        roomDb.setRoomBlocked(null);
-        roomRepositoryJpa.save(roomDb);
     }
 }
 

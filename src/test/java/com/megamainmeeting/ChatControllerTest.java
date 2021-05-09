@@ -1,6 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.domain.error.*;
+import com.megamainmeeting.interactor.ChatMessageInteractor;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
@@ -15,10 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.FileInputStream;
+
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-public class ChatControllerTest extends BaseTest{
+public class ChatControllerTest extends BaseTest {
 
     private final static long NOT_EXIST_USER_ID = -1;
 
@@ -28,12 +31,14 @@ public class ChatControllerTest extends BaseTest{
     RoomRepository roomRepository;
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
+    @Autowired
+    ChatMessageInteractor chatMessageInteractor;
 
     @Autowired
     private TestValues testValues;
 
     @Before
-    public void prepare(){
+    public void prepare() {
         testValues.prepareChatCandidateReqeusts();
         testValues.prepareRoomToUser1User2();
         testValues.deleteAllMessagesInRoom();
@@ -43,11 +48,10 @@ public class ChatControllerTest extends BaseTest{
     @Test(expected = RoomNotFoundException.class)
     public void addMessageRoomNotFound() throws Exception {
         NewChatMessage newChatMessage = new NewChatMessage();
-        newChatMessage.setRoomId(-1);
+        newChatMessage.setRoomId(testValues.getNotExistRoomId());
+        newChatMessage.setUserId(TestValues.USER_ID_1);
         newChatMessage.setMessage("asdfasdf");
-        BaseResponse<?> response = chatController.processMessage(TestValues.USER_ID_1, newChatMessage);
-        assertFalse(response.isSuccess());
-        assertEquals(ErrorMessages.ROOM_NOT_FOUND, response.getErrorMessage());
+        chatMessageInteractor.onNewMessage(newChatMessage);
     }
 
     @Test(expected = UserNotFoundException.class)
@@ -55,9 +59,8 @@ public class ChatControllerTest extends BaseTest{
         NewChatMessage newChatMessage = new NewChatMessage();
         newChatMessage.setRoomId(TestValues.ROOM_ID);
         newChatMessage.setMessage("asdfasdf");
-        BaseResponse<?> response = chatController.processMessage(NOT_EXIST_USER_ID, newChatMessage);
-        assertFalse(response.isSuccess());
-        assertEquals(ErrorMessages.USER_NOT_FOUND, response.getErrorMessage());
+        newChatMessage.setUserId(testValues.getNotExistUserId());
+        chatMessageInteractor.onNewMessage(newChatMessage);
     }
 
     @Test
@@ -65,11 +68,12 @@ public class ChatControllerTest extends BaseTest{
         NewChatMessage newChatMessage = new NewChatMessage();
         newChatMessage.setRoomId(TestValues.ROOM_ID);
         newChatMessage.setMessage("asdfasdf");
-        BaseResponse<ChatMessage> response = (BaseResponse<ChatMessage>) chatController.processMessage(TestValues.USER_ID_1, newChatMessage);
-        assertTrue(response.isSuccess());
-        assertEquals(1, response.getResult().getUserId());
-        assertEquals(TestValues.ROOM_ID, response.getResult().getRoom().getId());
-        assertEquals("asdfasdf", response.getResult().getMessage());
+//        newChatMessage.setImage(new FileInputStream(this.getClass().getResource("/testImage.png").getFile()).readAllBytes());
+        newChatMessage.setUserId(TestValues.USER_ID_1);
+        ChatMessage response = chatMessageInteractor.onNewMessage(newChatMessage);
+        assertEquals(1, response.getUserId());
+        assertEquals(TestValues.ROOM_ID, response.getRoom().getId());
+        assertEquals("asdfasdf", response.getMessage());
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.megamainmeeting.db.ChatMessageRepositoryJpa;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.SessionRepositoryJpa;
 import com.megamainmeeting.db.UserRepositoryJpa;
+import com.megamainmeeting.db.mapper.ChatMessageDbMapper;
 import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
 import com.megamainmeeting.domain.match.UserChatMatcher;
@@ -120,8 +121,13 @@ public class AppConfig {
     ChatMessageInteractor provideChatMessageInteractor(MessageChatManager messageChatManager,
                                                        ChatMessageRepository chatMessageRepository,
                                                        RoomRepositoryJpa roomRepositoryJpa,
-                                                       UserOpeningCheck userOpeningCheck) {
-        return new ChatMessageInteractor(messageChatManager, chatMessageRepository, roomRepositoryJpa, userOpeningCheck);
+                                                       UserOpeningCheck userOpeningCheck,
+                                                       ChatMessageDbMapper chatMessageDbMapper) {
+        return new ChatMessageInteractor(messageChatManager,
+                chatMessageRepository,
+                roomRepositoryJpa,
+                userOpeningCheck,
+                chatMessageDbMapper);
     }
 
     @Bean

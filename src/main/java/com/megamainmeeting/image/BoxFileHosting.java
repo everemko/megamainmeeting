@@ -23,7 +23,7 @@ public class BoxFileHosting implements ImageRepository {
     }
 
     @Override
-    public String saveAvatar(InputStream stream) throws IOException {
+    public String saveImage(InputStream stream) throws IOException {
         try (stream) {
             BoxFolder rootFolder = BoxFolder.getRootFolder(api);
             BoxFile.Info newFileInfo = rootFolder.uploadFile(stream, generateAvatarName());
@@ -36,7 +36,12 @@ public class BoxFileHosting implements ImageRepository {
     }
 
     @Override
-    public void deletePhoto(String url) {
+    public String saveImage(byte[] image) throws FileNotFoundException, IOException {
+        return saveImage(new ByteArrayInputStream(image));
+    }
+
+    @Override
+    public void deleteImage(String url) {
         try {
             if(url == null) return;
             BoxItem.Info itemInfo = BoxItem.getSharedItem(api, url);
