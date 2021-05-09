@@ -11,7 +11,7 @@ public class User {
 
     private long id;
     private long age;
-    private long gender;
+    private Gender gender;
     private String name;
 
 }

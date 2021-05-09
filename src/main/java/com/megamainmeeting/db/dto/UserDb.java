@@ -3,6 +3,7 @@ package com.megamainmeeting.db.dto;
 import com.megamainmeeting.domain.open.UserOpenType;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.room.RoomList;
+import com.megamainmeeting.entity.user.Gender;
 import com.megamainmeeting.entity.user.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,9 +30,11 @@ public class UserDb {
     @Column(nullable = false, name = "date_birth")
     private LocalDateTime dateBirth;
     @Column(nullable = false)
-    private Long gender;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     @Column(nullable = false, name = "gender_match")
-    private Long genderMatch;
+    @Enumerated(EnumType.STRING)
+    private Gender genderMatch;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private UserProfileDb userProfile;

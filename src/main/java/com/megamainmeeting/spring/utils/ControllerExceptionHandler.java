@@ -23,6 +23,7 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     public final FailureResponse handleAllExceptions(Exception ex, WebRequest request) {
+        logger.error(ex.toString());
         if(ex instanceof BaseException ){
             return new FailureResponse(ex.getMessage());
         }
@@ -36,7 +37,6 @@ public class ControllerExceptionHandler {
             return new FailureResponse("Exceeding the maximum uploading size");
         }
         else {
-            logger.error(ex.toString());
             return new FailureResponse(ErrorMessages.INTERNAL_SERVER_ERROR);
         }
     }

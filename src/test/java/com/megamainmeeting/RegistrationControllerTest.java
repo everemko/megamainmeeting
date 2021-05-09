@@ -2,17 +2,14 @@ package com.megamainmeeting;
 
 import com.megamainmeeting.domain.registration.NewAnonumousUser;
 import com.megamainmeeting.dto.RegistrationResult;
+import com.megamainmeeting.entity.user.Gender;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.controller.registration.RegistrationController;
-import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.MockMvcBuilder;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -30,8 +27,8 @@ public class RegistrationControllerTest {
     @Test
     public void testAnonymousRegistration() throws Exception{
         NewAnonumousUser user = new NewAnonumousUser();
-        user.setGender(0);
-        user.setGenderMatch(1);
+        user.setGender(Gender.MALE);
+        user.setGenderMatch(Gender.FEMALE);
         user.setName("Vasia");
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.YEAR, -20);

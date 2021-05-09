@@ -10,10 +10,8 @@ import com.megamainmeeting.domain.open.*;
 import com.megamainmeeting.dto.AuthenticationSocketDto;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import com.megamainmeeting.entity.room.RoomList;
-import com.megamainmeeting.interactor.ChatMessageInteractor;
+import com.megamainmeeting.entity.user.Gender;
 import com.megamainmeeting.spring.controller.chat.ChatCandidateRequest;
-import com.megamainmeeting.spring.controller.user.UserProfile;
-import com.megamainmeeting.utils.TestWebSocketSession;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -72,8 +70,8 @@ public class TestValues {
         }
         userDb.setDateBirth(LocalDateTime.of(1986, 3, 1, 0, 0, 0));
         userDb.setName("USER_1");
-        userDb.setGender(0L);
-        userDb.setGenderMatch(1L);
+        userDb.setGender(Gender.MALE);
+        userDb.setGenderMatch(Gender.FEMALE);
         userRepositoryJpa.save(userDb);
     }
 

@@ -1,6 +1,7 @@
 package com.megamainmeeting.domain.registration;
 
 import com.megamainmeeting.domain.error.RegistrationExceptions;
+import com.megamainmeeting.entity.user.Gender;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -13,8 +14,8 @@ public class NewAnonumousUser {
 
     private String name;
     private LocalDateTime dateBirth;
-    private long gender = -1;
-    private long genderMatch = -1;
+    private Gender gender;
+    private Gender genderMatch;
 
     public void checkValid() throws RegistrationExceptions {
         if(name == null) throw new RegistrationExceptions(RegistrationErrorStrings.NO_NAME);
@@ -23,7 +24,7 @@ public class NewAnonumousUser {
         LocalDateTime localDateTime = LocalDateTime.ofInstant(calendar.toInstant(), ZoneOffset.UTC);
         if(dateBirth == null) throw new RegistrationExceptions(RegistrationErrorStrings.DATE_BIRTH_NO_VALID);
         if(dateBirth.isAfter(localDateTime)) throw new RegistrationExceptions(RegistrationErrorStrings.DATE_BIRTH_NO_18);
-        if(gender != 0 && gender != 1) throw new RegistrationExceptions(RegistrationErrorStrings.NO_GENDER);
-        if(genderMatch != 0 && genderMatch != 1 ) throw new RegistrationExceptions(RegistrationErrorStrings.NO_GENDER_MATCH);
+        if(gender == null) throw new RegistrationExceptions(RegistrationErrorStrings.NO_GENDER);
+        if(genderMatch == null) throw new RegistrationExceptions(RegistrationErrorStrings.NO_GENDER_MATCH);
     }
 }

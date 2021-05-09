@@ -5,7 +5,9 @@ import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.db.dto.UserProfileDb;
 import com.megamainmeeting.domain.error.AvatarSizeException;
+import com.megamainmeeting.domain.error.BadDataException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
+import com.megamainmeeting.entity.user.Gender;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
 import lombok.AllArgsConstructor;
@@ -81,6 +83,17 @@ public class UserController {
             ) throws UserNotFoundException, IOException, AvatarSizeException {
         String url = updateAvatarInteractor.updatePhoto(userId, file.getBytes());
         return SuccessResponse.getSuccessInstance(url);
+    }
+
+    @PostMapping("user/gender/match")
+    public BaseResponse<Void> postMatchGender(
+            @RequestAttribute("UserId") long userid,
+            @RequestBody Gender gender) throws UserNotFoundException, BadDataException{
+        if(gender == null) throw new BadDataException();
+        UserDb userDb = userRepositoryJpa.findById(userid).orElseThrow(UserNotFoundException::new);
+        userDb.setGenderMatch(gender);
+        userRepositoryJpa.save(userDb);
+        return SuccessResponse.getSuccessInstance(null);
     }
 
 
