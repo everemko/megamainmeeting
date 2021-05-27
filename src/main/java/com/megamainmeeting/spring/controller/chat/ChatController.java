@@ -30,7 +30,7 @@ public class ChatController {
     public BaseResponse<ChatMessage> processMessage(@RequestAttribute("UserId") long userId,
                                           @RequestPart("roomId") long roomId,
                                           @RequestPart("message") String message,
-                                          @RequestPart("image") MultipartFile file) throws Exception {
+                                          @RequestPart(value = "image", required = false) MultipartFile file) throws Exception {
         NewChatMessage newChatMessage = NewChatMessage.getInstance(
                 message,
                 file != null ? file.getBytes() : null,
