@@ -122,11 +122,13 @@ public class AppConfig {
                                                        ChatMessageRepository chatMessageRepository,
                                                        RoomRepositoryJpa roomRepositoryJpa,
                                                        UserOpeningCheck userOpeningCheck,
-                                                       ChatMessageDbMapper chatMessageDbMapper) {
+                                                       ChatMessageDbMapper chatMessageDbMapper,
+                                                       UserMessagePushService messagePushService) {
         return new ChatMessageInteractor(messageChatManager,
                 chatMessageRepository,
                 roomRepositoryJpa,
                 userOpeningCheck,
+                messagePushService,
                 chatMessageDbMapper);
     }
 

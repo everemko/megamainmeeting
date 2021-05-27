@@ -2,6 +2,7 @@ package com.megamainmeeting.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.megamainmeeting.db.mapper.ChatMessageDbMapper;
+import com.megamainmeeting.interactor.UserMessagePushService;
 import com.megamainmeeting.utils.TestClientManager;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.repository.*;
@@ -89,12 +90,14 @@ public class AppConfigTest {
                                                        ChatMessageRepository chatMessageRepository,
                                                        RoomRepositoryJpa roomRepositoryJpa,
                                                        UserOpeningCheck userOpeningCheck,
-                                                       ChatMessageDbMapper chatMessageDbMapper) {
+                                                       ChatMessageDbMapper chatMessageDbMapper,
+                                                       UserMessagePushService pushService) {
         return new ChatMessageInteractor(
                 messageChatManager,
                 chatMessageRepository,
                 roomRepositoryJpa,
                 userOpeningCheck,
+                pushService,
                 chatMessageDbMapper);
     }
 

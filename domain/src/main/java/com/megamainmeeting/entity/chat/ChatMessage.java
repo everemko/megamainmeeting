@@ -4,6 +4,8 @@ import com.megamainmeeting.entity.room.Room;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 
 @Data
@@ -16,4 +18,11 @@ public class ChatMessage {
     private LocalDateTime time;
     private boolean isRead;
     private String image;
+
+    public Set<Long> getUsersWithoutSender(){
+        return room.getUsers()
+                .stream()
+                .filter(it -> it != userId)
+                .collect(Collectors.toSet());
+    }
 }

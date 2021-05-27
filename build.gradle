@@ -50,6 +50,8 @@ dependencies {
 // https://mvnrepository.com/artifact/com.eclipsesource.minimal-json/minimal-json
     implementation group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.1'
 
+    implementation 'com.google.firebase:firebase-admin:7.3.0'
+
 
 
 

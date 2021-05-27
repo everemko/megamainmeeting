@@ -27,6 +27,7 @@ public class ChatMessageInteractor {
     private final ChatMessageRepository chatMessageRepository;
     private final RoomRepositoryJpa roomRepositoryJpa;
     private final UserOpeningCheck userOpeningCheck;
+    private final UserMessagePushService messagePushService;
     private ChatMessageDbMapper chatMessageDbMapper;
 
     synchronized
@@ -36,6 +37,7 @@ public class ChatMessageInteractor {
         userOpeningCheck.checkBeforeMessage(newMessage.getRoomId(), newMessage.getUserId());
         ChatMessage message = chatMessageRepository.save(newMessage);
         messageChatManager.sendIgnoreSender(message);
+        messagePushService.send(message.getUsersWithoutSender(), message.getMessage());
         userOpeningCheck.checkAfterMessage(newMessage.getRoomId());
         return message;
     }
