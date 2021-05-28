@@ -5,11 +5,13 @@ import java.util.stream.Stream;
 
 public interface ImageRepository {
 
-    public String saveImage(InputStream stream) throws FileNotFoundException, IOException;
+    //return imageId
+    public long saveImage(InputStream stream) throws FileNotFoundException, IOException;
 
-    public void deleteImage(String url);
+    public void deleteImage(long id);
 
-    public String getDownloadLink(String url);
+    public String getDownloadLink(long id) throws FileNotFoundException;
 
-    public String saveImage(byte[] image) throws FileNotFoundException, IOException;
+    //return imageId
+    public long saveImage(byte[] image) throws FileNotFoundException, IOException;
 }

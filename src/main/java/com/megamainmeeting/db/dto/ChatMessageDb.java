@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import org.apache.tomcat.jni.Local;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.time.Clock;
@@ -30,8 +31,13 @@ public class ChatMessageDb {
     @JoinColumn(name = "user_id")
     private UserDb user;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "image_id", nullable = false)
+    @ColumnDefault("-1")
+    private long imageId;
+
+    public boolean isImage(){
+        return imageId != -1;
+    }
 
     private LocalDateTime time = LocalDateTime.now(ZoneOffset.UTC);
     private boolean isRead = false;

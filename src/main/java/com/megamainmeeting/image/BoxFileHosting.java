@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import java.io.*;
 
 @Component
-public class BoxFileHosting implements ImageRepository {
+public class BoxFileHosting {
 
     @Autowired
     private Logger logger;
@@ -22,7 +22,6 @@ public class BoxFileHosting implements ImageRepository {
         api = BoxDeveloperEditionAPIConnection.getAppEnterpriseConnection(config);
     }
 
-    @Override
     public String saveImage(InputStream stream) throws IOException {
         try (stream) {
             BoxFolder rootFolder = BoxFolder.getRootFolder(api);
@@ -35,12 +34,10 @@ public class BoxFileHosting implements ImageRepository {
         }
     }
 
-    @Override
     public String saveImage(byte[] image) throws FileNotFoundException, IOException {
         return saveImage(new ByteArrayInputStream(image));
     }
 
-    @Override
     public void deleteImage(String url) {
         try {
             if(url == null) return;
@@ -52,7 +49,6 @@ public class BoxFileHosting implements ImageRepository {
         }
     }
 
-    @Override
     public String getDownloadLink(String url) {
         try {
             if(url == null) return null;

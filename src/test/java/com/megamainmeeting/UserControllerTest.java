@@ -2,6 +2,7 @@ package com.megamainmeeting;
 
 import com.megamainmeeting.domain.ImageRepository;
 import com.megamainmeeting.utils.TestValues;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class UserControllerTest extends BaseTest{
     @Test
     public void test() throws FileNotFoundException, IOException {
         FileInputStream file = new FileInputStream(this.getClass().getResource("/testImage.png").getFile());
-        String link = imageRepository.saveImage(file);
+        long imageId = imageRepository.saveImage(file);
+        Assert.assertNotEquals(0, imageId);
     }
 }

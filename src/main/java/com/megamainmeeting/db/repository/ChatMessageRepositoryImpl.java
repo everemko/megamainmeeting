@@ -43,8 +43,8 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
         chatMessageDb.setRoom(roomDb);
         chatMessageDb.setMessage(message.getMessage());
         if (message.isImage()) {
-            String imageUrl = imageRepository.saveImage(message.getImage());
-            chatMessageDb.setImageUrl(imageUrl);
+            long imageId = imageRepository.saveImage(message.getImage());
+            chatMessageDb.setImageId(imageId);
         }
         ChatMessageDb savedMessage = chatMessageRepositoryJpa.save(chatMessageDb);
         return chatMessageDbMapper.map(savedMessage);

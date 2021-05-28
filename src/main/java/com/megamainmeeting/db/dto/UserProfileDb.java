@@ -27,17 +27,4 @@ public class UserProfileDb {
     private int height;
     private int weight;
     private String firstDateIdeal;
-
-    public String getByType(UserOpenType type){
-        switch (type){
-            case City: return city;
-            case Weight: return String.valueOf(weight);
-            case Height: return String.valueOf(height);
-            case Country: return country;
-            case Profession: return profession;
-            case AboutMyself: return aboutMyself;
-            case FirstDateIdeal: return firstDateIdeal;
-        }
-        return null;
-    }
 }

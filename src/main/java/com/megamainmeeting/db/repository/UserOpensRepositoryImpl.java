@@ -30,6 +30,8 @@ public class UserOpensRepositoryImpl implements UserOpensRepository {
     UserOpenUpRepositoryJpa userOpenUpRepositoryJpa;
     @Autowired
     UserProfileAvatarRepository userProfileAvatarRepository;
+    @Autowired
+    UserOpensValueFactory userOpensValueFactory;
 
     @Override
     public Room getRoom(long roomId) throws RoomNotFoundException, OpenRequestNotFoundException {
@@ -58,7 +60,7 @@ public class UserOpensRepositoryImpl implements UserOpensRepository {
                                 it.getUser().getId(),
                                 it.getOpenRequest().getId(),
                                 it.getUserOpenType(),
-                                it.getUser().getUserProfile().getByType(it.getUserOpenType())
+                                userOpensValueFactory.getByType( it.getUser().getUserProfile(), it.getUserOpenType())
                         ))
                 .collect(Collectors.toSet());
     }

@@ -148,4 +148,5 @@ public class AppConfig {
     WebSocketHandler provideWebSocketHandler(ChatWebSocketHandler chatWebSocketHandler) {
         return chatWebSocketHandler;
     }
+
 }
