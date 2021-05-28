@@ -24,7 +24,6 @@ public class UserProfileDb {
     private String country;
     private String profession;
     private String aboutMyself;
-    private String photo;
     private int height;
     private int weight;
     private String firstDateIdeal;
@@ -32,7 +31,6 @@ public class UserProfileDb {
     public String getByType(UserOpenType type){
         switch (type){
             case City: return city;
-            case Photo: return photo;
             case Weight: return String.valueOf(weight);
             case Height: return String.valueOf(height);
             case Country: return country;

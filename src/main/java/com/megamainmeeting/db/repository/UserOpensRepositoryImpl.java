@@ -10,6 +10,7 @@ import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.domain.open.*;
+import com.megamainmeeting.spring.controller.user.UserProfileAvatarRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +28,8 @@ public class UserOpensRepositoryImpl implements UserOpensRepository {
     OpenRequestRepositoryJpa openRequestRepositoryJpa;
     @Autowired
     UserOpenUpRepositoryJpa userOpenUpRepositoryJpa;
+    @Autowired
+    UserProfileAvatarRepository userProfileAvatarRepository;
 
     @Override
     public Room getRoom(long roomId) throws RoomNotFoundException, OpenRequestNotFoundException {
@@ -106,7 +109,7 @@ public class UserOpensRepositoryImpl implements UserOpensRepository {
         if (userProfile.getProfession() != null) {
             types.add(UserOpenType.Profession);
         }
-        if (userProfile.getPhoto() != null) {
+        if (userProfileAvatarRepository.isExist(userProfile.getUser().getId())) {
             types.add(UserOpenType.Photo);
         }
         return types;

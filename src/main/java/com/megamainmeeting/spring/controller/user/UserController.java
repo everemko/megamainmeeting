@@ -27,9 +27,9 @@ public class UserController {
     @Autowired
     UserRepositoryJpa userRepositoryJpa;
     @Autowired
-    ImageRepository imageRepository;
-    @Autowired
     UpdateAvatarInteractor updateAvatarInteractor;
+    @Autowired
+    UserProfileAvatarRepository userProfileAvatarRepository;
 
     @PostMapping("user/profile/update")
     BaseResponse<?> update(
@@ -72,7 +72,7 @@ public class UserController {
         userProfile.setHeight(userProfileDb.getHeight());
         userProfile.setProfession(userProfileDb.getProfession());
         userProfile.setWeight(userProfileDb.getWeight());
-        userProfile.setAvatar(userProfileDb.getPhoto());
+        userProfile.setAvatar(userProfileAvatarRepository.getDownloadLink(userId));
         return SuccessResponse.getSuccessInstance(userProfile);
     }
 
