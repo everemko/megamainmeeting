@@ -15,6 +15,7 @@ import com.megamainmeeting.domain.match.UserChatMatcher;
 import com.megamainmeeting.domain.match.UserChatPreparer;
 import com.megamainmeeting.domain.open.UserOpeningCheck;
 import com.megamainmeeting.interactor.*;
+import com.megamainmeeting.interactor.RoomInteractor;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.socket.ChatWebSocketHandler;

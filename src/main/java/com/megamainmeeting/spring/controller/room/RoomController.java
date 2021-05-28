@@ -1,13 +1,10 @@
 package com.megamainmeeting.spring.controller.room;
 
 import com.megamainmeeting.domain.block.RoomBlockReason;
-import com.megamainmeeting.domain.error.BaseException;
 import com.megamainmeeting.domain.error.SessionNotFoundException;
 import com.megamainmeeting.interactor.RoomInteractor;
 import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.spring.base.BaseResponse;
-import com.megamainmeeting.spring.base.FailureResponse;
-import jdk.jfr.BooleanFlag;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;

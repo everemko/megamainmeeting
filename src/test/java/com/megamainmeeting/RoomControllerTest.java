@@ -1,6 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.domain.block.RoomBlockReason;
+import com.megamainmeeting.domain.block.RoomBlocked;
 import com.megamainmeeting.spring.base.NotificationRpcResponse;
 import com.megamainmeeting.spring.base.RpcMethods;
 import com.megamainmeeting.spring.controller.room.RoomBlock;
@@ -22,8 +23,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.Arrays;
@@ -47,6 +46,8 @@ public class RoomControllerTest extends BaseTest {
     TestClientManager testClientManager;
     @Autowired
     AuthenticationController authenticationController;
+
+    private static final RoomBlockReason ROOM_BLOCK_REASON = RoomBlockReason.AbusiveBehaviour;
 
 
     @Before
@@ -85,12 +86,16 @@ public class RoomControllerTest extends BaseTest {
         roomBlock.setRoomId(TestValues.ROOM_ID);
         roomBlock.setReason(RoomBlockReason.AbusiveBehaviour);
         roomController.block(TestValues.USER_ID_1, roomBlock);
-        NotificationRpcResponse<Long> block1 = (NotificationRpcResponse<Long>) testClientManager.removeFirst();
-        NotificationRpcResponse<Long> block2 = (NotificationRpcResponse<Long>) testClientManager.removeFirst();
+        NotificationRpcResponse<RoomBlocked> block1 = (NotificationRpcResponse<RoomBlocked>) testClientManager.removeFirst();
+        NotificationRpcResponse<RoomBlocked> block2 = (NotificationRpcResponse<RoomBlocked>) testClientManager.removeFirst();
         Assert.assertEquals(RpcMethods.ROOM_BLOCKED_NOTIFICATION, block1.getMethod());
         Assert.assertEquals(RpcMethods.ROOM_BLOCKED_NOTIFICATION, block2.getMethod());
-        Assert.assertEquals(TestValues.ROOM_ID, (long) block1.getParams());
-        Assert.assertEquals(TestValues.ROOM_ID, (long) block2.getParams());
+        Assert.assertEquals(TestValues.ROOM_ID, (long) block1.getParams().getRoomId());
+        Assert.assertEquals(TestValues.ROOM_ID, (long) block2.getParams().getRoomId());
+        Assert.assertEquals(TestValues.USER_ID_1, block1.getParams().getUserId());
+        Assert.assertEquals(TestValues.USER_ID_1, block2.getParams().getUserId());
+        Assert.assertEquals(ROOM_BLOCK_REASON, block1.getParams().getReason());
+        Assert.assertEquals(ROOM_BLOCK_REASON, block2.getParams().getReason());
     }
 }
 

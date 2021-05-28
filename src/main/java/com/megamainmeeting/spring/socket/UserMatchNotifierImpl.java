@@ -3,9 +3,9 @@ package com.megamainmeeting.spring.socket;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.block.RoomBlocked;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
-import com.megamainmeeting.domain.open.UserOpensSet;
 import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
@@ -78,9 +78,10 @@ public class UserMatchNotifierImpl implements UserNotifier {
         userSocketManager.send(userId, response);
     }
 
+
     @Override
-    public void notifyRoomBlocked(long userId, long roomId){
-        BaseRpc response = rpcFactory.getNotification(RpcMethods.ROOM_BLOCKED_NOTIFICATION, roomId);
+    public void notifyRoomBlocked(long userId, RoomBlocked roomBlockedChatNotification) {
+        BaseRpc response = rpcFactory.getNotification(RpcMethods.ROOM_BLOCKED_NOTIFICATION, roomBlockedChatNotification);
         userSocketManager.send(userId, response);
     }
 }

@@ -1,8 +1,8 @@
 package com.megamainmeeting.domain;
 
+import com.megamainmeeting.domain.block.RoomBlocked;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
-import com.megamainmeeting.domain.open.UserOpensSet;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.domain.match.RoomPreparing;
@@ -23,5 +23,5 @@ public interface UserNotifier {
 
     void notifyUserOpens(long userId, RoomBlockingStatus roomBlockingStatus);
 
-    void notifyRoomBlocked(long userId, long roomId);
+    void notifyRoomBlocked(long userId, RoomBlocked roomBlockedChatNotification);
 }

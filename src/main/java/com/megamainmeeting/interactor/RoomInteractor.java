@@ -6,6 +6,7 @@ import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.db.dto.RoomDeleted;
 import com.megamainmeeting.db.dto.UserDb;
 import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.block.RoomBlocked;
 import com.megamainmeeting.domain.error.RoomIsBlockedException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
@@ -63,8 +64,13 @@ public class RoomInteractor {
         roomBlockedDb.setReason(roomBlock.getReason());
         roomDb.setRoomBlocked(roomBlockedDb);
         roomRepositoryJpa.save(roomDb);
+        RoomBlocked roomBlockedChatNotification = RoomBlocked.getInstance(
+                roomDb.getId(),
+                userDb.getId(),
+                roomBlock.getReason()
+        );
         for(UserDb user: roomDb.getUsers()){
-            userNotifier.notifyRoomBlocked(user.getId(), roomDb.getId());
+            userNotifier.notifyRoomBlocked(user.getId(), roomBlockedChatNotification);
         }
     }
 }

@@ -1,10 +1,9 @@
 package com.megamainmeeting.dto;
 
-import com.megamainmeeting.db.dto.ChatMessageDb;
-import com.megamainmeeting.db.dto.RoomDb;
-import com.megamainmeeting.db.dto.RoomDeleted;
-import com.megamainmeeting.db.dto.UserDb;
+import com.megamainmeeting.db.dto.*;
+import com.megamainmeeting.domain.block.RoomBlocked;
 import com.megamainmeeting.entity.user.User;
+import com.megamainmeeting.spring.controller.room.RoomBlock;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -21,9 +20,9 @@ public class RoomResponse {
     private LocalDateTime createdAt;
     private long messageCountUnread;
     private RoomDeleted roomDeleted;
-    private boolean isBlocked = false;
+    private RoomBlocked roomBlocked;
 
-    public RoomResponse(RoomDb roomDb){
+    public RoomResponse(RoomDb roomDb) {
         id = roomDb.getId();
         users = roomDb.getUsers()
                 .stream()
@@ -35,6 +34,14 @@ public class RoomResponse {
                 .filter(ChatMessageDb::isRead)
                 .count();
         roomDeleted = roomDb.getRoomDeleted();
-        isBlocked = roomDb.getRoomBlocked() != null;
+        RoomBlockedDb roomBlockedDb = roomDb.getRoomBlocked();
+
+        if (roomBlockedDb != null) {
+            roomBlocked = RoomBlocked.getInstance(
+                    roomBlockedDb.getRoom().getId(),
+                    roomBlockedDb.getUser().getId(),
+                    roomBlockedDb.getReason());
+        }
+
     }
 }
