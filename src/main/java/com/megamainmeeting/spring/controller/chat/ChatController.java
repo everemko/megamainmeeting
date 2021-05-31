@@ -29,7 +29,7 @@ public class ChatController {
     @PostMapping("/chat/message/add")
     public BaseResponse<ChatMessage> processMessage(@RequestAttribute("UserId") long userId,
                                           @RequestPart("roomId") long roomId,
-                                          @RequestPart("message") String message,
+                                          @RequestPart(value = "message", required = false) String message,
                                           @RequestPart(value = "image", required = false) MultipartFile file) throws Exception {
         NewChatMessage newChatMessage = NewChatMessage.getInstance(
                 message,

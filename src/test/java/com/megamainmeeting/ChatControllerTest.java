@@ -77,6 +77,19 @@ public class ChatControllerTest extends BaseTest {
     }
 
     @Test
+    public void addImageMessageWithoutMessage() throws Exception{
+        NewChatMessage newChatMessage = new NewChatMessage();
+        newChatMessage.setRoomId(TestValues.ROOM_ID);
+//        newChatMessage.setMessage("asdfasdf");
+        newChatMessage.setImage(new FileInputStream(this.getClass().getResource("/testImage.png").getFile()).readAllBytes());
+        newChatMessage.setUserId(TestValues.USER_ID_1);
+        ChatMessage response = chatMessageInteractor.onNewMessage(newChatMessage);
+        assertEquals(1, response.getUserId());
+        assertEquals(TestValues.ROOM_ID, response.getRoom().getId());
+        assertNull(response.getMessage());
+    }
+
+    @Test
     public void removeChatCandidate() throws Exception {
         chatController.removeChatCandidate(TestValues.USER_ID_1);
         chatController.addChatCandidate(TestValues.USER_ID_1, testValues.getChatCandidate1());
