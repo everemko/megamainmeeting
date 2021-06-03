@@ -14,12 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class FirebaseClient implements UserMessagePushService {
 
@@ -52,13 +51,12 @@ public class FirebaseClient implements UserMessagePushService {
         Collection<String> tokens = users.stream()
                 .map(it -> {
                     try {
-                        return Optional.ofNullable(userPushTokenRepository.getToken(it));
+                        return userPushTokenRepository.getToken(it);
                     } catch (UserPushTokenNotFound e){
-                        return Optional.<String>empty();
+                        return Collections.<String>emptyList();
                     }
                 })
-                .filter(Optional::isPresent)
-                .map(Optional::get)
+                .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
         if(tokens.isEmpty()) return;
         Notification notification = Notification.builder()

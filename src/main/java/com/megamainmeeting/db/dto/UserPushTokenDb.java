@@ -19,6 +19,7 @@ public class UserPushTokenDb {
     @JoinColumn(name = "user_id")
     private UserDb userDb;
 
+    @Column(unique = true)
     private String token;
 
     public static UserPushTokenDb getInstance(UserDb userDb, String token){

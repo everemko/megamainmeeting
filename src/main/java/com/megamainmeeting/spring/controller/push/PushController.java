@@ -20,8 +20,8 @@ public class PushController {
 
     @PostMapping("/push/token")
     public BaseResponse<Object> addPushToken(@RequestAttribute("UserId") long userId,
-                                           @RequestBody String token) throws UserNotFoundException, BadDataException {
-        userPushTokenRepository.addToken(userId, token);
+                                           @RequestBody PushTokenResponseBody body) throws UserNotFoundException, BadDataException {
+        userPushTokenRepository.addToken(userId, body.getToken());
         return SuccessResponse.getSimpleSuccessResponse();
     }
 }
