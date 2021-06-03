@@ -45,21 +45,17 @@ public class ChatMessageInteractor {
     public Map<Long, List<ChatMessage>> getMessagesAfterDate(Map<Long, LocalDateTime> map,
                                                              long userId) throws RoomNotFoundException, UserNotInRoomException {
         LinkedHashMap<Long, List<ChatMessage>> newMap = new LinkedHashMap<>();
-        for (RoomDb room : roomRepositoryJpa.findAllByUserId(userId)) {
-            Optional<LocalDateTime> optional = map.entrySet()
-                    .stream()
-                    .filter(it -> it.getKey() == room.getId())
-                    .map(Map.Entry::getValue)
-                    .findFirst();
+        for(Map.Entry<Long, LocalDateTime> entry: map.entrySet()){
+            RoomDb room = roomRepositoryJpa.findById(entry.getKey()).orElseThrow(RoomNotFoundException::new);
+            if(!room.isUserInRoom(userId)){
+                throw new UserNotInRoomException();
+            }
             List<ChatMessage> list = room.getMessages()
                     .stream()
-                    .filter((ChatMessageDb it) -> {
-                        if (optional.isEmpty()) return true;
-                        else return it.getTime().isAfter(optional.get());
-                    })
+                    .filter(it -> it.getTime().isAfter(entry.getValue()))
                     .map(it -> chatMessageDbMapper.map(it))
                     .collect(Collectors.toList());
-            newMap.put(room.getId(), list);
+            newMap.put(entry.getKey(), list);
         }
         return newMap;
     }
