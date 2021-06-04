@@ -7,6 +7,7 @@ import lombok.Data;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Data
 public class Room {
@@ -19,6 +20,7 @@ public class Room {
     private Set<User> users;
 
     public boolean isBlocked(){
+        if(isAllOpens()) return false;
         long level = messageCount / MAX_MESSAGES_PER_LEVEL;
         if(openRequests.size() != level) return false;
         for(OpenRequest openRequest: openRequests){
@@ -28,8 +30,13 @@ public class Room {
     }
 
     public boolean isNeedToBeBlocked(){
+        if(isAllOpens()) return false;
         long level = messageCount / MAX_MESSAGES_PER_LEVEL;
         return level > openRequests.size();
+    }
+
+    private boolean isAllOpens(){
+        return openRequests.size() == OpenRequestType.values().length;
     }
 
     public User getUser(long userId) throws UserNotInRoomException {
