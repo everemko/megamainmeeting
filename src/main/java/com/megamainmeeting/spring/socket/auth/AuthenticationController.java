@@ -14,8 +14,9 @@ public class AuthenticationController {
     @Autowired
     private SocketSessions sessions;
 
-    public void auth(AuthenticationSocketDto dto, WebSocketSession session){
+    public boolean auth(AuthenticationSocketDto dto, WebSocketSession session){
         sessions.add(dto.getUserId(), session);
+        return true;
     }
 
     public void checkAuthorization(WebSocketSession session) throws AuthorizationException {

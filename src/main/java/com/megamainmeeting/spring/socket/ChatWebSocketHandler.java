@@ -56,10 +56,11 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             if (!request.getMethod().equals(RpcMethods.USER_AUTHENTICATION)) {
                 authenticationController.checkAuthorization(session);
             }
+            Object response = null;
             switch (request.getMethod()) {
                 case RpcMethods.USER_AUTHENTICATION: {
                     AuthenticationSocketDto dto = mapper.convertValue(request.getParams(), AuthenticationSocketDto.class);
-                    authenticationController.auth(dto, session);
+                    response = authenticationController.auth(dto, session);
                     break;
                 }
                 case RpcMethods.READY_TO_CHAT_STATUS: {
@@ -73,6 +74,10 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                     break;
                 }
 
+            }
+            if(response != null) {
+                BaseRpc rpc = rpcFactory.getSuccess(request.getMethod(), response, request.getId());
+                userSocketManager.send(session, rpc);
             }
         } catch (IOException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.DESERIALIZE_ERROR);
