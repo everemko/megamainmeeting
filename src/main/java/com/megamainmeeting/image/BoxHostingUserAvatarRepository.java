@@ -23,7 +23,7 @@ public class BoxHostingUserAvatarRepository implements UserProfileAvatarReposito
     @Override
     public String getDownloadLink(long userId) {
         BoxHostingUserAvatarDb avatarDb = boxHostingUserAvatarRepositoryJpa.findByUserId(userId);
-        if (avatarDb == null) return null;
+        if (avatarDb == null) return "";
         return boxFileHosting.getDownloadLink(avatarDb.getImageUrl());
     }
 

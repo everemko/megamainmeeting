@@ -85,6 +85,14 @@ public class UserController {
         return SuccessResponse.getSuccessInstance(url);
     }
 
+    @DeleteMapping("user/profile/avatar")
+    public BaseResponse<Object> deleteUserAvatar(
+            @RequestAttribute("UserId") long userId
+    ) throws UserNotFoundException{
+        updateAvatarInteractor.deletePhoto(userId);
+        return SuccessResponse.getSimpleSuccessResponse();
+    }
+
     @PostMapping("user/gender/match")
     public BaseResponse<Void> postMatchGender(
             @RequestAttribute("UserId") long userid,

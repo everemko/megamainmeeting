@@ -29,5 +29,10 @@ public class UpdateAvatarInteractor {
         return userProfileAvatarRepository.save(userId, new ByteArrayInputStream(avatar));
     }
 
+    public void deletePhoto(long userId) throws UserNotFoundException{
+        UserDb user = userRepositoryJpa.findById(userId).orElseThrow(UserNotFoundException::new);
+        userProfileAvatarRepository.delete(user.getId());
+    }
+
     private static final double MAX_IMAGE_SIZE = 2 * Math.pow(10, 6);
 }
