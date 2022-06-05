@@ -1,7 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.domain.error.*;
-import com.megamainmeeting.interactor.ChatMessageInteractor;
+import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
@@ -13,7 +13,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.FileInputStream;

@@ -14,7 +14,7 @@ import com.megamainmeeting.db.dto.RoomDb;
 import com.megamainmeeting.domain.RoomRepository;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import com.megamainmeeting.entity.room.Room;
-import com.megamainmeeting.interactor.ChatMessageInteractor;
+import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
 import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.controller.room.RoomController;

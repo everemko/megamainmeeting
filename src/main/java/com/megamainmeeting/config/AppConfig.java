@@ -13,6 +13,8 @@ import com.megamainmeeting.db.repository.*;
 import com.megamainmeeting.domain.*;
 import com.megamainmeeting.domain.match.UserChatMatcher;
 import com.megamainmeeting.domain.match.UserChatPreparer;
+import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
+import com.megamainmeeting.domain.messaging.UserMessagePushService;
 import com.megamainmeeting.domain.open.UserOpeningCheck;
 import com.megamainmeeting.interactor.*;
 import com.megamainmeeting.interactor.RoomInteractor;
@@ -24,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.WebSocketHandler;
 
 import java.time.LocalDateTime;
@@ -31,6 +34,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
+@EnableScheduling
 public class AppConfig {
 
     @Bean
@@ -81,7 +85,7 @@ public class AppConfig {
     UserChatMatcher provideUserChatMatcher(
             UserChatCandidateQueue userChatCandidateQueue,
             UserChatPreparer userChatPreparer
-            ) {
+    ) {
         return new UserChatMatcher(userChatCandidateQueue,
                 userChatPreparer
         );
@@ -121,16 +125,14 @@ public class AppConfig {
     @Bean
     ChatMessageInteractor provideChatMessageInteractor(MessageChatManager messageChatManager,
                                                        ChatMessageRepository chatMessageRepository,
-                                                       RoomRepositoryJpa roomRepositoryJpa,
                                                        UserOpeningCheck userOpeningCheck,
-                                                       ChatMessageDbMapper chatMessageDbMapper,
+                                                       UserRepositoryImpl userRepository,
                                                        UserMessagePushService messagePushService) {
         return new ChatMessageInteractor(messageChatManager,
                 chatMessageRepository,
-                roomRepositoryJpa,
                 userOpeningCheck,
-                messagePushService,
-                chatMessageDbMapper);
+                userRepository,
+                messagePushService);
     }
 
     @Bean

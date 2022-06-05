@@ -1,7 +1,7 @@
 package com.megamainmeeting;
 
 import com.megamainmeeting.dto.RoomResponse;
-import com.megamainmeeting.interactor.ChatMessageInteractor;
+import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
 import com.megamainmeeting.utils.TestValues;
 import com.megamainmeeting.db.UserRepositoryJpa;
 import com.megamainmeeting.domain.RoomRepository;
@@ -11,7 +11,6 @@ import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.spring.base.*;
-import com.megamainmeeting.config.AppConfigTest;
 import com.megamainmeeting.spring.controller.chat.ChatController;
 import com.megamainmeeting.spring.socket.auth.AuthenticationController;
 import com.megamainmeeting.spring.socket.chat.ChatCandidateController;
@@ -22,8 +21,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)

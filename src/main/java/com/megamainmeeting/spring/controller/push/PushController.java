@@ -5,7 +5,6 @@ import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.push.UserPushTokenRepository;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;

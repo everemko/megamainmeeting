@@ -27,6 +27,8 @@ import java.io.IOException;
 @Component
 public class ChatWebSocketHandler extends TextWebSocketHandler {
 
+    private final String TAG = this.getClass().getSimpleName();
+    private static final String CONNECTION_CLOSED_MESSAGE = "Connection closed for userId: %s";
 
     @Autowired
     private ObjectMapper mapper;
@@ -75,7 +77,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 }
 
             }
-            if(response != null) {
+            if (response != null) {
                 BaseRpc rpc = rpcFactory.getSuccess(request.getMethod(), response, request.getId());
                 userSocketManager.send(session, rpc);
             }
@@ -97,6 +99,13 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
         super.afterConnectionClosed(session, status);
-        socketSessions.remove(session);
+        try {
+            long userId = socketSessions.getUserId(session);
+            logger.info(String.format(CONNECTION_CLOSED_MESSAGE, userId));
+        } catch (Throwable ignored) {
+
+        } finally {
+            socketSessions.remove(session);
+        }
     }
 }

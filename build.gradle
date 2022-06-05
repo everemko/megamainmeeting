@@ -19,8 +19,17 @@ bootRun {
     main = 'com.megamainmeeting.Application'
 }
 
+ext {
+
+    versions = [
+            postgreSql: "42.2.16",
+            jUnit     : "4.12"
+    ]
+}
+
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    testCompile group: 'junit', name: 'junit', version: "$versions.jUnit"
     testCompile('org.springframework.boot:spring-boot-starter-test')
 
     // https://mvnrepository.com/artifact/org.springframework/spring-websocket
@@ -34,7 +43,7 @@ dependencies {
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.30.Final'
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 
-    implementation group: 'org.postgresql', name: 'postgresql', version: '42.2.16'
+    implementation group: 'org.postgresql', name: 'postgresql', version: "$versions.postgreSql"
 
     implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
 
@@ -50,11 +59,7 @@ dependencies {
 // https://mvnrepository.com/artifact/com.eclipsesource.minimal-json/minimal-json
     implementation group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.1'
 
-    implementation 'com.google.firebase:firebase-admin:7.3.0'
-
-    implementation 'com.google.apis:google-api-services-androidpublisher:v3-rev20210527-1.31.0'
-
-
 
     implementation project('domain')
+    implementation project('push')
 }

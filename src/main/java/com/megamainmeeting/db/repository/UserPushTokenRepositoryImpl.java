@@ -10,13 +10,14 @@ import com.megamainmeeting.push.UserPushTokenNotFound;
 import com.megamainmeeting.push.UserPushTokenRepository;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
-import java.util.function.Function;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -34,11 +35,11 @@ public class UserPushTokenRepositoryImpl implements UserPushTokenRepository {
         if (token == null) throw new BadDataException();
         try {
             UserPushTokenDb saved = userPushTokenRepositoryJpa.getByToken(token);
-            if(saved != null) return;
+            if (saved != null) return;
             UserDb userDb = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
             UserPushTokenDb userPushTokenDb = UserPushTokenDb.getInstance(userDb, token);
             userPushTokenRepositoryJpa.save(userPushTokenDb);
-        } catch (Throwable exception){
+        } catch (Throwable exception) {
             logger.info(this.getClass().getSimpleName(), exception);
         }
     }
@@ -48,5 +49,19 @@ public class UserPushTokenRepositoryImpl implements UserPushTokenRepository {
         List<UserPushTokenDb> userPushToken = userPushTokenRepositoryJpa.getByUserId(userId);
         if (userPushToken == null) throw new UserPushTokenNotFound();
         return userPushToken.stream().map(UserPushTokenDb::getToken).collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<String> getTokens(Set<Long> users) {
+        return users.stream()
+                .map(it -> {
+                    try {
+                        return getToken(it);
+                    } catch (UserPushTokenNotFound e) {
+                        return Collections.<String>emptyList();
+                    }
+                })
+                .flatMap(Collection::stream)
+                .collect(Collectors.toSet());
     }
 }

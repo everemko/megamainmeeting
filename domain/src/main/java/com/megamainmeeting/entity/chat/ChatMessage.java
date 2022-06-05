@@ -17,12 +17,20 @@ public class ChatMessage {
     private long userId;
     private LocalDateTime time;
     private boolean isRead;
-    private String image;
+    private String imageUrl;
 
     public Set<Long> getUsersWithoutSender(){
         return room.getUsers()
                 .stream()
                 .filter(it -> it != userId)
                 .collect(Collectors.toSet());
+    }
+
+    public boolean isHasImage(){
+        return imageUrl != null;
+    }
+
+    public boolean isHasTextMessage(){
+        return message != null && !message.isEmpty();
     }
 }

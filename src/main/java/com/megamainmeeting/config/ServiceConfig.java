@@ -1,6 +1,5 @@
 package com.megamainmeeting.config;
 
-import com.megamainmeeting.interactor.UserMessagePushService;
 import com.megamainmeeting.push.FirebaseClient;
 import com.megamainmeeting.push.UserPushTokenRepository;
 import org.slf4j.Logger;

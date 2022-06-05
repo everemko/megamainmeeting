@@ -28,7 +28,7 @@ public class ChatMessageDbMapper {
         if(chatMessageDb.isImage()) {
             try {
                 String url = imageRepository.getDownloadLink(chatMessageDb.getImageId());
-                chatMessage.setImage(url);
+                chatMessage.setImageUrl(url);
             } catch (FileNotFoundException exception){
                 logger.error(this.getClass().getSimpleName(), exception);
             }
