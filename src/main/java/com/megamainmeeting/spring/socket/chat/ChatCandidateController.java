@@ -6,23 +6,26 @@ import com.megamainmeeting.interactor.UserChatCandidateInteractor;
 import com.megamainmeeting.dto.ReadyStatusDto;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
 import com.megamainmeeting.spring.SocketSessions;
+import com.megamainmeeting.spring.socket.base.BaseController;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 
 @Component
 @AllArgsConstructor
-public class ChatCandidateController {
+public class ChatCandidateController implements BaseController<ReadyStatusDto, Object> {
 
     private final UserChatCandidateInteractor userChatCandidateInteractor;
     private final SocketSessions sessions;
 
-    public void userStatus(ReadyStatusDto dto, WebSocketSession session) throws UserNotFoundException,
-            UserNotMatchException, WebSocketSessionNotFoundException {
+
+    @Override
+    public Object handle(ReadyStatusDto dto, long userId) throws Exception {
         if (dto.isReady()) {
-            userChatCandidateInteractor.setUserReady(sessions.getUserId(session));
+            userChatCandidateInteractor.setUserReady(userId);
         } else {
-            userChatCandidateInteractor.setUserNotReady(sessions.getUserId(session));
+            userChatCandidateInteractor.setUserNotReady(userId);
         }
+        return new Object();
     }
 }

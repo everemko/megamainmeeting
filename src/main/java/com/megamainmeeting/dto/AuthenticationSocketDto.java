@@ -6,4 +6,5 @@ import lombok.Data;
 public class AuthenticationSocketDto {
 
     private long userId;
+    private String token;
 }

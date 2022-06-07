@@ -59,6 +59,7 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 authenticationController.checkAuthorization(session);
             }
             Object response = null;
+            long userId = socketSessions.getUserId(session);
             switch (request.getMethod()) {
                 case RpcMethods.USER_AUTHENTICATION: {
                     AuthenticationSocketDto dto = mapper.convertValue(request.getParams(), AuthenticationSocketDto.class);
@@ -67,12 +68,12 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
                 }
                 case RpcMethods.READY_TO_CHAT_STATUS: {
                     ReadyStatusDto dto = mapper.convertValue(request.getParams(), ReadyStatusDto.class);
-                    chatCandidateController.userStatus(dto, session);
+                    chatCandidateController.handle(dto, userId);
                     break;
                 }
                 case RpcMethods.MESSAGE_HAS_BEEN_READ: {
                     ReadMessageOperationDto dto = mapper.convertValue(request.getParams(), ReadMessageOperationDto.class);
-                    messageOperationsController.handle(dto, socketSessions.getUserId(session));
+                    messageOperationsController.handle(dto, userId);
                     break;
                 }
 

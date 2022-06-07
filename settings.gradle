@@ -1,4 +1,5 @@
 rootProject.name = 'MegaMainMeeting'
 include 'domain'
 include 'push'
+include 'auth'
 

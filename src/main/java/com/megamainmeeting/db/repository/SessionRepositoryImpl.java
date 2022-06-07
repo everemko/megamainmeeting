@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
+import java.util.Set;
+
 @Component
 public class SessionRepositoryImpl implements SessionRepository {
 
@@ -27,7 +29,7 @@ public class SessionRepositoryImpl implements SessionRepository {
             SessionDb sessionDb = sessionRepositoryJpa.findByToken(token);
             if (sessionDb == null) throw new SessionNotFoundException();
             return sessionDb.getUser().toDomain();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new SessionNotFoundException();
         }
     }
@@ -38,8 +40,13 @@ public class SessionRepositoryImpl implements SessionRepository {
             SessionDb sessionDb = sessionRepositoryJpa.findByToken(token);
             if (sessionDb == null) throw new SessionNotFoundException();
             return sessionDb.getUser().getId();
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new SessionNotFoundException();
         }
+    }
+
+    @Override
+    public Set<String> getTokens(long userId) {
+        return sessionRepositoryJpa.getTokens(userId);
     }
 }

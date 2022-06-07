@@ -23,7 +23,8 @@ ext {
 
     versions = [
             postgreSql: "42.2.16",
-            jUnit     : "4.12"
+            jUnit     : "4.12",
+            lombok    : "1.18.12"
     ]
 }
 
@@ -35,10 +36,10 @@ dependencies {
     // https://mvnrepository.com/artifact/org.springframework/spring-websocket
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 
-    implementation group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
-    annotationProcessor "org.projectlombok:lombok:1.18.12"
-    testImplementation group: 'org.projectlombok', name: 'lombok', version: '1.18.12'
-    testAnnotationProcessor "org.projectlombok:lombok:1.18.12"
+    implementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
+    annotationProcessor "org.projectlombok:lombok:$versions.lombok"
+    testImplementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
+    testAnnotationProcessor "org.projectlombok:lombok:$versions.lombok"
 
     implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.30.Final'
     implementation('org.springframework.boot:spring-boot-starter-data-jpa')
@@ -62,4 +63,5 @@ dependencies {
 
     implementation project('domain')
     implementation project('push')
+    implementation project('auth')
 }
