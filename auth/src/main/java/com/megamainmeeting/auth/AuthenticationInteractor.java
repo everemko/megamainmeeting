@@ -17,7 +17,7 @@ public class AuthenticationInteractor {
     private final SessionRepository sessionRepository;
 
     public boolean isAuth(Authentication auth) throws UserNotFoundException {
-        if (userRepository.isExist(auth.getUserId())) throw new UserNotFoundException();
+        if (!userRepository.isExist(auth.getUserId())) throw new UserNotFoundException();
         Set<String> tokens = sessionRepository.getTokens(auth.getUserId());
         return tokens.contains(auth.getToken());
     }
