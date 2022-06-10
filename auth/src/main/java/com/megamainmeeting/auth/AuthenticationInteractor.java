@@ -4,11 +4,13 @@ import com.megamainmeeting.domain.SessionRepository;
 import com.megamainmeeting.domain.UserRepository;
 import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.entity.auth.Authentication;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+import javax.inject.Inject;
 import java.util.Set;
 
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PUBLIC, onConstructor = @__({ @Inject }))
 public class AuthenticationInteractor {
 
     private final UserRepository userRepository;

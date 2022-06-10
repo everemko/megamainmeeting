@@ -15,6 +15,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:7.3.0'
     implementation 'com.google.apis:google-api-services-androidpublisher:v3-rev20210527-1.31.0'
     implementation group: 'org.postgresql', name: 'postgresql', version: "$versions.postgreSql"
+    implementation "com.google.code.gson:gson:$versions.gson"
 
     implementation project(':domain')
 }

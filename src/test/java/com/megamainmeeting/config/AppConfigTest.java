@@ -3,6 +3,9 @@ package com.megamainmeeting.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.megamainmeeting.db.mapper.ChatMessageDbMapper;
 import com.megamainmeeting.domain.messaging.UserMessagePushService;
+import com.megamainmeeting.push.FirebaseClient;
+import com.megamainmeeting.push.UserNotifierList;
+import com.megamainmeeting.spring.socket.UserMatchNotifierImpl;
 import com.megamainmeeting.utils.TestClientManager;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.repository.*;
@@ -21,6 +24,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.handler.LoggingWebSocketHandlerDecorator;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @TestConfiguration
@@ -52,6 +57,17 @@ public class AppConfigTest {
         return new UserChatMatcher(userChatCandidateQueue,
                 userChatPreparer
         );
+    }
+
+    @Bean
+    UserNotifier provideUserNotifier(
+            FirebaseClient firebaseClient,
+            UserMatchNotifierImpl matchNotifier
+    ) {
+        List<UserNotifier> notifiers = new ArrayList<>();
+        notifiers.add(matchNotifier);
+        notifiers.add(firebaseClient);
+        return new UserNotifierList(notifiers);
     }
 
     @Bean

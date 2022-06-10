@@ -4,8 +4,15 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
+import com.google.gson.Gson;
+import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.block.RoomBlocked;
+import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.domain.messaging.UserMessagePushService;
+import com.megamainmeeting.domain.open.OpenRequest;
+import com.megamainmeeting.domain.open.RoomBlockingStatus;
 import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.user.User;
 import org.slf4j.Logger;
 
@@ -14,21 +21,19 @@ import java.io.InputStream;
 import java.util.Collection;
 import java.util.Set;
 
-public class FirebaseClient implements UserMessagePushService {
+public class FirebaseClient implements UserMessagePushService, UserNotifier {
 
     private static final String FIREBASE_MESSAGING_NULL = "Firebase messaging is null";
     private static final String CLIENT_RESOURCE = "/megamainmeeting-firebase-adminsdk-s8fes-dd27d29c92.json";
     private final String TAG = getClass().getSimpleName();
-    private static final String DEFAULT_CHANNEL = "DEFAULT_CHANNEL";
-    private static final String DEEPLINK = "deeplink";
-    private static final String DEEPLINK_SCHEME = "megamainmeeting";
-    private static final String DEEPLINK_HOST = "megamainmeeting";
-    private static final String DEEPLINK_DEFAULT = DEEPLINK_SCHEME + "://" + DEEPLINK_HOST;
-    private static final String DEEPLINK_MESSAGE = DEEPLINK_DEFAULT + "/message";
-    private static final String DEEPLINK_OPEN_REQUEST = DEEPLINK_DEFAULT + "/openrequest";
+
+    private static final String DATA_MESSAGE = "message";
+    private static final String DATA_MESSAGE_SENDER = "message_sender";
+    private static final String DATA_OPEN_REQUEST = "open_request";
 
     private final Logger logger;
     private final UserPushTokenRepository userPushTokenRepository;
+    private final Gson gson = new Gson();
 
     private FirebaseMessaging firebaseMessaging;
 
@@ -48,92 +53,15 @@ public class FirebaseClient implements UserMessagePushService {
 
     @Override
     public void sendMessage(ChatMessage message, User sender) {
-        if (message.isHasImage() && message.isHasTextMessage()) {
-            sendMessageWithImage(message.getUsersWithoutSender(), message.getMessage(), message.getImageUrl(), sender.getName());
-            return;
-        }
-
-        if (message.isHasTextMessage()) {
-            sendMessage(message.getUsersWithoutSender(), message.getMessage(), sender.getName());
-            return;
-        }
-
-        if (message.isHasImage()) {
-            sendImage(message.getUsersWithoutSender(), message.getImageUrl(), sender.getName());
-            return;
-        }
-    }
-
-    @Override
-    public void sendImage(Set<Long> users, String imageUrl, String senderName) {
-        Collection<String> tokens = userPushTokenRepository.getTokens(users);
-        if (tokens.isEmpty()) return;
-        AndroidNotification androidNotification = AndroidNotification.builder()
-                .setChannelId(DEFAULT_CHANNEL)
-                .setTitle(senderName)
-                .setImage(imageUrl)
-                .build();
-        MulticastMessage multicastMessage = prepareMessageMulticastMessage(androidNotification, tokens);
-        sendMulticast(multicastMessage);
-    }
-
-    @Override
-    public void sendMessageWithImage(Set<Long> users, String message, String imageUrl, String senderName) {
-        Collection<String> tokens = userPushTokenRepository.getTokens(users);
-        if (tokens.isEmpty()) return;
-        AndroidNotification androidNotification = AndroidNotification.builder()
-                .setChannelId(DEFAULT_CHANNEL)
-                .setBody(message)
-                .setTitle(senderName)
-                .setIcon("ic_logo")
-                .setImage(imageUrl)
-                .setPriority(AndroidNotification.Priority.HIGH)
-                .build();
-        MulticastMessage multicastMessage = prepareMessageMulticastMessage(androidNotification, tokens);
-        sendMulticast(multicastMessage);
-    }
-
-    @Override
-    public void sendMessage(Set<Long> users, String message, String senderName) {
-        Collection<String> tokens = userPushTokenRepository.getTokens(users);
-        if (tokens.isEmpty()) return;
-        AndroidNotification androidNotification = AndroidNotification.builder()
-                .setChannelId(DEFAULT_CHANNEL)
-                .setTitle(senderName)
-                .setBody(message)
-                .build();
-        MulticastMessage multicastMessage = prepareMessageMulticastMessage(androidNotification, tokens);
-        sendMulticast(multicastMessage);
-    }
-
-    @Override
-    public void sendOpeningRequest(Set<Long> users, String senderName) {
-        Collection<String> tokens = userPushTokenRepository.getTokens(users);
-        if (tokens.isEmpty()) return;
-        AndroidNotification androidNotification = AndroidNotification.builder()
-                .setChannelId(DEFAULT_CHANNEL)
-                .setTitle(senderName)
-                .build();
-        AndroidConfig androidConfig = AndroidConfig.builder()
-                .setNotification(androidNotification)
-                .build();
+        Collection<String> tokens = userPushTokenRepository.getTokens(message.getUsersWithoutSender());
+        String messageJson = gson.toJson(message);
+        String senderJson = gson.toJson(sender);
         MulticastMessage multicastMessage = MulticastMessage.builder()
-                .setAndroidConfig(androidConfig)
                 .addAllTokens(tokens)
-                .putData(DEEPLINK, DEEPLINK_OPEN_REQUEST)
+                .putData(DATA_MESSAGE, messageJson)
+                .putData(DATA_MESSAGE_SENDER, senderJson)
                 .build();
         sendMulticast(multicastMessage);
-    }
-
-    private MulticastMessage prepareMessageMulticastMessage(AndroidNotification androidNotification, Collection<String> tokens) {
-        AndroidConfig androidConfig = AndroidConfig.builder()
-                .setNotification(androidNotification)
-                .build();
-        return MulticastMessage.builder()
-                .addAllTokens(tokens)
-                .setAndroidConfig(androidConfig)
-                .putData(DEEPLINK, DEEPLINK_MESSAGE)
-                .build();
     }
 
     private void sendMulticast(MulticastMessage multicastMessage) {
@@ -144,5 +72,55 @@ public class FirebaseClient implements UserMessagePushService {
         } catch (NullPointerException exception) {
             logger.error(TAG, FIREBASE_MESSAGING_NULL);
         }
+    }
+
+    @Override
+    public void notifyRoomReady(Room room) {
+
+    }
+
+    @Override
+    public void notifyUsersRefuse(RoomPreparing preparing) {
+
+    }
+
+    @Override
+    public void notifyUserRefuseChat(long userId) {
+
+    }
+
+    @Override
+    public void notifyMatch(RoomPreparing preparing) {
+
+    }
+
+    @Override
+    public void notifyChatMessageUpdated(ChatMessage message) {
+
+    }
+
+    @Override
+    public void notifyUserShouldOpens(long userId, OpenRequest openRequest) {
+        try {
+            Collection<String> tokens = userPushTokenRepository.getToken(userId);
+            String openRequestJson = gson.toJson(openRequest);
+            MulticastMessage multicastMessage = MulticastMessage.builder()
+                    .addAllTokens(tokens)
+                    .putData(DATA_OPEN_REQUEST, openRequestJson)
+                    .build();
+            sendMulticast(multicastMessage);
+        } catch (UserPushTokenNotFound userPushTokenNotFound) {
+
+        }
+    }
+
+    @Override
+    public void notifyUserOpens(long userId, RoomBlockingStatus roomBlockingStatus) {
+
+    }
+
+    @Override
+    public void notifyRoomBlocked(long userId, RoomBlocked roomBlockedChatNotification) {
+
     }
 }

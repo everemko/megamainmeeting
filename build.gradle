@@ -24,7 +24,9 @@ ext {
     versions = [
             postgreSql: "42.2.16",
             jUnit     : "4.12",
-            lombok    : "1.18.12"
+            lombok    : "1.18.12",
+            gson      : "2.9.0"
+
     ]
 }
 

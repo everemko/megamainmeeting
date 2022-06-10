@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
+import com.megamainmeeting.auth.AuthenticationInteractor;
 import com.megamainmeeting.db.ChatMessageRepositoryJpa;
 import com.megamainmeeting.db.RoomRepositoryJpa;
 import com.megamainmeeting.db.SessionRepositoryJpa;
@@ -18,19 +19,25 @@ import com.megamainmeeting.domain.messaging.UserMessagePushService;
 import com.megamainmeeting.domain.open.UserOpeningCheck;
 import com.megamainmeeting.interactor.*;
 import com.megamainmeeting.interactor.RoomInteractor;
+import com.megamainmeeting.push.FirebaseClient;
+import com.megamainmeeting.push.UserNotifierList;
 import com.megamainmeeting.spring.SocketSessions;
 import com.megamainmeeting.spring.UserSocketClientManager;
 import com.megamainmeeting.spring.socket.ChatWebSocketHandler;
+import com.megamainmeeting.spring.socket.UserMatchNotifierImpl;
 import com.megamainmeeting.spring.socket.UserSocketManagerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.WebSocketHandler;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
@@ -89,6 +96,18 @@ public class AppConfig {
         return new UserChatMatcher(userChatCandidateQueue,
                 userChatPreparer
         );
+    }
+
+    @Bean
+    @Primary
+    UserNotifier provideUserNotifier(
+            FirebaseClient firebaseClient,
+            UserMatchNotifierImpl matchNotifier
+    ) {
+        List<UserNotifier> notifiers = new ArrayList<>();
+        notifiers.add(matchNotifier);
+        notifiers.add(firebaseClient);
+        return new UserNotifierList(notifiers);
     }
 
     @Bean
@@ -152,4 +171,11 @@ public class AppConfig {
         return chatWebSocketHandler;
     }
 
+    @Bean
+    AuthenticationInteractor provideAuthenticationInteractor(
+            UserRepository userRepository,
+            SessionRepository sessionRepository
+    ) {
+        return new AuthenticationInteractor(userRepository, sessionRepository);
+    }
 }
