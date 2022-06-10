@@ -5,6 +5,7 @@ import com.google.firebase.FirebaseApp;
 import com.google.firebase.FirebaseOptions;
 import com.google.firebase.messaging.*;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.domain.block.RoomBlocked;
 import com.megamainmeeting.domain.match.RoomPreparing;
@@ -23,6 +24,7 @@ import java.util.Set;
 
 public class FirebaseClient implements UserMessagePushService, UserNotifier {
 
+    private static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     private static final String FIREBASE_MESSAGING_NULL = "Firebase messaging is null";
     private static final String CLIENT_RESOURCE = "/megamainmeeting-firebase-adminsdk-s8fes-dd27d29c92.json";
     private final String TAG = getClass().getSimpleName();
@@ -33,7 +35,9 @@ public class FirebaseClient implements UserMessagePushService, UserNotifier {
 
     private final Logger logger;
     private final UserPushTokenRepository userPushTokenRepository;
-    private final Gson gson = new Gson();
+    private final Gson gson = new GsonBuilder()
+            .setDateFormat(DATE_FORMAT)
+            .create();
 
     private FirebaseMessaging firebaseMessaging;
 
