@@ -58,29 +58,31 @@ public class ChatWebSocketHandler extends TextWebSocketHandler {
             if (!request.getMethod().equals(RpcMethods.USER_AUTHENTICATION)) {
                 authenticationController.checkAuthorization(session);
             }
-            Object response = null;
-            long userId = socketSessions.getUserId(session);
-            switch (request.getMethod()) {
-                case RpcMethods.USER_AUTHENTICATION: {
-                    AuthenticationSocketDto dto = mapper.convertValue(request.getParams(), AuthenticationSocketDto.class);
-                    response = authenticationController.auth(dto, session);
-                    break;
-                }
-                case RpcMethods.READY_TO_CHAT_STATUS: {
-                    ReadyStatusDto dto = mapper.convertValue(request.getParams(), ReadyStatusDto.class);
-                    chatCandidateController.handle(dto, userId);
-                    break;
-                }
-                case RpcMethods.MESSAGE_HAS_BEEN_READ: {
-                    ReadMessageOperationDto dto = mapper.convertValue(request.getParams(), ReadMessageOperationDto.class);
-                    messageOperationsController.handle(dto, userId);
-                    break;
-                }
 
-            }
-            if (response != null) {
+            if (request.getMethod().equals(RpcMethods.USER_AUTHENTICATION)) {
+                AuthenticationSocketDto dto = mapper.convertValue(request.getParams(), AuthenticationSocketDto.class);
+                Object response = authenticationController.auth(dto, session);
                 BaseRpc rpc = rpcFactory.getSuccess(request.getMethod(), response, request.getId());
                 userSocketManager.send(session, rpc);
+            } else {
+                Object response = null;
+                long userId = socketSessions.getUserId(session);
+                switch (request.getMethod()) {
+                    case RpcMethods.READY_TO_CHAT_STATUS: {
+                        ReadyStatusDto dto = mapper.convertValue(request.getParams(), ReadyStatusDto.class);
+                        chatCandidateController.handle(dto, userId);
+                        break;
+                    }
+                    case RpcMethods.MESSAGE_HAS_BEEN_READ: {
+                        ReadMessageOperationDto dto = mapper.convertValue(request.getParams(), ReadMessageOperationDto.class);
+                        messageOperationsController.handle(dto, userId);
+                        break;
+                    }
+                }
+                if (response != null) {
+                    BaseRpc rpc = rpcFactory.getSuccess(request.getMethod(), response, request.getId());
+                    userSocketManager.send(session, rpc);
+                }
             }
         } catch (IOException exception) {
             BaseRpc response = rpcFactory.getError(ErrorMessages.DESERIALIZE_ERROR);
