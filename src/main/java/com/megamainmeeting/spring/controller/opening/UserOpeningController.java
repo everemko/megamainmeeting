@@ -7,7 +7,6 @@ import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.domain.open.*;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
-import com.megamainmeeting.spring.controller.room.RoomBlock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestAttribute;

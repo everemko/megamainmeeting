@@ -18,21 +18,21 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
-public class AuthenticationRestHeaderInterceptor
-        implements AsyncHandlerInterceptor {
-
-    private static final String HEADER_TOKEN = "Token";
-    private static final String HEADER_USER_ID = "UserId";
-    @Autowired
-    private SessionRepository sessionRepository;
-
-    @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        String token = request.getHeader(HEADER_TOKEN);
-        if(token == null) throw new TokenNotFoundException();
-        long userId = sessionRepository.getUserId(token);
-        request.setAttribute(HEADER_USER_ID, userId);
-        return true;
-    }
-}
+//@Component
+//public class AuthenticationRestHeaderInterceptor
+//        implements AsyncHandlerInterceptor {
+//
+//    private static final String HEADER_TOKEN = "Token";
+//    private static final String HEADER_USER_ID = "UserId";
+//    @Autowired
+//    private SessionRepository sessionRepository;
+//
+//    @Override
+//    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+//        String token = request.getHeader(HEADER_TOKEN);
+//        if(token == null) throw new TokenNotFoundException();
+//        long userId = sessionRepository.getUserId(token);
+//        request.setAttribute(HEADER_USER_ID, userId);
+//        return true;
+//    }
+//}

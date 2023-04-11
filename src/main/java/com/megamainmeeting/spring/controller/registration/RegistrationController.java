@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
-import com.megamainmeeting.dto.RegistrationResult;
+import com.megamainmeeting.spring.dto.RegistrationResult;
 
 @RestController
 @AllArgsConstructor

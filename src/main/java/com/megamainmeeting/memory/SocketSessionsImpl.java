@@ -2,9 +2,8 @@ package com.megamainmeeting.memory;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
-import com.megamainmeeting.domain.error.SessionNotFoundException;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
-import com.megamainmeeting.spring.SocketSessions;
+import com.megamainmeeting.spring.socket.SocketSessions;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
 

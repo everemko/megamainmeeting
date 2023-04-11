@@ -1,15 +1,17 @@
 package com.megamainmeeting.spring.controller.chat;
 
-import com.megamainmeeting.db.RoomRepositoryJpa;
-import com.megamainmeeting.db.dto.RoomDb;
-import com.megamainmeeting.db.mapper.ChatMessageDbMapper;
+import com.megamainmeeting.database.RoomRepositoryJpa;
+import com.megamainmeeting.database.dto.RoomDb;
+import com.megamainmeeting.database.repository.ChatMessageRepositoryImpl;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
-import com.megamainmeeting.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.domain.interactor.UserChatCandidateInteractor;
+import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
+import com.megamainmeeting.entity.chat.ChatCandidateRequest;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.chat.NewChatMessage;
-import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
-import com.megamainmeeting.spring.base.*;
+import com.megamainmeeting.spring.base.BaseResponse;
+import com.megamainmeeting.spring.base.SuccessResponse;
 import lombok.AllArgsConstructor;
 import org.slf4j.Logger;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +32,7 @@ public class ChatController {
     private final ChatMessageInteractor chatMessageInteractor;
     private final UserChatCandidateInteractor chatCandidateInteractor;
     private final RoomRepositoryJpa roomRepositoryJpa;
-    private final ChatMessageDbMapper chatMessageDbMapper;
+    private final ChatMessageRepositoryImpl chatMessageRepository;
 
 
     @PostMapping("/chat/message/add")
@@ -74,7 +76,7 @@ public class ChatController {
             List<ChatMessage> list = room.getMessages()
                     .stream()
                     .filter(it -> it.getTime().isAfter(entry.getValue()))
-                    .map(chatMessageDbMapper::map)
+                    .map(chatMessageRepository::map)
                     .collect(Collectors.toList());
             newMap.put(entry.getKey(), list);
         }

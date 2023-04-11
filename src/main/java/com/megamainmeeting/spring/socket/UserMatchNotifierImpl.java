@@ -1,17 +1,17 @@
 package com.megamainmeeting.spring.socket;
 
-import com.megamainmeeting.db.RoomRepositoryJpa;
-import com.megamainmeeting.db.dto.RoomDb;
+import com.megamainmeeting.database.RoomRepositoryJpa;
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.block.RoomBlocked;
+import com.megamainmeeting.domain.block.NewRoomBlock;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
-import com.megamainmeeting.dto.RoomResponse;
+import com.megamainmeeting.database.dto.RoomDb;
 import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.domain.match.RoomPreparing;
-import com.megamainmeeting.spring.UserSocketClientManager;
-import com.megamainmeeting.spring.base.*;
+import com.megamainmeeting.spring.dto.RoomResponse;
+import com.megamainmeeting.spring.socket.dto.BaseRpc;
+import com.megamainmeeting.spring.socket.dto.RpcFactory;
+import com.megamainmeeting.spring.socket.dto.RpcMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -26,7 +26,7 @@ public class UserMatchNotifierImpl implements UserNotifier {
     RoomRepositoryJpa roomRepositoryJpa;
 
     @Override
-    public void notifyRoomReady(Room room) {
+    public void notifyRoomReady(com.megamainmeeting.entity.room.Room room) {
         RoomDb roomDb = roomRepositoryJpa.findById(room.getId()).orElse(null);
         if (roomDb == null) return;
         RoomResponse roomResponse = new RoomResponse(roomDb);
@@ -80,7 +80,7 @@ public class UserMatchNotifierImpl implements UserNotifier {
 
 
     @Override
-    public void notifyRoomBlocked(long userId, RoomBlocked roomBlockedChatNotification) {
+    public void notifyRoomBlocked(long userId, NewRoomBlock roomBlockedChatNotification) {
         BaseRpc response = rpcFactory.getNotification(RpcMethods.ROOM_BLOCKED_NOTIFICATION, roomBlockedChatNotification);
         userSocketManager.send(userId, response);
     }

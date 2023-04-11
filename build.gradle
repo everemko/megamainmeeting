@@ -1,8 +1,11 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.4.3'
+    id 'org.springframework.boot' version '2.7.10'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'org.jetbrains.kotlin.jvm' version '1.5.10'
 }
+
+apply plugin: 'war'
 
 group 'org.example'
 version '1.0-SNAPSHOT'
@@ -11,8 +14,8 @@ repositories {
     mavenCentral()
 }
 
-bootJar {
-    mainClassName = 'com.megamainmeeting.Application'
+bootWar{
+    mainClass = 'com.megamainmeeting.Application'
 }
 
 bootRun {
@@ -22,48 +25,70 @@ bootRun {
 ext {
 
     versions = [
-            postgreSql: "42.2.16",
-            jUnit     : "4.12",
-            lombok    : "1.18.12",
-            gson      : "2.9.0"
-
+            postgreSql                  : "42.2.16",
+            jUnit                       : "4.12",
+            mockito                     : "4.8.1",
+            lombok                      : "1.18.12",
+            gson                        : "2.9.0",
+            hibernate                   : "5.4.30.Final",
+            javainject                  : "1",
+            boxhosting                  : "2.54.0",
+            springbootstartersecurity   : "3.0.5",
+            springbootstarterweb        : "3.0.5",
+            jasper                      : "10.1.7",
+            jstlapi                     : "1.2",
+            startertomcat               : "2.7.0"
     ]
 }
 
 dependencies {
 
-    testCompile group: 'junit', name: 'junit', version: "$versions.jUnit"
-    testCompile('org.springframework.boot:spring-boot-starter-test')
-
-    // https://mvnrepository.com/artifact/org.springframework/spring-websocket
-    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    testImplementation group: 'junit', name: 'junit', version: "$versions.jUnit"
+    testImplementation('org.springframework.boot:spring-boot-starter-test')
+    testImplementation "org.mockito:mockito-core:$versions.mockito"
 
     implementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
     annotationProcessor "org.projectlombok:lombok:$versions.lombok"
     testImplementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
     testAnnotationProcessor "org.projectlombok:lombok:$versions.lombok"
 
-    implementation group: 'org.hibernate', name: 'hibernate-core', version: '5.4.30.Final'
-    implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+//    providedRuntime group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: "$versions.jasper"
+//    providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "$versions.startertomcat"
+//    providedRuntime group: 'javax.servlet.jsp.jstl', name: 'jstl-api', version: "$versions.jstlapi"
+
 
     implementation group: 'org.postgresql', name: 'postgresql', version: "$versions.postgreSql"
 
     implementation group: 'com.google.guava', name: 'guava', version: '30.1-jre'
 
-    // https://mvnrepository.com/artifact/com.box/box-java-sdk
-    implementation group: 'com.box', name: 'box-java-sdk', version: '2.54.0'
 
-    // https://mvnrepository.com/artifact/org.bouncycastle/bcpkix-jdk15on
     implementation group: 'org.bouncycastle', name: 'bcpkix-jdk15on', version: '1.60'
-// https://mvnrepository.com/artifact/org.bouncycastle/bcprov-jdk15on
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.60'
-    // https://mvnrepository.com/artifact/org.bitbucket.b_c/jose4j
     implementation group: 'org.bitbucket.b_c', name: 'jose4j', version: '0.5.5'
-// https://mvnrepository.com/artifact/com.eclipsesource.minimal-json/minimal-json
+
     implementation group: 'com.eclipsesource.minimal-json', name: 'minimal-json', version: '0.9.1'
+
 
 
     implementation project('domain')
     implementation project('push')
     implementation project('auth')
+    implementation project('database')
+    implementation project('boxhosting')
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
+}
+compileKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
+}
+compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
 }

@@ -3,10 +3,10 @@ package com.megamainmeeting.spring.socket.auth;
 import com.megamainmeeting.auth.AuthenticationInteractor;
 import com.megamainmeeting.domain.error.AuthorizationException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.dto.AuthenticationSocketDto;
-import com.megamainmeeting.entity.auth.Authentication;
+import com.megamainmeeting.spring.dto.AuthenticationSocketDto;
+import com.megamainmeeting.entity.Authentication;
 import com.megamainmeeting.error.WebSocketSessionNotFoundException;
-import com.megamainmeeting.spring.SocketSessions;
+import com.megamainmeeting.spring.socket.SocketSessions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.WebSocketSession;
@@ -19,19 +19,17 @@ public class AuthenticationController {
     @Autowired
     private AuthenticationInteractor authenticationInteractor;
 
-    public boolean auth(AuthenticationSocketDto dto, WebSocketSession session) throws UserNotFoundException {
+    public void auth(AuthenticationSocketDto dto, WebSocketSession session) throws AuthorizationException, UserNotFoundException {
         Authentication authentication = new Authentication();
         authentication.setToken(dto.getToken());
         authentication.setUserId(dto.getUserId());
-        if (!authenticationInteractor.isAuth(authentication)) return false;
+        if (!authenticationInteractor.isAuth(authentication)) throw new AuthorizationException();
         sessions.add(dto.getUserId(), session);
-        return true;
     }
 
     public void checkAuthorization(WebSocketSession session) throws AuthorizationException {
         try {
-            Long userId = sessions.getUserId(session);
-            if (userId == null) throw new AuthorizationException();
+            sessions.getUserId(session);
         } catch (WebSocketSessionNotFoundException exception) {
             throw new AuthorizationException();
         }

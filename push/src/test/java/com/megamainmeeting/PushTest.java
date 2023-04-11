@@ -9,6 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -32,7 +33,7 @@ public class PushTest {
         chatMessage.setRoom(room);
         chatMessage.setImageUrl("https://upload.wikimedia.org/wikipedia/commons/thumb/a/aa/Philips_PM5544.svg/448px-Philips_PM5544.svg.png");
         chatMessage.setMessage("Message");
-        User sender = new User(USER_1, 17, Gender.MALE, "Vasia");
+        User sender = new User(USER_1, Gender.MALE, "Vasia", LocalDateTime.now(), Gender.FEMALE);
         firebaseClient.sendMessage(chatMessage, sender);
     }
 
@@ -48,7 +49,7 @@ public class PushTest {
         chatMessage.setUserId(USER_1);
         chatMessage.setRoom(room);;
         chatMessage.setMessage("Message");
-        User sender = new User(USER_1, 17, Gender.MALE, "Vasia");
+        User sender = new User(USER_1, Gender.MALE, "Vasia", LocalDateTime.now(), Gender.FEMALE);
         firebaseClient.sendMessage(chatMessage, sender);
     }
 }

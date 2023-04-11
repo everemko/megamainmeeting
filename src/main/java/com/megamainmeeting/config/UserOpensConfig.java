@@ -1,6 +1,5 @@
 package com.megamainmeeting.config;
 
-import com.megamainmeeting.db.repository.UserOpensRepositoryImpl;
 import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.domain.open.RoomBlockingNotifier;
 import com.megamainmeeting.domain.open.UserOpeningCheck;

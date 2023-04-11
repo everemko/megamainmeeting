@@ -10,7 +10,7 @@ repositories {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: "$versions.jUnit"
+    testImplementation group: 'junit', name: 'junit', version: "$versions.jUnit"
 
     implementation 'com.google.firebase:firebase-admin:7.3.0'
     implementation 'com.google.apis:google-api-services-androidpublisher:v3-rev20210527-1.31.0'

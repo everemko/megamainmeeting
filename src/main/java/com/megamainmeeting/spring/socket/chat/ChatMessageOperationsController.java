@@ -2,13 +2,11 @@ package com.megamainmeeting.spring.socket.chat;
 
 import com.megamainmeeting.domain.ChatMessageRepository;
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.error.ChatMessageNotFoundException;
-import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
-import com.megamainmeeting.dto.ReadMessageOperationDto;
+import com.megamainmeeting.spring.dto.ReadMessageOperationDto;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.spring.socket.base.BaseController;
-import org.postgresql.core.BaseConnection;
+import com.megamainmeeting.spring.socket.dto.RpcMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -28,5 +26,15 @@ public class ChatMessageOperationsController implements BaseController<ReadMessa
         chatMessageRepository.update(chatMessage);
         userNotifier.notifyChatMessageUpdated(chatMessage);
         return null;
+    }
+
+    @Override
+    public String getRpcMethod() {
+        return RpcMethods.MESSAGE_HAS_BEEN_READ;
+    }
+
+    @Override
+    public Class<ReadMessageOperationDto> getDtoClass() {
+        return ReadMessageOperationDto.class;
     }
 }

@@ -3,8 +3,9 @@ package com.megamainmeeting.spring.socket;
 import com.megamainmeeting.domain.MessageChatManager;
 import com.megamainmeeting.entity.chat.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
-import com.megamainmeeting.spring.UserSocketClientManager;
-import com.megamainmeeting.spring.base.*;
+import com.megamainmeeting.spring.socket.dto.BaseRpc;
+import com.megamainmeeting.spring.socket.dto.RpcFactory;
+import com.megamainmeeting.spring.socket.dto.RpcMethods;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

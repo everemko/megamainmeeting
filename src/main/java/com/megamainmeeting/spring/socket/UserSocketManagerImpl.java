@@ -1,10 +1,7 @@
 package com.megamainmeeting.spring.socket;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.megamainmeeting.spring.SocketSessions;
-import com.megamainmeeting.spring.UserSocketClientManager;
-import com.megamainmeeting.spring.base.BaseRpc;
-import lombok.AllArgsConstructor;
+import com.megamainmeeting.spring.socket.dto.BaseRpc;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,7 +10,7 @@ import org.springframework.web.socket.WebSocketSession;
 
 import java.io.IOException;
 
-@AllArgsConstructor
+@Component
 public class UserSocketManagerImpl implements UserSocketClientManager {
 
     @Autowired

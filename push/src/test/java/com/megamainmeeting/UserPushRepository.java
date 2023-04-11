@@ -27,7 +27,7 @@ class UserPushRepository implements UserPushTokenRepository {
     }
 
     @Override
-    public List<String> getToken(long userId) throws UserPushTokenNotFound {
+    public List<String> getTokens(long userId) throws UserPushTokenNotFound {
         try (Connection conn = DriverManager.getConnection(jdbcPath, user, password)) {
             PreparedStatement ps = conn.prepareStatement(GET_TOKEN_SQL);
             ps.setLong(1, userId);

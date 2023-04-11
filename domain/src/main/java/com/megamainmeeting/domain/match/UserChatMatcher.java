@@ -6,15 +6,17 @@ import com.megamainmeeting.domain.error.UserAlreadyCandidateException;
 import com.megamainmeeting.entity.user.User;
 import lombok.AllArgsConstructor;
 
+import javax.inject.Inject;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-@AllArgsConstructor
 public class UserChatMatcher {
 
-    private final UserChatCandidateQueue userMatchQueue;
-    private final UserChatPreparer userChatPreparer;
+    @Inject
+    private UserChatCandidateQueue userMatchQueue;
+    @Inject
+    private UserChatPreparer userChatPreparer;
 
     public void match(ChatCandidate chatCandidate) throws AddChatCandidateException, UserAlreadyCandidateException {
         if(userMatchQueue.isExist(chatCandidate.getUserId())) throw new UserAlreadyCandidateException();

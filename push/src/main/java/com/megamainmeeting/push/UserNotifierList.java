@@ -1,12 +1,11 @@
 package com.megamainmeeting.push;
 
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.block.RoomBlocked;
+import com.megamainmeeting.domain.block.NewRoomBlock;
 import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
 import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.room.Room;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class UserNotifierList implements UserNotifier {
     }
 
     @Override
-    public void notifyRoomReady(Room room) {
+    public void notifyRoomReady(com.megamainmeeting.entity.room.Room room) {
         userNotifiers.forEach((userNotifier ->
                 userNotifier.notifyRoomReady(room)
         ));
@@ -68,7 +67,7 @@ public class UserNotifierList implements UserNotifier {
     }
 
     @Override
-    public void notifyRoomBlocked(long userId, RoomBlocked roomBlockedChatNotification) {
+    public void notifyRoomBlocked(long userId, NewRoomBlock roomBlockedChatNotification) {
         userNotifiers.forEach((userNotifier ->
                 userNotifier.notifyRoomBlocked(userId, roomBlockedChatNotification)
         ));

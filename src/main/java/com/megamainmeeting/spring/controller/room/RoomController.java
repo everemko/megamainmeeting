@@ -1,15 +1,20 @@
 package com.megamainmeeting.spring.controller.room;
 
+import com.megamainmeeting.database.RoomRepositoryJpa;
+import com.megamainmeeting.database.dto.RoomDb;
+import com.megamainmeeting.spring.dto.RoomResponse;
+import com.megamainmeeting.domain.block.NewRoomBlock;
 import com.megamainmeeting.domain.block.RoomBlockReason;
+import com.megamainmeeting.domain.block.RoomInteractor;
 import com.megamainmeeting.domain.error.SessionNotFoundException;
-import com.megamainmeeting.interactor.RoomInteractor;
-import com.megamainmeeting.dto.RoomResponse;
 import com.megamainmeeting.spring.base.BaseResponse;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 @RestController
@@ -17,11 +22,17 @@ import java.util.List;
 public class RoomController {
 
     private final RoomInteractor roomInteractor;
+    private final RoomRepositoryJpa roomRepositoryJpa;
 
     @GetMapping("/chat/rooms")
     public BaseResponse<List<RoomResponse>> getRooms(@RequestAttribute("UserId") long userId) throws SessionNotFoundException {
-        List<RoomResponse> rooms = roomInteractor.getRooms(userId);
-        return BaseResponse.getSuccessInstance(rooms);
+        List<RoomDb> rooms = roomRepositoryJpa.findAllByUserId(userId);
+        List<RoomResponse> roomResponses;
+        if (rooms == null) roomResponses = Collections.emptyList();
+        else roomResponses = rooms.stream()
+                .map(RoomResponse::new)
+                .collect(Collectors.toList());
+        return BaseResponse.getSuccessInstance(roomResponses);
     }
 
     @PostMapping("chat/room/remove/{id}")
@@ -32,14 +43,14 @@ public class RoomController {
     }
 
     @GetMapping("chat/room/block")
-    public BaseResponse<RoomBlockReason[]> getBlocking(){
+    public BaseResponse<RoomBlockReason[]> getBlocking() {
         return BaseResponse.getSuccessInstance(RoomBlockReason.values());
     }
 
     @PostMapping("chat/room/block")
     public BaseResponse<Void> block(@RequestAttribute("UserId") long userId,
-                                    @RequestBody RoomBlock roomBlock
-    ) throws Exception{
+                                    @RequestBody NewRoomBlock roomBlock
+    ) throws Exception {
         roomBlock.setUserId(userId);
         roomInteractor.blockRoom(roomBlock);
         return BaseResponse.getSuccessInstance(null);

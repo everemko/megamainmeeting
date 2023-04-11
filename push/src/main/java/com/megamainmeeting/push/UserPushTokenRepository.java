@@ -11,7 +11,7 @@ public interface UserPushTokenRepository {
 
     public void addToken(long userId, String token) throws UserNotFoundException, BadDataException;
 
-    List<String> getToken(long userId) throws UserPushTokenNotFound;
+    List<String> getTokens(long userId) throws UserPushTokenNotFound;
 
     Collection<String> getTokens(Set<Long> users);
 }

@@ -7,20 +7,18 @@ import com.google.firebase.messaging.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.block.RoomBlocked;
+import com.megamainmeeting.domain.block.NewRoomBlock;
 import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.domain.messaging.UserMessagePushService;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
 import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.user.User;
 import org.slf4j.Logger;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Collection;
-import java.util.Set;
 
 public class FirebaseClient implements UserMessagePushService, UserNotifier {
 
@@ -79,7 +77,7 @@ public class FirebaseClient implements UserMessagePushService, UserNotifier {
     }
 
     @Override
-    public void notifyRoomReady(Room room) {
+    public void notifyRoomReady(com.megamainmeeting.entity.room.Room room) {
 
     }
 
@@ -106,7 +104,7 @@ public class FirebaseClient implements UserMessagePushService, UserNotifier {
     @Override
     public void notifyUserShouldOpens(long userId, OpenRequest openRequest) {
         try {
-            Collection<String> tokens = userPushTokenRepository.getToken(userId);
+            Collection<String> tokens = userPushTokenRepository.getTokens(userId);
             String openRequestJson = gson.toJson(openRequest);
             MulticastMessage multicastMessage = MulticastMessage.builder()
                     .addAllTokens(tokens)
@@ -124,7 +122,7 @@ public class FirebaseClient implements UserMessagePushService, UserNotifier {
     }
 
     @Override
-    public void notifyRoomBlocked(long userId, RoomBlocked roomBlockedChatNotification) {
+    public void notifyRoomBlocked(long userId, NewRoomBlock roomBlockedChatNotification) {
 
     }
 }

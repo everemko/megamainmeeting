@@ -6,23 +6,30 @@ import com.megamainmeeting.domain.error.UserNotMatchException;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.user.User;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
+import javax.inject.Inject;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserChatPreparer {
 
     private static final long DELAY = 3000;
 
-    private final RoomPreparingRepository roomPreparingRepository;
-    private final UserNotifier matchNotifier;
-    private final RoomRepository roomRepository;
-    private final UserRepository userRepository;
-    private final UserChatCandidateQueue userMatchQueue;
+    @Inject
+    private RoomPreparingRepository roomPreparingRepository;
+    @Inject
+    private UserNotifier matchNotifier;
+    @Inject
+    private RoomRepository roomRepository;
+    @Inject
+    private UserRepository userRepository;
+    @Inject
+    private UserChatCandidateQueue userMatchQueue;
 
     private final ScheduledExecutorService scheduledExecutorService;
     private final Map<RoomPreparing, OnceRunnable> returnToMatchQueueMap = new HashMap<>();
