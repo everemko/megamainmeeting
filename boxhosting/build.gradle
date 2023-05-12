@@ -1,0 +1,25 @@
+plugins {
+    id 'java'
+}
+
+group 'org.example'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+jar {
+    enabled = true
+}
+
+dependencies {
+    testImplementation group: 'junit', name: 'junit', version: "$versions.jUnit"
+
+    implementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
+    annotationProcessor "org.projectlombok:lombok:$versions.lombok"
+    implementation group: 'javax.inject', name: 'javax.inject', version: "$versions.javainject"
+    implementation group: 'com.box', name: 'box-java-sdk', version: "$versions.boxhosting"
+
+    implementation project(":domain")
+}
