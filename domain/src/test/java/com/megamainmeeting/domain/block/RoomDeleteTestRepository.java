@@ -1,5 +1,6 @@
 package com.megamainmeeting.domain.block;
 
+import com.megamainmeeting.domain.block.entity.RoomDeleted;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import lombok.Data;
 

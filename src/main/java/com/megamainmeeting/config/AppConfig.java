@@ -5,26 +5,19 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import com.megamainmeeting.auth.AuthenticationInteractorImpl;
-import com.megamainmeeting.auth.AuthenticationSessionsRepository;
-import com.megamainmeeting.auth.AuthenticationUserRepository;
 import com.megamainmeeting.boxhosting.BoxFileHosting;
 import com.megamainmeeting.boxhosting.BoxHostingUserAvatarRepository;
 import com.megamainmeeting.boxhosting.BoxImageRepository;
 import com.megamainmeeting.domain.*;
-import com.megamainmeeting.domain.block.RoomBlockRepository;
-import com.megamainmeeting.domain.block.RoomDeleteRepository;
 import com.megamainmeeting.domain.match.UserChatMatcher;
 import com.megamainmeeting.domain.match.UserChatPreparer;
-import com.megamainmeeting.domain.messaging.ChatMessageInteractor;
-import com.megamainmeeting.domain.messaging.UserMessagePushService;
-import com.megamainmeeting.domain.open.UserOpeningCheck;
+import com.megamainmeeting.domain.messaging.NewMessageUseCase;
 import com.megamainmeeting.domain.interactor.*;
 import com.megamainmeeting.domain.block.RoomInteractor;
 import com.megamainmeeting.domain.useravatar.UpdateAvatarInteractor;
 import com.megamainmeeting.domain.useravatar.UserProfileAvatarRepository;
 import com.megamainmeeting.push.FirebaseClient;
 import com.megamainmeeting.push.UserNotifierList;
-import com.megamainmeeting.database.repository.*;
 import com.megamainmeeting.spring.socket.handler.ChatWebSocketHandler;
 import com.megamainmeeting.spring.socket.UserMatchNotifierImpl;
 import org.apache.logging.log4j.LogManager;
@@ -33,7 +26,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.socket.WebSocketHandler;
 
 import java.time.LocalDateTime;
@@ -43,7 +35,6 @@ import java.util.List;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 
 @Configuration
-@EnableScheduling
 public class AppConfig {
 
     @Bean
@@ -100,8 +91,8 @@ public class AppConfig {
     }
 
     @Bean
-    ChatMessageInteractor provideChatMessageInteractor() {
-        return new ChatMessageInteractor();
+    NewMessageUseCase provideChatMessageInteractor() {
+        return new NewMessageUseCase();
     }
 
     @Bean

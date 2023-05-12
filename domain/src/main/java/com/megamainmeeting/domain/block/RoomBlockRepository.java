@@ -1,5 +1,7 @@
 package com.megamainmeeting.domain.block;
 
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.RoomBlock;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 
 public interface RoomBlockRepository {

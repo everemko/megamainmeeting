@@ -2,7 +2,7 @@ package com.megamainmeeting.database.repository;
 
 import com.megamainmeeting.database.RoomRepositoryJpa;
 import com.megamainmeeting.database.UserRepositoryJpa;
-import com.megamainmeeting.domain.block.RoomDeleted;
+import com.megamainmeeting.domain.block.entity.RoomDeleted;
 import com.megamainmeeting.domain.block.RoomDeleteRepository;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;

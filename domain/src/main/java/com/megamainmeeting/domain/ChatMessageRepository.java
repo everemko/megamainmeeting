@@ -3,8 +3,8 @@ package com.megamainmeeting.domain;
 import com.megamainmeeting.domain.error.ChatMessageNotFoundException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotFoundException;
-import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.chat.NewChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.NewChatMessage;
 
 import java.io.IOException;
 

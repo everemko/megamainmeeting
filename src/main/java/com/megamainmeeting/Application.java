@@ -16,14 +16,13 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @SpringBootApplication
 @Import({ SecurityConfig.class })
 @EnableAutoConfiguration
-public class Application extends SpringBootServletInitializer {
+public class Application {
 
-    @Override
-    protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
-        return builder.sources(Application.class);
-    }
 
     public static void main(String[] args) {
         SpringApplication.run(Application.class, args);
+        System.setProperty(
+                org.apache.tomcat.util.scan.Constants.SKIP_JARS_PROPERTY,
+                "*.jar");
     }
 }

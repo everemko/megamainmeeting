@@ -1,11 +1,10 @@
 package com.megamainmeeting;
 
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.user.Gender;
 import com.megamainmeeting.entity.user.User;
 import com.megamainmeeting.push.FirebaseClient;
-import org.junit.Before;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
 package com.megamainmeeting.domain;
 
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 
 public interface MessageChatManager {
 

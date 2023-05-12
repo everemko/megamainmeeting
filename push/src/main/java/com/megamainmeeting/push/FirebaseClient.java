@@ -7,12 +7,12 @@ import com.google.firebase.messaging.*;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.block.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
 import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.domain.messaging.UserMessagePushService;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 import com.megamainmeeting.entity.user.User;
 import org.slf4j.Logger;
 

@@ -7,17 +7,16 @@ import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.domain.open.*;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
+import com.megamainmeeting.spring.controller.Endpoints;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestAttribute;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
 @RestController
+@RequestMapping(path = Endpoints.BASE_API)
 public class UserOpeningController {
 
     @Autowired
@@ -26,7 +25,7 @@ public class UserOpeningController {
     UserOpensRepository userOpensRepository;
 
     @PostMapping("user/open")
-    public BaseResponse<?> userOpen(@RequestAttribute("UserId") long userId,
+    public BaseResponse<?> userOpen(@RequestHeader("UserId") long userId,
                                     @RequestBody UserOpens userOpens) throws RoomNotFoundException, UserNotInRoomException,
             UserNotFoundException, OpenRequestNotFoundException {
         userOpens.setUserId(userId);
@@ -35,7 +34,7 @@ public class UserOpeningController {
     }
 
     @PostMapping("user/open/available")
-    public BaseResponse<Set<UserOpenType>> getOpensAvailable(@RequestAttribute("UserId") long userId,
+    public BaseResponse<Set<UserOpenType>> getOpensAvailable(@RequestHeader("UserId") long userId,
                                                              @RequestBody long roomId) throws RoomNotFoundException,
             UserNotInRoomException, OpenRequestNotFoundException {
         Room room = userOpensRepository.getRoom(roomId);
@@ -44,7 +43,7 @@ public class UserOpeningController {
     }
 
     @PostMapping("room/blocking/status")
-    public BaseResponse<RoomBlockingStatus> getRoomBlockingStatus(@RequestAttribute("UserId") long userId,
+    public BaseResponse<RoomBlockingStatus> getRoomBlockingStatus(@RequestHeader("UserId") long userId,
                                                                   @RequestBody long roomId) throws RoomNotFoundException,
             UserNotInRoomException, OpenRequestNotFoundException {
         RoomBlockingStatus roomBlockingStatus = getBlockingStatus(userId, roomId);
@@ -52,7 +51,7 @@ public class UserOpeningController {
     }
 
     @PostMapping("room/blocking/status/list")
-    public BaseResponse<List<RoomBlockingStatus>> getRoomBlockingStatus(@RequestAttribute("UserId") long userId,
+    public BaseResponse<List<RoomBlockingStatus>> getRoomBlockingStatus(@RequestHeader("UserId") long userId,
                                                                   @RequestBody List<Long> roomIdList)
             throws RoomNotFoundException, UserNotInRoomException, OpenRequestNotFoundException{
         List<RoomBlockingStatus> list = new ArrayList<>();

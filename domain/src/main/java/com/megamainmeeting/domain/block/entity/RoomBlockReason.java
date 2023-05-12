@@ -1,4 +1,4 @@
-package com.megamainmeeting.domain.block;
+package com.megamainmeeting.domain.block.entity;
 
 public enum RoomBlockReason {
 

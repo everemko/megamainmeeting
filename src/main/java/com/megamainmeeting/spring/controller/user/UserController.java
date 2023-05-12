@@ -12,6 +12,7 @@ import com.megamainmeeting.entity.user.Gender;
 import com.megamainmeeting.entity.user.UserProfile;
 import com.megamainmeeting.spring.base.BaseResponse;
 import com.megamainmeeting.spring.base.SuccessResponse;
+import com.megamainmeeting.spring.controller.Endpoints;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Component
 @RestController
+@RequestMapping(path = Endpoints.BASE_API)
 public class UserController {
 
     @Autowired
@@ -33,7 +35,7 @@ public class UserController {
 
     @PostMapping("user/profile/update")
     BaseResponse<?> update(
-            @RequestAttribute("UserId") long userId,
+            @RequestHeader("UserId") long userId,
             @RequestBody UserProfile userProfile) throws Exception {
         userProfile.setUserId(userId);
         Optional<UserDb> optional = userRepositoryJpa.findById(userProfile.getUserId());
@@ -57,7 +59,7 @@ public class UserController {
     }
 
     @GetMapping("user/profile")
-    BaseResponse<UserProfile> getUserProfile(@RequestAttribute("UserId") long userId) throws Exception {
+    BaseResponse<UserProfile> getUserProfile(@RequestHeader("UserId") long userId) throws Exception {
         Optional<UserDb> optional = userRepositoryJpa.findById(userId);
         if (optional.isEmpty()) throw new UserNotFoundException();
         UserDb user = optional.get();
@@ -78,7 +80,7 @@ public class UserController {
 
     @PostMapping("user/profile/avatar")
     public BaseResponse<String> postUserAvatar(
-            @RequestAttribute("UserId") long userId,
+            @RequestHeader("UserId") long userId,
             @RequestPart("avatar") MultipartFile file
     ) throws UserNotFoundException, IOException, AvatarSizeException {
         String url = updateAvatarInteractor.updatePhoto(userId, file.getBytes());
@@ -87,7 +89,7 @@ public class UserController {
 
     @DeleteMapping("user/profile/avatar")
     public BaseResponse<Object> deleteUserAvatar(
-            @RequestAttribute("UserId") long userId
+            @RequestHeader("UserId") long userId
     ) throws UserNotFoundException {
         updateAvatarInteractor.deletePhoto(userId);
         return SuccessResponse.getSimpleSuccessResponse();
@@ -95,7 +97,7 @@ public class UserController {
 
     @PostMapping("user/gender/match")
     public BaseResponse<Void> postMatchGender(
-            @RequestAttribute("UserId") long userid,
+            @RequestHeader("UserId") long userid,
             @RequestBody Gender gender) throws UserNotFoundException, BadDataException {
         if (gender == null) throw new BadDataException();
         UserDb userDb = userRepositoryJpa.findById(userid).orElseThrow(UserNotFoundException::new);

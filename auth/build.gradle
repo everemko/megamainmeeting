@@ -1,5 +1,7 @@
 plugins {
     id 'java'
+    id 'org.springframework.boot'
+    id 'io.spring.dependency-management'
 }
 
 group 'org.example'
@@ -14,6 +16,9 @@ dependencies {
     implementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
     annotationProcessor "org.projectlombok:lombok:$versions.lombok"
     implementation group: 'javax.inject', name: 'javax.inject', version: '1'
+
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
 
     implementation project(':domain')
 }

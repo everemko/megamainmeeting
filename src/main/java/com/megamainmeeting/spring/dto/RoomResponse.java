@@ -2,7 +2,7 @@ package com.megamainmeeting.spring.dto;
 
 import com.megamainmeeting.database.dto.*;
 import com.megamainmeeting.database.mapper.UserDbMapper;
-import com.megamainmeeting.domain.block.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
 import com.megamainmeeting.entity.user.User;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;

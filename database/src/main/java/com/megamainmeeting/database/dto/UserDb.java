@@ -1,18 +1,13 @@
 package com.megamainmeeting.database.dto;
 
-import com.megamainmeeting.entity.room.Room;
 import com.megamainmeeting.entity.user.Gender;
-import com.megamainmeeting.entity.user.User;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.time.Period;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Setter

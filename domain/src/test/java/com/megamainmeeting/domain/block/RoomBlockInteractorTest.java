@@ -2,6 +2,8 @@ package com.megamainmeeting.domain.block;
 
 
 import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.RoomBlockReason;
 import com.megamainmeeting.domain.error.RoomIsBlockedException;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.domain.error.UserNotInRoomException;

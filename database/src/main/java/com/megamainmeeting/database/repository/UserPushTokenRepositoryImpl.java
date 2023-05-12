@@ -8,7 +8,7 @@ import com.megamainmeeting.database.dto.UserDb;
 import com.megamainmeeting.database.dto.UserPushTokenDb;
 import com.megamainmeeting.push.UserPushTokenNotFound;
 import com.megamainmeeting.push.UserPushTokenRepository;
-import org.slf4j.Logger;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

@@ -1,9 +1,9 @@
 package com.megamainmeeting.domain;
 
-import com.megamainmeeting.domain.block.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 import com.megamainmeeting.domain.match.RoomPreparing;
 
 public interface UserNotifier {

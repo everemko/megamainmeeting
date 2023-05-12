@@ -2,8 +2,8 @@ package com.megamainmeeting.database.repository;
 
 import com.megamainmeeting.database.RoomBlockedRepositoryJpa;
 import com.megamainmeeting.database.RoomRepositoryJpa;
-import com.megamainmeeting.domain.block.NewRoomBlock;
-import com.megamainmeeting.domain.block.RoomBlock;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.RoomBlock;
 import com.megamainmeeting.domain.block.RoomBlockRepository;
 import com.megamainmeeting.domain.error.RoomNotFoundException;
 import com.megamainmeeting.database.dto.RoomBlockedDb;

@@ -1,4 +1,4 @@
-package com.megamainmeeting.entity.chat;
+package com.megamainmeeting.domain.messaging.entity;
 
 import com.megamainmeeting.entity.room.Room;
 import lombok.Data;

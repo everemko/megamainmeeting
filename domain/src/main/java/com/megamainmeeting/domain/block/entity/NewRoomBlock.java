@@ -1,12 +1,9 @@
-package com.megamainmeeting.domain.block;
+package com.megamainmeeting.domain.block.entity;
 
 import com.megamainmeeting.domain.error.BadDataException;
-import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 @Data
 @AllArgsConstructor()

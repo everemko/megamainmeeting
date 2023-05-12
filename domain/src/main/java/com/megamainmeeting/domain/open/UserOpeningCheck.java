@@ -23,14 +23,6 @@ public class UserOpeningCheck {
         }
     }
 
-    public void checkAfterMessage(long roomId) throws RoomNotFoundException, OpenRequestNotFoundException {
-        Room room = userOpensRepository.getRoom(roomId);
-        if(room.isNeedToBeBlocked()){
-            OpenRequest openRequest = userOpensRepository.blockRoom(roomId);
-            roomBlockingNotifier.notifyRoomShouldOpens(room, openRequest);
-        }
-    }
-
     public void addUserOpen(UserOpens userOpens) throws RoomNotFoundException,
             UserNotInRoomException, UserNotFoundException, OpenRequestNotFoundException {
         userOpensRepository.updateUserOpens(userOpens);

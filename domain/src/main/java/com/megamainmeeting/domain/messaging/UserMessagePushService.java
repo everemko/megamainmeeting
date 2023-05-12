@@ -1,9 +1,7 @@
 package com.megamainmeeting.domain.messaging;
 
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 import com.megamainmeeting.entity.user.User;
-
-import java.util.Set;
 
 public interface UserMessagePushService {
 

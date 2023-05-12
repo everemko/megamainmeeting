@@ -58,4 +58,12 @@ public class Room {
         room.setOpenRequests(openRequests);
         return room;
     }
+
+    public long[] getUsers(){
+        return users.stream().mapToLong(User::getId).toArray();
+    }
+
+    public void incrementMessageCount(){
+        messageCount++;
+    }
 }

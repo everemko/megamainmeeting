@@ -2,11 +2,11 @@ package com.megamainmeeting.spring.socket;
 
 import com.megamainmeeting.database.RoomRepositoryJpa;
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.block.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
 import com.megamainmeeting.database.dto.RoomDb;
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.spring.dto.RoomResponse;
 import com.megamainmeeting.spring.socket.dto.BaseRpc;

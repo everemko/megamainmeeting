@@ -2,9 +2,10 @@ package com.megamainmeeting.spring.controller.room;
 
 import com.megamainmeeting.database.RoomRepositoryJpa;
 import com.megamainmeeting.database.dto.RoomDb;
+import com.megamainmeeting.spring.controller.Endpoints;
 import com.megamainmeeting.spring.dto.RoomResponse;
-import com.megamainmeeting.domain.block.NewRoomBlock;
-import com.megamainmeeting.domain.block.RoomBlockReason;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.RoomBlockReason;
 import com.megamainmeeting.domain.block.RoomInteractor;
 import com.megamainmeeting.domain.error.SessionNotFoundException;
 import com.megamainmeeting.spring.base.BaseResponse;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Component
 @RestController
+@RequestMapping(path = Endpoints.BASE_API)
 @AllArgsConstructor
 public class RoomController {
 
@@ -25,7 +27,7 @@ public class RoomController {
     private final RoomRepositoryJpa roomRepositoryJpa;
 
     @GetMapping("/chat/rooms")
-    public BaseResponse<List<RoomResponse>> getRooms(@RequestAttribute("UserId") long userId) throws SessionNotFoundException {
+    public BaseResponse<List<RoomResponse>> getRooms(@RequestHeader("UserId") long userId) throws SessionNotFoundException {
         List<RoomDb> rooms = roomRepositoryJpa.findAllByUserId(userId);
         List<RoomResponse> roomResponses;
         if (rooms == null) roomResponses = Collections.emptyList();
@@ -36,7 +38,7 @@ public class RoomController {
     }
 
     @PostMapping("chat/room/remove/{id}")
-    public BaseResponse<Void> remove(@RequestAttribute("UserId") long userId,
+    public BaseResponse<Void> remove(@RequestHeader("UserId") long userId,
                                      @PathVariable long id) throws Exception {
         roomInteractor.removeRoom(userId, id);
         return BaseResponse.getSuccessInstance(null);
@@ -48,7 +50,7 @@ public class RoomController {
     }
 
     @PostMapping("chat/room/block")
-    public BaseResponse<Void> block(@RequestAttribute("UserId") long userId,
+    public BaseResponse<Void> block(@RequestHeader("UserId") long userId,
                                     @RequestBody NewRoomBlock roomBlock
     ) throws Exception {
         roomBlock.setUserId(userId);

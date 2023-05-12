@@ -4,7 +4,7 @@ import com.megamainmeeting.domain.ChatMessageRepository;
 import com.megamainmeeting.domain.UserNotifier;
 import com.megamainmeeting.domain.error.UserNotInRoomException;
 import com.megamainmeeting.spring.dto.ReadMessageOperationDto;
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 import com.megamainmeeting.spring.socket.base.BaseController;
 import com.megamainmeeting.spring.socket.dto.RpcMethods;
 import org.springframework.beans.factory.annotation.Autowired;

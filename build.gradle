@@ -1,14 +1,16 @@
 plugins {
     id 'java'
     id 'org.springframework.boot' version '2.7.10'
-    id 'io.spring.dependency-management' version '1.0.8.RELEASE'
+    id 'io.spring.dependency-management' version '1.1.0'
     id 'org.jetbrains.kotlin.jvm' version '1.5.10'
 }
 
 apply plugin: 'war'
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+war {
+    baseName = 'spring-boot-jsp-sample'
+    version = '0.0.1-SNAPSHOT'
+}
 
 repositories {
     mavenCentral()
@@ -19,7 +21,7 @@ bootWar{
 }
 
 bootRun {
-    main = 'com.megamainmeeting.Application'
+    mainClass = 'com.megamainmeeting.Application'
 }
 
 ext {
@@ -30,16 +32,22 @@ ext {
             mockito                     : "4.8.1",
             lombok                      : "1.18.12",
             gson                        : "2.9.0",
-            hibernate                   : "5.4.30.Final",
+            hibernate                   : "6.2.0.Final",
             javainject                  : "1",
             boxhosting                  : "2.54.0",
             springbootstartersecurity   : "3.0.5",
             springbootstarterweb        : "3.0.5",
-            jasper                      : "10.1.7",
-            jstlapi                     : "1.2",
-            startertomcat               : "2.7.0"
+            jasper                      : "9.0.44",
+            jstl                         : "1.2",
+            startertomcat               : "2.7.10",
+            oauth2                      : "2.5.2.RELEASE"
     ]
 }
+
+configurations {
+    providedRuntime
+}
+
 
 dependencies {
 
@@ -52,14 +60,19 @@ dependencies {
     testImplementation group: 'org.projectlombok', name: 'lombok', version: "$versions.lombok"
     testAnnotationProcessor "org.projectlombok:lombok:$versions.lombok"
 
+    implementation group: 'javax.inject', name: 'javax.inject', version: "$versions.javainject"
+
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-//    providedRuntime group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: "$versions.jasper"
-//    providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "$versions.startertomcat"
-//    providedRuntime group: 'javax.servlet.jsp.jstl', name: 'jstl-api', version: "$versions.jstlapi"
+    providedRuntime group: 'org.apache.tomcat.embed', name: 'tomcat-embed-jasper', version: "$versions.jasper"
+    providedRuntime group: 'org.springframework.boot', name: 'spring-boot-starter-tomcat', version: "$versions.startertomcat"
+    implementation group: 'javax.servlet', name: 'jstl', version: "$versions.jstl"
+    implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: "$versions.oauth2"
+
+
 
 
     implementation group: 'org.postgresql', name: 'postgresql', version: "$versions.postgreSql"

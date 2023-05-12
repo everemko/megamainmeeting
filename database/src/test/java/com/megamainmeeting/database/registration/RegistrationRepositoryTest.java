@@ -4,7 +4,7 @@ import com.megamainmeeting.database.Application;
 import com.megamainmeeting.domain.RegistrationRepository;
 import com.megamainmeeting.domain.SessionRepository;
 import com.megamainmeeting.domain.error.SessionNotFoundException;
-import com.megamainmeeting.domain.registration.NewAnonumousUser;
+import com.megamainmeeting.domain.registration.NewUser;
 import com.megamainmeeting.entity.auth.Session;
 import com.megamainmeeting.entity.user.User;
 import org.junit.Assert;
@@ -30,7 +30,7 @@ public class RegistrationRepositoryTest {
 
     @Test
     public void test() throws SessionNotFoundException {
-        NewAnonumousUser newAnonumousUser = new NewAnonumousUser();
+        NewUser newAnonumousUser = new NewUser();
         newAnonumousUser.setName(USER_1.getName());
         newAnonumousUser.setDateBirth(USER_1.getDateBirth());
         newAnonumousUser.setGender(USER_1.getGender());

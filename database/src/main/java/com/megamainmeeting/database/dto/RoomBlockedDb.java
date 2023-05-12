@@ -1,6 +1,6 @@
 package com.megamainmeeting.database.dto;
 
-import com.megamainmeeting.domain.block.RoomBlockReason;
+import com.megamainmeeting.domain.block.entity.RoomBlockReason;
 import lombok.Getter;
 import lombok.Setter;
 

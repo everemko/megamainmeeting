@@ -1,11 +1,11 @@
 package com.megamainmeeting.push;
 
 import com.megamainmeeting.domain.UserNotifier;
-import com.megamainmeeting.domain.block.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
 import com.megamainmeeting.domain.match.RoomPreparing;
 import com.megamainmeeting.domain.open.OpenRequest;
 import com.megamainmeeting.domain.open.RoomBlockingStatus;
-import com.megamainmeeting.entity.chat.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
 
 import java.util.List;
 

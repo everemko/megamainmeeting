@@ -11,10 +11,9 @@ import com.megamainmeeting.domain.error.UserNotFoundException;
 import com.megamainmeeting.database.dto.ChatMessageDb;
 import com.megamainmeeting.database.dto.RoomDb;
 import com.megamainmeeting.database.dto.UserDb;
-import com.megamainmeeting.entity.chat.ChatMessage;
-import com.megamainmeeting.entity.chat.NewChatMessage;
-import org.slf4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.megamainmeeting.domain.messaging.entity.ChatMessage;
+import com.megamainmeeting.domain.messaging.entity.NewChatMessage;
+import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Component;
 
 import javax.inject.Inject;

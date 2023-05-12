@@ -1,6 +1,9 @@
 package com.megamainmeeting.domain.block;
 
 import com.megamainmeeting.domain.UserNotifier;
+import com.megamainmeeting.domain.block.entity.NewRoomBlock;
+import com.megamainmeeting.domain.block.entity.RoomBlock;
+import com.megamainmeeting.domain.block.entity.RoomDeleted;
 import com.megamainmeeting.domain.error.*;
 
 import javax.inject.Inject;
